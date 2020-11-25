@@ -13,11 +13,29 @@ import android.os.SystemClock.sleep
 import android.util.Log
 import android.view.*
 import android.widget.FrameLayout
+import java.sql.Time
 import java.util.*
 import java.util.concurrent.Executors
 import java.util.concurrent.ScheduledFuture
 import java.util.concurrent.TimeUnit
+import kotlin.math.absoluteValue
+import kotlin.system.measureNanoTime
+import kotlin.system.measureTimeMillis
 
+
+/** Initial splash screen for the app. Presents the user with a black screen that slowly fills with virus molecules.
+ * There is a 75% chance a spawning molecule will be COVID, and a 25% chance it will be something else.
+ * Clicking/touching the screen will open the app's main listview. As this splash screen is solely aesthetic, once
+ * the user leaves this screen it will not reappear on subsequent resumes, or back button presses. The splash screen
+ * will only appear on initial startup.
+ *
+ * Also, by press+hold+dragging, the user can generate multitudes of additional virus molecules
+ * (until they use up all available memory and the app crashes)
+ *
+ * This screen demonstrates our mastery of android graphical elements (given that the rest of our app has no need for graphics).
+ *
+ * At present, I have not figured out how to add the viruses on a delay. Once that is working, this activity will be complete.
+ */
 
 class SplashScreen : Activity(){
 
@@ -45,6 +63,9 @@ class SplashScreen : Activity(){
 
     // Audio volume
     private var mStreamVolume: Float = 0.toFloat()
+    var timeDown: Long = 0L
+    var timeUp: Long = 0L
+    var elapsed: Long = 0L
 
 
     // Gesture Library
@@ -79,11 +100,22 @@ class SplashScreen : Activity(){
             touched = true
             createVirus(event.x, event.y)
 
+
+
             when (event.actionMasked) {
+
                 MotionEvent.ACTION_DOWN -> {
+                   timeDown = System.currentTimeMillis()
+
                 }
                 MotionEvent.ACTION_UP -> {
-                    startActivity(intent)
+
+                    timeUp = System.currentTimeMillis()
+
+                    if ((timeUp - timeDown).absoluteValue < 500) {
+
+                        startActivity(intent)
+                    }
                 }
             }
             true
