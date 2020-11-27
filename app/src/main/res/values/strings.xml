@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">CovidServices</string>
+    <string name="connecting_people_in_quarantine">CONNECTING PEOPLE IN QUARANTINE</string>
+    <string name="to_people_who_need_money">TO PEOPLE WHO NEED MONEY</string>
+    <string name="covid_services">COVID SERVICES</string>
 
 </resources>

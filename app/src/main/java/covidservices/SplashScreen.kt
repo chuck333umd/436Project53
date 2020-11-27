@@ -6,35 +6,36 @@ import android.content.Context
 import android.content.Intent
 import android.gesture.*
 import android.graphics.*
-import android.media.AudioManager
-import android.media.SoundPool
 import android.os.Bundle
-import android.os.SystemClock.sleep
+import android.os.Handler
 import android.util.Log
 import android.view.*
 import android.widget.FrameLayout
-import java.sql.Time
+import android.widget.TextView
 import java.util.*
 import java.util.concurrent.Executors
 import java.util.concurrent.ScheduledFuture
 import java.util.concurrent.TimeUnit
 import kotlin.math.absoluteValue
-import kotlin.system.measureNanoTime
-import kotlin.system.measureTimeMillis
 
 
 /** Initial splash screen for the app. Presents the user with a black screen that slowly fills with virus molecules.
- * There is a 75% chance a spawning molecule will be COVID, and a 25% chance it will be something else.
- * Clicking/touching the screen will open the app's main listview. As this splash screen is solely aesthetic, once
- * the user leaves this screen it will not reappear on subsequent resumes, or back button presses. The splash screen
- * will only appear on initial startup.
+ * There is a 90% chance a spawning molecule will be COVID, and a 10% chance it will be something else. The viruses
+ * will auto-generate until 150 are on screen.
  *
- * Also, by press+hold+dragging, the user can generate multitudes of additional virus molecules
+ * The subtext under the app name starts off black and slowly turns to red as the number of virus molecules increases.
+ *
+ * Also, by touch+hold+drag, the user can generate multitudes of additional virus molecules
  * (until they use up all available memory and the app crashes)
+ *
+ * Touching the screen will open the app's main listview.
+ *
+ * As this splash screen is solely aesthetic, once the user leaves this screen it will not reappear on subsequent
+ * resumes, or back button presses. The splash screen will only appear on initial startup (noHistory = true).
  *
  * This screen demonstrates our mastery of android graphical elements (given that the rest of our app has no need for graphics).
  *
- * At present, I have not figured out how to add the viruses on a delay. Once that is working, this activity will be complete.
+ * Author: Chuck Daniels
  */
 
 class SplashScreen : Activity(){
@@ -44,32 +45,18 @@ class SplashScreen : Activity(){
 
     private var mBitmap: Bitmap? = null
     private var mBitmap2: Bitmap? = null
+    private var mSplashTextView: TextView? = null
+    private var mSplashSubTextView: TextView? = null
+    private var mSplashSubTextView2: TextView? = null
 
     private var r2 = 0
-
-    // Display dimensions
-
+    private var active: Boolean = true;
 
     private var mDisplayWidth: Int = 0
     private var mDisplayHeight: Int = 0
 
-    private var touched = false
-
-    // SoundPool
-    private var mSoundPool: SoundPool? = null
-
-    // ID for the virus popping sound
-    private var mSoundID: Int = 0
-
-    // Audio volume
-    private var mStreamVolume: Float = 0.toFloat()
     var timeDown: Long = 0L
     var timeUp: Long = 0L
-    var elapsed: Long = 0L
-
-
-    // Gesture Library
-    private lateinit var mLibrary: GestureLibrary
 
     private lateinit var bList: ArrayList<VirusView>
 
@@ -89,23 +76,22 @@ class SplashScreen : Activity(){
         mFrame = findViewById<View>(R.id.frame) as FrameLayout
         mBitmap = BitmapFactory.decodeResource(resources, R.drawable.b64)
         mBitmap2 =  BitmapFactory.decodeResource(resources, R.drawable.e64)
+        mSplashTextView = findViewById<TextView>(R.id.covidServices)
+        mSplashSubTextView = findViewById<TextView>(R.id.subText)
+        mSplashSubTextView2 = findViewById<TextView>(R.id.subText2)
 
         bList = ArrayList<VirusView>()
 
-        val intent = Intent(this, MainListScreen::class.java)
-
+        val intentMainListScreen = Intent(this, MainListScreen::class.java)
 
         mFrame!!.setOnTouchListener { _, event ->
 
-            touched = true
             createVirus(event.x, event.y)
-
-
 
             when (event.actionMasked) {
 
                 MotionEvent.ACTION_DOWN -> {
-                   timeDown = System.currentTimeMillis()
+                    timeDown = System.currentTimeMillis()
 
                 }
                 MotionEvent.ACTION_UP -> {
@@ -114,7 +100,10 @@ class SplashScreen : Activity(){
 
                     if ((timeUp - timeDown).absoluteValue < 500) {
 
-                        startActivity(intent)
+                        bList.forEach { b -> b.kill()}
+                        active = false
+
+                        startActivity(intentMainListScreen)
                     }
                 }
             }
@@ -126,27 +115,48 @@ class SplashScreen : Activity(){
     private fun createVirus(x: Float, y: Float){
         bList.add(VirusView(applicationContext, x, y, bList.size, System.currentTimeMillis()))
         bList[bList.size - 1].start()
-        //bList[bList.size - 1].invalidate()
         mFrame!!.addView(bList[bList.size - 1])
-        Log.i(TAG, "bList size = " + bList.size)
+
+
+        if (bList.size < 64) {
+            val colorHexStr = "#" + "%02x".format(bList.size * 4) + "0000"
+            mSplashSubTextView?.setTextColor(Color.parseColor(colorHexStr))
+        }
+        if (bList.size in 32..95) {
+            val colorHexStr = "#" + "%02x".format((bList.size * 4) - (32 *4)) + "0000"
+            //Log.i("color", "bListSize = " + bList.size +", color = $colorHexStr")
+            mSplashSubTextView2?.setTextColor(Color.parseColor(colorHexStr))
+
+        }
     }
     override fun onResume() {
         super.onResume()
 
-
-        for (i in 0..10) {
-           val xpos = (100..mDisplayWidth-100).random()
-            val ypos = (100..mDisplayHeight-100).random()
-            createVirus(xpos.toFloat(), ypos.toFloat())
-
+        val handler = Handler(mainLooper)
+        val runnable: Runnable = object : Runnable {
+            override fun run() {
+                if (bList.size < 128) {
+                    /** Randomizes the horizontal or vertical spawn position*/
+                    val xpos = (0..mDisplayWidth).random().toFloat()
+                    val ypos = (0..mDisplayHeight).random().toFloat()
+                    /** Randomizes which screen border the viruses spawn from*/
+                    when((1..4).random()){
+                        1 -> createVirus(xpos, -100F)
+                        2 -> createVirus(mDisplayWidth.toFloat()+100F, ypos)
+                        3 -> createVirus(xpos, mDisplayHeight.toFloat()+100F)
+                        4 -> createVirus(-100F, ypos)
+                    }
+                    if (active) handler.postDelayed(this, 1000)
+                }
+            }
         }
+        if (active) handler.postDelayed(runnable, 1000)
     }
 
     override fun onWindowFocusChanged(hasFocus: Boolean) {
         super.onWindowFocusChanged(hasFocus)
         if (hasFocus) {
 
-            // Get the size of the display so this View knows where borders are
             mDisplayWidth = mFrame!!.width
             mDisplayHeight = mFrame!!.height
 
@@ -180,42 +190,24 @@ class SplashScreen : Activity(){
         private var mRotate: Long = 0
         private var mDRotate: Long = 0
 
-        // Return true if the VirusView is not on the screen after the move
-        // operation
         private fun isOutOfView(): Boolean {
-           // Log.i(TAG, "mXPos = $mXPos, mYPos = $mYPos")
-           // Log.i(TAG, "mDisplayWidth = $mDisplayWidth, mDisplayHeight = $mDisplayHeight")
-           // Log.i(TAG, "0 - mScaledBitmapWidth = " + (0 - mScaledBitmapWidth))
-           // Log.i(TAG, "isOutOfView = " + (mXPos < 0 - mScaledBitmapWidth || mXPos > mDisplayWidth || mYPos < 0 - mScaledBitmapWidth || mYPos > mDisplayHeight))
-           return  (mXPos < 0 - mScaledBitmapWidth || mXPos > mDisplayWidth || mYPos < 0 - mScaledBitmapWidth || mYPos > mDisplayHeight)
+           return  (mXPos < -50 - mScaledBitmapWidth || mXPos > mDisplayWidth + 50 || mYPos < -50 - mScaledBitmapWidth || mYPos > mDisplayHeight + 50)
         }
-
-
-
-
 
         init {
             Log.i(TAG, "Creating Virus at: x:$x y:$y")
 
-            // Create a new random number generator to
-            // randomize size, rotation, speed and direction
             val r = Random()
 
-            // Creates the virus bitmap for this VirusView
             createScaledBitmap(r)
 
-            // Radius of the Bitmap
             mRadius = (mScaledBitmapWidth / 2).toFloat()
             mRadiusSquared = mRadius * mRadius
 
-            // Adjust position to center the virus under user's finger
             mXPos = x - mRadius
             mYPos = y - mRadius
 
-            // Set the VirusView's speed and direction
             setSpeedAndDirection(r)
-
-            // Set the VirusView's rotation
             setRotation(r)
 
             mPainter.isAntiAlias = true
@@ -229,11 +221,6 @@ class SplashScreen : Activity(){
         }
 
 
-        fun changeVector(dX: Float, dY: Float) {
-            mDx = dX
-            mDy = dY
-
-        }
         private fun setSpeedAndDirection(r: Random) {
 
             //  mDx = 20f
@@ -250,33 +237,28 @@ class SplashScreen : Activity(){
 
         private fun createScaledBitmap(r: Random) {
 
-
-
             mScaledBitmapWidth = r.nextInt(2 * BITMAP_SIZE) + BITMAP_SIZE
 
-            r2 = (1..4).random()
+            r2 = (1..10).random()
             Log.i(TAG, "r2 = $r2")
             mScaledBitmap = if (r2 == 1) Bitmap.createScaledBitmap(mBitmap2!!, mScaledBitmapWidth, mScaledBitmapWidth, false) //25% chance to spawn ebola
             else Bitmap.createScaledBitmap(mBitmap!!, mScaledBitmapWidth, mScaledBitmapWidth, false) //75% chance to spawn covid
 
-
         }
 
-        // Start moving the VirusView & updating the display
         fun start() {
 
-            // Creates a WorkerThread
             val executor = Executors.newScheduledThreadPool(1)
 
             mMoverFuture = executor.scheduleWithFixedDelay({
                 if (moveWhileOnScreen()) {
                     postInvalidate()
                 } else
-                    stop(false)
+                    revector()
+                    //stop(false)
             }, 0, REFRESH_RATE.toLong(), TimeUnit.MILLISECONDS)
         }
 
-        // Returns true if the VirusView intersects position (x,y)
         @Synchronized
         fun intersects(x: Float, y: Float): Boolean {
 
@@ -288,7 +270,7 @@ class SplashScreen : Activity(){
         }
 
 
-        private fun stop(wasPopped: Boolean) {
+        fun kill() {
 
             if (null != mMoverFuture) {
 
@@ -298,17 +280,7 @@ class SplashScreen : Activity(){
 
                 // This work will be performed on the UI Thread
                 mFrame!!.post {
-                    // Remove the VirusView from mFrame
                     mFrame!!.removeView(this@VirusView)
-
-                    // If the virus was popped by user,
-                    // play the popping sound
-                    if (wasPopped) {
-                        mSoundPool!!.play(
-                                mSoundID, mStreamVolume,
-                                mStreamVolume, 1, 0, 1.0f
-                        )
-                    }
                 }
             }
 
@@ -322,6 +294,27 @@ class SplashScreen : Activity(){
             mDx = velocityX / REFRESH_RATE
             mDy = velocityY / REFRESH_RATE
         }
+
+        @Synchronized
+        fun revector() {
+            Log.i("vector", "Changing vector mDx = $mDx, mDy = $mDy")
+
+
+            if (mXPos > mDisplayWidth - 100 || mXPos < 100) {
+                mDx = -mDx
+                return
+            }
+            if (mYPos > mDisplayHeight - 100 || mYPos < 100) {
+                mDy = -mDy
+                return
+            }
+            mDy = -mDy
+            mDx = -mDx
+
+
+        }
+
+
 
         // Draw the Virus at its current location
         @Synchronized
