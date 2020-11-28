@@ -45,6 +45,10 @@ class SplashScreen : Activity(){
 
     private var mBitmap: Bitmap? = null
     private var mBitmap2: Bitmap? = null
+    private var mBitmap3: Bitmap? = null
+    private var mBitmap4: Bitmap? = null
+    private var mBitmap5: Bitmap? = null
+    private var mBitmap6: Bitmap? = null
     private var mSplashTextView: TextView? = null
     private var mSplashSubTextView: TextView? = null
     private var mSplashSubTextView2: TextView? = null
@@ -76,6 +80,10 @@ class SplashScreen : Activity(){
         mFrame = findViewById<View>(R.id.frame) as FrameLayout
         mBitmap = BitmapFactory.decodeResource(resources, R.drawable.b64)
         mBitmap2 =  BitmapFactory.decodeResource(resources, R.drawable.e64)
+        mBitmap3 =  BitmapFactory.decodeResource(resources, R.drawable.f64)
+        mBitmap4 =  BitmapFactory.decodeResource(resources, R.drawable.z64)
+        mBitmap5 =  BitmapFactory.decodeResource(resources, R.drawable.g64)
+        mBitmap6 =  BitmapFactory.decodeResource(resources, R.drawable.d64)
         mSplashTextView = findViewById<TextView>(R.id.covidServices)
         mSplashSubTextView = findViewById<TextView>(R.id.subText)
         mSplashSubTextView2 = findViewById<TextView>(R.id.subText2)
@@ -118,6 +126,7 @@ class SplashScreen : Activity(){
         mFrame!!.addView(bList[bList.size - 1])
 
 
+        /** Changes text color based on the number of virusViews */
         if (bList.size < 64) {
             val colorHexStr = "#" + "%02x".format(bList.size * 4) + "0000"
             mSplashSubTextView?.setTextColor(Color.parseColor(colorHexStr))
@@ -156,10 +165,8 @@ class SplashScreen : Activity(){
     override fun onWindowFocusChanged(hasFocus: Boolean) {
         super.onWindowFocusChanged(hasFocus)
         if (hasFocus) {
-
             mDisplayWidth = mFrame!!.width
             mDisplayHeight = mFrame!!.height
-
         }
     }
 
@@ -223,9 +230,6 @@ class SplashScreen : Activity(){
 
         private fun setSpeedAndDirection(r: Random) {
 
-            //  mDx = 20f
-            //   mDy = 20f
-
             mDx = (r.nextInt(mScaledBitmapWidth * 3) + 1) / mScaledBitmapWidth.toFloat()
             mDx *= (if (r.nextInt() % 2 == 0) 1 else -1).toFloat()
 
@@ -239,10 +243,16 @@ class SplashScreen : Activity(){
 
             mScaledBitmapWidth = r.nextInt(2 * BITMAP_SIZE) + BITMAP_SIZE
 
-            r2 = (1..10).random()
+            r2 = (1..30).random()
             Log.i(TAG, "r2 = $r2")
-            mScaledBitmap = if (r2 == 1) Bitmap.createScaledBitmap(mBitmap2!!, mScaledBitmapWidth, mScaledBitmapWidth, false) //25% chance to spawn ebola
-            else Bitmap.createScaledBitmap(mBitmap!!, mScaledBitmapWidth, mScaledBitmapWidth, false) //75% chance to spawn covid
+            mScaledBitmap = when (r2) {
+                1 -> Bitmap.createScaledBitmap(mBitmap2!!, mScaledBitmapWidth, mScaledBitmapWidth, false)
+                //2 -> Bitmap.createScaledBitmap(mBitmap3!!, mScaledBitmapWidth, mScaledBitmapWidth, false)
+               // 3 -> Bitmap.createScaledBitmap(mBitmap4!!, mScaledBitmapWidth, mScaledBitmapWidth, false)
+               // 4 -> Bitmap.createScaledBitmap(mBitmap5!!, mScaledBitmapWidth, mScaledBitmapWidth, false)
+                5 -> Bitmap.createScaledBitmap(mBitmap6!!, mScaledBitmapWidth, mScaledBitmapWidth, false)
+                else -> Bitmap.createScaledBitmap(mBitmap!!, mScaledBitmapWidth, mScaledBitmapWidth, false) //chance to spawn covid
+            }
 
         }
 
