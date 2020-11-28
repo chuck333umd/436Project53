@@ -19,21 +19,27 @@ import java.util.concurrent.TimeUnit
 import kotlin.math.absoluteValue
 
 
-/** Initial splash screen for the app. Presents the user with a black screen that slowly fills with virus molecules.
- * There is a 90% chance a spawning molecule will be COVID, and a 10% chance it will be something else. The viruses
- * will auto-generate until 150 are on screen.
+/** Initial splash screen for the app. Presents the user with a black screen that slowly fills with
+ * virus molecules. There is a high chance a spawn will be COVID, and a small chance it will not.
  *
- * The subtext under the app name starts off black and slowly turns to red as the number of virus molecules increases.
+ * The viruses will auto-generate until 150 are on screen, and will bounce off the walls at a right
+ * vector  they are completely offscreen.
+ *
+ * The subtext under the app name starts off black and slowly turns to red as the number of virus
+ * molecules increases.
  *
  * Also, by touch+hold+drag, the user can generate multitudes of additional virus molecules
  * (until they use up all available memory and the app crashes)
  *
- * Touching the screen will open the app's main listview.
+ * Touching the screen or touch+hold for less than 500ms will open the app's main listview once
+ * there are at least 64 viruses on screen.
  *
- * As this splash screen is solely aesthetic, once the user leaves this screen it will not reappear on subsequent
- * resumes, or back button presses. The splash screen will only appear on initial startup (noHistory = true).
+ * As this splash screen is solely aesthetic, once the user leaves this screen it will not
+ * reappear on subsequent resumes, or back button presses. The splash screen will only appear
+ * on initial startup (noHistory = true).
  *
- * This screen demonstrates our mastery of android graphical elements (given that the rest of our app has no need for graphics).
+ * This screen demonstrates our mastery of android graphical elements
+ * (given that the rest of our app has no need for graphics).
  *
  * Author: Chuck Daniels
  */
@@ -106,7 +112,7 @@ class SplashScreen : Activity(){
 
                     timeUp = System.currentTimeMillis()
 
-                    if ((timeUp - timeDown).absoluteValue < 500) {
+                    if (bList.size > 64 && (timeUp - timeDown).absoluteValue < 500 ) {
 
                         bList.forEach { b -> b.kill()}
                         active = false
@@ -243,11 +249,11 @@ class SplashScreen : Activity(){
 
             mScaledBitmapWidth = r.nextInt(2 * BITMAP_SIZE) + BITMAP_SIZE
 
-            r2 = (1..30).random()
+            r2 = (1..40).random()
             Log.i(TAG, "r2 = $r2")
             mScaledBitmap = when (r2) {
                 1 -> Bitmap.createScaledBitmap(mBitmap2!!, mScaledBitmapWidth, mScaledBitmapWidth, false)
-                //2 -> Bitmap.createScaledBitmap(mBitmap3!!, mScaledBitmapWidth, mScaledBitmapWidth, false)
+                2 -> Bitmap.createScaledBitmap(mBitmap2!!, mScaledBitmapWidth, mScaledBitmapWidth, false)
                // 3 -> Bitmap.createScaledBitmap(mBitmap4!!, mScaledBitmapWidth, mScaledBitmapWidth, false)
                // 4 -> Bitmap.createScaledBitmap(mBitmap5!!, mScaledBitmapWidth, mScaledBitmapWidth, false)
                 5 -> Bitmap.createScaledBitmap(mBitmap6!!, mScaledBitmapWidth, mScaledBitmapWidth, false)
