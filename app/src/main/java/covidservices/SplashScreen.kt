@@ -113,6 +113,7 @@ class SplashScreen : Activity(){
                     timeUp = System.currentTimeMillis()
 
                     if (bList.size > 64 && (timeUp - timeDown).absoluteValue < 500 ) {
+                    //if (/*bList.size > 64 && */(timeUp - timeDown).absoluteValue < 500 ) {
 
                         bList.forEach { b -> b.kill()}
                         active = false
@@ -247,6 +248,8 @@ class SplashScreen : Activity(){
 
         private fun createScaledBitmap(r: Random) {
 
+
+
             mScaledBitmapWidth = r.nextInt(2 * BITMAP_SIZE) + BITMAP_SIZE
 
             r2 = (1..40).random()
@@ -263,6 +266,7 @@ class SplashScreen : Activity(){
         }
 
         fun start() {
+
 
             val executor = Executors.newScheduledThreadPool(1)
 
