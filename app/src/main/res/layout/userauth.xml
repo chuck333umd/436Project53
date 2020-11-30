@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center_vertical"
+    android:orientation="vertical"
+    android:padding="16dp"
+    tools:context="covidservices.UserAuth">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Account Login / Registration" />
+
+    <EditText
+        android:id="@+id/userauth_username"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Username required for registration."
+        android:importantForAutofill="no"
+        android:inputType="text"
+        android:text="asdasdasd"
+        />
+
+    <EditText
+        android:id="@+id/userauth_email"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Email"
+        android:inputType="textEmailAddress"
+        android:importantForAutofill="no"
+        android:text="asd@asd.com"/>
+
+    <EditText
+        android:id="@+id/userauth_password"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Password"
+        android:inputType="textPassword"
+        android:importantForAutofill="no"
+        android:text="asdasd1"/>
+
+    <Button
+        android:id="@+id/userauth_login"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Login" />
+
+    <Button
+        android:id="@+id/userauth_register"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Register" />
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone" />
+</LinearLayout>

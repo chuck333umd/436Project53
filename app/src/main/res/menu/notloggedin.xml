@@ -3,5 +3,5 @@
 
     <item
         android:id="@+id/menu_login"
-        android:title="Log In" />
+        android:title="Log In / Register" />
 </menu>

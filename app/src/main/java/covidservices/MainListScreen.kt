@@ -3,13 +3,13 @@ package covidservices
 import android.Manifest.permission.ACCESS_FINE_LOCATION
 import android.annotation.TargetApi
 import android.app.Activity
-import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Color.parseColor
 import android.location.*
 import android.os.Build
 import android.os.Bundle
+import android.os.Parcelable
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
@@ -39,9 +39,10 @@ import java.util.concurrent.TimeUnit
 class MainListScreen : Activity() {
 
 
-    private var loggedIn: Boolean = true /** Change to false for final build */
+    private var loggedIn: Boolean = false /** Change to false for final build */
     private lateinit var mZipView: TextView
     private lateinit var mRadiusView: TextView
+    private lateinit var mCurrentUser: TextView
     private var mZip = ""
     private var mRadius = 50
 
@@ -63,8 +64,24 @@ class MainListScreen : Activity() {
         var numJobs = 0
 
         setContentView(R.layout.mainlist)
+
         mZipView = findViewById(R.id.location)
         mRadiusView = findViewById(R.id.radius)
+
+        mCurrentUser = findViewById(R.id.mainlist_currentUser)
+
+        val logIn = intent.getBooleanExtra("loggedIn", false)
+        if (logIn) {
+
+            invalidateOptionsMenu()
+            val username = intent.getStringExtra("username")
+            val userID = intent.getStringExtra("userID")
+            val user = intent.getParcelableExtra<Parcelable>("user")
+            loggedIn = true
+            mCurrentUser.text = username + "   ID:   " + userID
+        }
+
+
 
         Log.i("SplashScreen", "Starting Main List Screen")
 
@@ -113,6 +130,7 @@ class MainListScreen : Activity() {
 
 
         if (mRadiusView.text.toString().length < 9 && radiusValidator(mRadiusView.text.toString()) && mRadiusView.text.toString().toInt() > 0){
+            Log.i(TAG, "radiusButton")
             mRadius = mRadiusView.text.toString().toInt()
             mRadiusView.setTextColor(parseColor("#000000"))
             Toast.makeText(applicationContext, "Radius Updated", Toast.LENGTH_SHORT).show()
@@ -128,7 +146,9 @@ class MainListScreen : Activity() {
     }
 
     fun radiusValidator(s: String): Boolean {
-        val regex = "[0-9]+".toRegex()
+
+        val regex = "^[0-9]+$".toRegex()
+        Log.i(TAG, "radiusValidator = " + regex.containsMatchIn(s))
         return regex.containsMatchIn(s)
     }
 
@@ -162,7 +182,7 @@ class MainListScreen : Activity() {
         private const val REQUEST_FINE_LOC_PERM_ONCREATE = 200
         private const val REQUEST_FINE_LOC_PERM_ONRESUME = 201
         private var mFirstUpdate = true
-        private const val TAG = "LocationGetLocation"
+        private const val TAG = "main"
     }
 
 
@@ -382,15 +402,17 @@ class MainListScreen : Activity() {
         val intentMyJobs = Intent(this, MyJobs::class.java)
         val intentMyTasks = Intent(this, MyTasks::class.java)
         val intentCreateJob = Intent(this, CreateJob::class.java)
+        val intentLogin = Intent(this, UserAuth::class.java)
 
         return when (item.itemId) {
             R.id.menu_login -> {
-                loggedIn = true
-                invalidateOptionsMenu()
+
+                startActivity(intentLogin)
                 true
             }
             R.id.menu_logout -> {
                 loggedIn = false
+                mCurrentUser.text = "None"
                 invalidateOptionsMenu()
                 true
             }
