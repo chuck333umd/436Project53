@@ -10,6 +10,8 @@ import android.location.*
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.TextView
@@ -36,6 +38,7 @@ import java.util.concurrent.TimeUnit
 class MainListScreen : Activity() {
 
     // Views for display location information
+    private var loggedIn: Boolean = false
     private lateinit var mZipView: TextView
     private lateinit var mRadiusView: TextView
     private var mZip = ""
@@ -66,7 +69,7 @@ class MainListScreen : Activity() {
 
 
         /** START IMPORT */
-        mLocationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
+        mLocationManager = getSystemService(LOCATION_SERVICE) as LocationManager
         if (null != mLocationManager) {
             Log.i(TAG, "Couldn't find the LocationManager")
             // Return a LocationListener
@@ -364,6 +367,31 @@ class MainListScreen : Activity() {
 
     }
 
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        if (loggedIn) {
+            menuInflater.inflate(R.menu.loggedin, menu)
+        }else{
+            menuInflater.inflate(R.menu.notloggedin, menu)
+        }
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.menu_login -> {
+                loggedIn = true
+                invalidateOptionsMenu()
+                true
+            }
+            R.id.menu_logout -> {
+                loggedIn = false
+                invalidateOptionsMenu()
+                true
+            }
+
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
 
 
 
