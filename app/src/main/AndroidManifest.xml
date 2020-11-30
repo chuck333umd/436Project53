@@ -45,6 +45,7 @@
         </activity>
         <activity
             android:name="covidservices.UserAuth"
+            android:label="Login / Register">
             android:theme="@style/AppTheme">
         </activity>
     </application>

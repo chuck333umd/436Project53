@@ -17,6 +17,15 @@ import com.google.firebase.auth.UserProfileChangeRequest
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 
+/** User authentication via Firebase. Takes a username, email and password and saves them in firebase
+ * after validating them. Va;lidation specs are listed in Validators.kt
+ *
+ * The user can register and log in via the same screen. Logging in does not require the username.
+ *
+ * For testing purposes the fields are populated with "asd" (password is asdasd1)
+ *
+ * Author: Chuck Daniels
+ */
 
 class UserAuth : AppCompatActivity() {
 
