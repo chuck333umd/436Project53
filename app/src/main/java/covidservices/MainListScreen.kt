@@ -4,6 +4,7 @@ import android.Manifest.permission.ACCESS_FINE_LOCATION
 import android.annotation.TargetApi
 import android.app.Activity
 import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Color.parseColor
 import android.location.*
@@ -37,8 +38,8 @@ import java.util.concurrent.TimeUnit
 
 class MainListScreen : Activity() {
 
-    // Views for display location information
-    private var loggedIn: Boolean = false
+
+    private var loggedIn: Boolean = true /** Change to false for final build */
     private lateinit var mZipView: TextView
     private lateinit var mRadiusView: TextView
     private var mZip = ""
@@ -377,6 +378,11 @@ class MainListScreen : Activity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
+
+        val intentMyJobs = Intent(this, MyJobs::class.java)
+        val intentMyTasks = Intent(this, MyTasks::class.java)
+        val intentCreateJob = Intent(this, CreateJob::class.java)
+
         return when (item.itemId) {
             R.id.menu_login -> {
                 loggedIn = true
@@ -386,6 +392,18 @@ class MainListScreen : Activity() {
             R.id.menu_logout -> {
                 loggedIn = false
                 invalidateOptionsMenu()
+                true
+            }
+            R.id.menu_myjobs -> {
+                startActivity(intentMyJobs)
+                true
+            }
+            R.id.menu_createjob -> {
+                startActivity(intentCreateJob)
+                true
+            }
+            R.id.menu_mytasks -> {
+                startActivity(intentMyTasks)
                 true
             }
 

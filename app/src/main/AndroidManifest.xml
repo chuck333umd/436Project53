@@ -28,7 +28,18 @@
             android:name="covidservices.MainListScreen"
             android:label="Covid Services Jobs List"
             android:windowSoftInputMode="stateHidden">
-
+        </activity>
+        <activity
+            android:name="covidservices.MyJobs"
+            android:label="My Jobs">
+        </activity>
+        <activity
+            android:name="covidservices.MyTasks"
+            android:label="My Tasks">
+        </activity>
+        <activity
+            android:name="covidservices.CreateJob"
+            android:label="Create Job">
         </activity>
     </application>
 

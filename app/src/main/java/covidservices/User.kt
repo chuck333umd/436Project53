@@ -1,15 +1,17 @@
 package covidservices
 
-class User {
+class User(var name: String, var email: String) {
 
 
-        var name: String = ""
-        var email: String = ""
-        lateinit var jobsCreated: List<Integer>
-        lateinit var jobsAccepted: List<Integer>
+        private val jobsCreated: ArrayList<Integer> = ArrayList()
+        private val tasksAccepted: ArrayList<Integer> = ArrayList()
 
-        constructor() {
+        fun addJob(jobID: Integer): Boolean{
+                return jobsCreated.add(jobID)
+        }
 
+        fun addTask(jobID: Integer): Boolean{
+                return tasksAccepted.add(jobID)
         }
 
 

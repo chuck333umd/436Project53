@@ -1,8 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:title="My Jobs" />
-    <item android:title="My Tasks" />
-    <item android:title="Create Job" />
+    <item
+        android:id="@+id/menu_myjobs"
+        android:title="My Jobs" />
+    <item
+        android:id="@+id/menu_mytasks"
+        android:title="My Tasks" />
+    <item
+        android:id="@+id/menu_createjob"
+        android:title="Create Job" />
     <item
         android:id="@+id/menu_logout"
         android:title="Log Out" />
