@@ -15,6 +15,14 @@ import java.util.Date
 import java.text.SimpleDateFormat
 
 
+// TODO - Implement a way for the view to show a different button depending on the case:
+// TODO   Case 1 - Job is not currently assigned to any tasker (shows ACCEPT JOB button)
+// TODO   Case 2 - Job is currently assigned to a tasker and is being viewed by the tasker (shows IN PROGRESS notation as well as QUIT JOB button)
+// TODO   Case 3 - Job is currently assigned to a tasker and is being viewed by the creator (shows IN PROGRESS notation as well as FIRE TASKER button)
+// TODO   Case 4 - Job is completed (shows COMPLETED notation)
+
+// TODO - Implement functionality for the above listed cases. 
+
 class ViewJob : Activity() {
 
     private lateinit var mDatabase: DatabaseReference
