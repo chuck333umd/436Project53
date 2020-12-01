@@ -40,14 +40,19 @@ import java.util.concurrent.TimeUnit
  * Author: Chuck Daniels
  */
 
+
+// TODO - Implement sortJobsByRadius() to sort jobs by radius distance from current zipcode <mainlist_location.text>
+
+// TODO - Add the listview <mainlist_listview> that shows all jobs within radius <mainlist_radius.text>
+
 // TODO OPTIONAL - Clean up all the unnecessary crap from this activity pertaining to location,
-// TODO OPTIONAL - since we do not need to update the location once we obtain the initial ZIP,
-// TODO OPTIONAL - a lot of this can be removed.
+// TODO OPTIONAL   since we do not need to update the location once we obtain the initial ZIP,
+// TODO OPTIONAL   some of this can be probably be removed.
 
 class MainListScreen : Activity() {
 
 
-    private var loggedIn: Boolean = false /** Change to false for final build */
+    private var loggedIn: Boolean = false
     private lateinit var mZipView: TextView
     private lateinit var mRadiusView: TextView
     private lateinit var mCurrentUser: TextView
@@ -75,8 +80,8 @@ class MainListScreen : Activity() {
 
         setContentView(R.layout.mainlist)
 
-        mZipView = findViewById(R.id.location)
-        mRadiusView = findViewById(R.id.radius)
+        mZipView = findViewById(R.id.mainlist_location)
+        mRadiusView = findViewById(R.id.mainlist_radius)
 
         mCurrentUser = findViewById(R.id.mainlist_currentUser)
 
@@ -92,11 +97,6 @@ class MainListScreen : Activity() {
         }
 
 
-
-        Log.i("SplashScreen", "Starting Main List Screen")
-
-
-        /** START IMPORT */
         mLocationManager = getSystemService(LOCATION_SERVICE) as LocationManager
         if (null != mLocationManager) {
             Log.i(TAG, "Couldn't find the LocationManager")
@@ -109,14 +109,17 @@ class MainListScreen : Activity() {
             getAndDisplayLastKnownLocation()
             installLocationListeners()
         }
-        /** FINISH IMPORT */
 
 
+        /** Dont forget to update this value when you search the database for <jobs within radius> */
 
         if (numJobs == 0) Toast.makeText(applicationContext, "No Jobs Currently", Toast.LENGTH_SHORT).show()
 
+    }
 
+    fun sortJobsByRadius(){
 
+        //TODO - Implement method to return list of job IDs for any job within radius
     }
 
     fun locationButton(view: View){
@@ -179,6 +182,70 @@ class MainListScreen : Activity() {
 
         finish()
         //finishAffinity()
+    }
+
+    // Update display
+    private fun updateDisplay(location: Location) {
+
+        val geocoder = Geocoder(this, Locale.getDefault())
+        val addresses: List<Address> = geocoder.getFromLocation(location.latitude, location.longitude, 1)
+
+        Log.i("main", "addresses: $addresses")
+        addresses.forEach { a ->
+            Log.i("main", "zip: " + a.postalCode)
+            mZipView.text = a.postalCode
+            mZip = a.postalCode
+        }
+
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        if (loggedIn) {
+            menuInflater.inflate(R.menu.loggedin, menu)
+        }else{
+            menuInflater.inflate(R.menu.notloggedin, menu)
+        }
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+
+        val intentMyJobs = Intent(this, MyJobs::class.java)
+        val intentMyTasks = Intent(this, MyTasks::class.java)
+        val intentCreateJob = Intent(this, CreateJob::class.java)
+        val intentLogin = Intent(this, UserAuth::class.java)
+
+        return when (item.itemId) {
+            R.id.menu_login -> {
+
+                startActivity(intentLogin)
+                true
+            }
+            R.id.menu_logout -> {
+                loggedIn = false
+                mCurrentUser.text = "None"
+                invalidateOptionsMenu()
+                true
+            }
+            R.id.menu_myjobs -> {
+                startActivity(intentMyJobs)
+                true
+            }
+            R.id.menu_createjob -> {
+
+                val intentCreateJob = Intent(this, CreateJob::class.java)
+                intentCreateJob.putExtra("username", username)
+
+                startActivity(intentCreateJob)
+                true
+            }
+            R.id.menu_mytasks -> {
+                startActivity(intentMyTasks)
+                true
+            }
+
+            else -> super.onOptionsItemSelected(item)
+        }
     }
 
 
@@ -383,69 +450,7 @@ class MainListScreen : Activity() {
         }
     }
 
-    // Update display
-    private fun updateDisplay(location: Location) {
 
-        val geocoder = Geocoder(this, Locale.getDefault())
-        val addresses: List<Address> = geocoder.getFromLocation(location.latitude, location.longitude, 1)
-
-        Log.i("main", "addresses: $addresses")
-        addresses.forEach { a ->
-            Log.i("main", "zip: " + a.postalCode)
-            mZipView.text = a.postalCode
-            mZip = a.postalCode
-        }
-
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        if (loggedIn) {
-            menuInflater.inflate(R.menu.loggedin, menu)
-        }else{
-            menuInflater.inflate(R.menu.notloggedin, menu)
-        }
-        return true
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-
-        val intentMyJobs = Intent(this, MyJobs::class.java)
-        val intentMyTasks = Intent(this, MyTasks::class.java)
-        val intentCreateJob = Intent(this, CreateJob::class.java)
-        val intentLogin = Intent(this, UserAuth::class.java)
-
-        return when (item.itemId) {
-            R.id.menu_login -> {
-
-                startActivity(intentLogin)
-                true
-            }
-            R.id.menu_logout -> {
-                loggedIn = false
-                mCurrentUser.text = "None"
-                invalidateOptionsMenu()
-                true
-            }
-            R.id.menu_myjobs -> {
-                startActivity(intentMyJobs)
-                true
-            }
-            R.id.menu_createjob -> {
-
-                val intentCreateJob = Intent(this, CreateJob::class.java)
-                intentCreateJob.putExtra("username", username)
-
-                startActivity(intentCreateJob)
-                true
-            }
-            R.id.menu_mytasks -> {
-                startActivity(intentMyTasks)
-                true
-            }
-
-            else -> super.onOptionsItemSelected(item)
-        }
-    }
 
 
 

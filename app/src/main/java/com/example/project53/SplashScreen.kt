@@ -44,6 +44,8 @@ import kotlin.math.absoluteValue
  * Author: Chuck Daniels
  */
 
+// TODO - NOTHING; THIS CLASS IS DONE
+
 class SplashScreen : Activity(){
 
     // The Main view
@@ -112,6 +114,7 @@ class SplashScreen : Activity(){
 
                     timeUp = System.currentTimeMillis()
 
+                    /** Change this back for final build */
                     //if (bList.size > 64 && (timeUp - timeDown).absoluteValue < 500 ) {
                     if (/*bList.size > 64 && */(timeUp - timeDown).absoluteValue < 500 ) {
 

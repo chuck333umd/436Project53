@@ -76,6 +76,7 @@ class CreateJob : Activity() {
     private fun validateFields(){
 
         //TODO - CREATE VALIDATOR CODE TO MAKE SURE USER CANNOT ENTER IMPROPERLY FORMATTED DATA
+        //TODO - MAKE SURE PAYOUT IS IN WHOLE DOLLAR AMOUNT AND IS A VALID INT (NO CENTS)
 
     }
 
@@ -85,7 +86,7 @@ class CreateJob : Activity() {
 
         var randjid = (0..Long.MAX_VALUE).random()
 
-        //TODO - CHECK ALL "Jobs" KEYS IN DB TO MAKE SURE THIS ID IS UNIQUE
+        //TODO (OPTIONAL) - CHECK ALL "Jobs" KEYS IN DB TO MAKE SURE THIS ID IS UNIQUE
 
         return randjid
     }
