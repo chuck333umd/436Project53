@@ -22,6 +22,7 @@ class ViewJob : Activity() {
 
     private lateinit var mDatabase: DatabaseReference
     private lateinit var mViewJob_User: TextView
+    private lateinit var mViewJob_Tasker: TextView
     private lateinit var mAcceptJobButton: Button
     private lateinit var mViewJob_DateView: TextView
     private lateinit var mViewJob_TimeView: TextView
@@ -30,6 +31,7 @@ class ViewJob : Activity() {
     private lateinit var mViewJob_DescriptionView: TextView
 
     private var username: String? = null
+    private var jid: Long = -1
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -37,6 +39,7 @@ class ViewJob : Activity() {
         setContentView(R.layout.createjob)
 
         mViewJob_User = findViewById(R.id.viewjob_username)
+        mViewJob_Tasker = findViewById(R.id.viewjob_taskername)
         mAcceptJobButton = findViewById(R.id.viewjob_acceptbutton)
         mViewJob_DateView = findViewById(R.id.viewjob_editTextDate)
         mViewJob_TimeView = findViewById(R.id.viewjob_editTextTime)
@@ -46,18 +49,29 @@ class ViewJob : Activity() {
         mDatabase = FirebaseDatabase.getInstance().getReference("Jobs")
 
         username = intent.getStringExtra("username")
+        jid = intent.getLongExtra("jid", -1L)
+
+        Log.i(TAG, "ViewJob()")
         Log.i(TAG, "username = $username")
+        Log.i(TAG, "jid = $jid")
+
         mViewJob_User.text = username
+
+        // TODO - retrieve job from database using jid and populate TextViews
+
+        setupViewButtons()
 
     }
 
-    fun buttonClick(view: View){
+    private fun setupViewButtons(){
+        //TODO - Hide/Show buttons depending on which case in above todo ^^^
 
-        //TODO - IMPLEMENT acceptJob()
 
     }
 
     fun acceptJobButtonClick(view: View){
+
+
 
         //TODO - edit job in "Jobs" database to show isStarted = true
         //TODO - edit job in "Jobs" database to show tasker = username of <person who accepted>

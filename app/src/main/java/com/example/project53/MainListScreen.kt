@@ -41,7 +41,7 @@ import java.util.concurrent.TimeUnit
  */
 
 
-// TODO - Implement sortJobsByRadius() to sort jobs by radius distance from current zipcode <mainlist_location.text>
+// TODO - Implement displayJobsByRadius() to sort jobs by radius distance from current zipcode <mainlist_location.text>
 
 // TODO - Add the listview <mainlist_listview> that shows all jobs within radius <mainlist_radius.text> using list_item.xml layout
 // TODO   Clicking on one of the list items will open it in ViewJob.kt
@@ -118,11 +118,16 @@ class MainListScreen : Activity() {
 
         if (numJobs == 0) Toast.makeText(applicationContext, "No Jobs Currently", Toast.LENGTH_SHORT).show()
 
+        displayJobsByRadius()
+
     }
 
-    fun sortJobsByRadius(){
+    fun displayJobsByRadius(){
 
         //TODO - Implement method to return list of job IDs for any job within radius
+
+        //TODO - When displaying an individual job with ViewJob, send an intent containing username
+        //TODO   as "username" StringExtra and job ID as "jid" LongExtra
     }
 
     fun locationButton(view: View){
