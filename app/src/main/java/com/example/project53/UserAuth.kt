@@ -13,8 +13,8 @@ import android.widget.Toast
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.UserProfileChangeRequest
-import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.*
+
 
 /** User authentication via Firebase. Takes a username, email and password and saves them in firebase
  * after validating them. Va;lidation specs are listed in Validators.kt
@@ -122,50 +122,62 @@ class UserAuth : Activity() {
             Toast.makeText(applicationContext, "Enter a valid password!", Toast.LENGTH_LONG).show()
             return
         }
-/*
-        mAuth!!.createUserWithEmailAndPassword(email, password)
-                .addOnCompleteListener(this) { task ->
-                    Log.d("main", "Authentication successful")
-                    if (!task.isSuccessful) {
-                        Toast.makeText(this, "Authentication failed.",  Toast.LENGTH_SHORT).show();
-                    }
-                }
-*/
+
         var task = mAuth!!.createUserWithEmailAndPassword(email, password).addOnCompleteListener(this, OnCompleteListener { task ->
             Log.i("main", "registerNewUser: ")
             if (task.isSuccessful) {
-                Toast.makeText(applicationContext, "Registration successful!", Toast.LENGTH_LONG).show()
-                progressBar!!.visibility = View.GONE
+
 
 
                 val user = mAuth!!.currentUser
                 user!!.updateProfile(UserProfileChangeRequest.Builder().setDisplayName(username).build())
 
-                var mDatabase = FirebaseDatabase.getInstance().getReference("Users")
-                mDatabase.child(username.toString()).child(mAuth!!.uid.toString()).setValue("placeholder")
 
-                loginUserAccount()
-                /*
-                Log.i("main", mAuth!!.uid!!)
-                Log.i("main", "mAuth!!.currentUser!!.displayName = " + mAuth!!.currentUser!!.displayName)
+                val eventListener: ValueEventListener = object : ValueEventListener {
+                    override fun onDataChange(dataSnapshot: DataSnapshot) {
+                        if (!dataSnapshot.exists()) {
 
-                val intent = Intent(this, MainListScreen::class.java)
-                intent.putExtra("loggedIn", true)
-                intent.putExtra("userID", mAuth!!.uid)
-                intent.putExtra("username", mAuth!!.currentUser!!.displayName)
-                intent.putExtra("user", user)
+                            val newuser = User(username, userEmail!!.text.toString(), ArrayList<Long>(), ArrayList<Long>())
+                            mUsers!!.child(username.toString()).setValue(newuser)
+
+                            Toast.makeText(applicationContext, "Registration successful!", Toast.LENGTH_LONG).show()
+                            progressBar!!.visibility = View.GONE
+
+                            loginUserAccount()
+                        }else{
+                            Toast.makeText(applicationContext, "Username Not Unique!", Toast.LENGTH_LONG).show()
+                            userName!!.setText("")
+                            progressBar!!.visibility = View.GONE
+                        }
+                    }
+
+                    override fun onCancelled(databaseError: DatabaseError) {
+                        Log.d(TAG, databaseError.message) //Don't ignore errors!
+                    }
+                }
+
+                val query: Query = mUsers!!.orderByChild("name").equalTo(username)
+
+                /** Add new user only if he doesnt already exist in database */
+
+                query.addValueEventListener(eventListener)
 
 
-                startActivity(intent)*/
+
+
 
             } else {
-                Toast.makeText(applicationContext, "Registration failed! Please try again later", Toast.LENGTH_LONG).show()
+                Toast.makeText(applicationContext, "Failure (or Email May Already Exist)!", Toast.LENGTH_LONG).show()
                 progressBar!!.visibility = View.GONE
             }
         })
 
 
 
+    }
+
+    fun checkforcurrentuser(): Boolean{
+        return true
     }
 
 

@@ -50,6 +50,8 @@ class MainListScreen : Activity() {
     private var mZip = ""
     private var mRadius = 50
 
+    private var username: String? = null
+
 
     // Current best location estimate
     private var mBestReading: Location? = null
@@ -78,7 +80,7 @@ class MainListScreen : Activity() {
         if (logIn) {
 
             invalidateOptionsMenu()
-            val username = intent.getStringExtra("username")
+            username = intent.getStringExtra("username")
             val userID = intent.getStringExtra("userID")
             val user = intent.getParcelableExtra<Parcelable>("user")
             loggedIn = true
@@ -425,6 +427,10 @@ class MainListScreen : Activity() {
                 true
             }
             R.id.menu_createjob -> {
+
+                val intentCreateJob = Intent(this, CreateJob::class.java)
+                intentCreateJob.putExtra("username", username)
+
                 startActivity(intentCreateJob)
                 true
             }

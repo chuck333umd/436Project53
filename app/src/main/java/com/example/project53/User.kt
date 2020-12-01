@@ -1,16 +1,15 @@
 package com.example.project53
 
-class User(var name: String, var email: String) {
+class User(var name: String, var email: String, var jobsCreated: ArrayList<Long>, var tasksAccepted: ArrayList<Long>) {
 
 
-        private val jobsCreated: ArrayList<Integer> = ArrayList()
-        private val tasksAccepted: ArrayList<Integer> = ArrayList()
 
-        fun addJob(jobID: Integer): Boolean{
+
+        fun addJob(jobID: Long): Boolean{
                 return jobsCreated.add(jobID)
         }
 
-        fun addTask(jobID: Integer): Boolean{
+        fun addTask(jobID: Long): Boolean{
                 return tasksAccepted.add(jobID)
         }
 

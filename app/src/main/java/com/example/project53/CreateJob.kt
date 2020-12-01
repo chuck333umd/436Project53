@@ -11,34 +11,80 @@ import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.gms.tasks.OnFailureListener
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
-
+import java.util.Date
+import java.text.SimpleDateFormat
 
 
 class CreateJob : Activity() {
 
     private lateinit var mDatabase: DatabaseReference
-    private lateinit var mButton: Button
-    private lateinit var mTextOne: TextView
-    private lateinit var mTextTwo: TextView
+    private lateinit var mCreateJobUser: TextView
+    private lateinit var mCreateJobButton: Button
+    private lateinit var mCreateJobDateView: TextView
+    private lateinit var mCreateJobTimeView: TextView
+    private lateinit var mCreateJobPayoutView: TextView
+    private lateinit var mCreateJobMinPayoutView: TextView
+    private lateinit var mCreateJobDescriptionView: TextView
+
+    private var username: String? = null
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.myjobs)
+        setContentView(R.layout.createjob)
 
-        mButton = findViewById(R.id.createjob_button)
-        mTextOne = findViewById(R.id.createjob_textone)
-        mTextTwo = findViewById(R.id.createjob_texttwo)
+        mCreateJobUser = findViewById(R.id.createjob_username)
+        mCreateJobButton = findViewById(R.id.createjob_button)
+        mCreateJobDateView = findViewById(R.id.createjob_editTextDate)
+        mCreateJobTimeView = findViewById(R.id.createjob_editTextTime)
+        mCreateJobPayoutView = findViewById(R.id.createjob_editTextPayout)
+        mCreateJobMinPayoutView = findViewById(R.id.createjob_editTextMinPayout)
+        mCreateJobDescriptionView = findViewById(R.id.createjob_editTextDescription)
 
         mDatabase = FirebaseDatabase.getInstance().getReference("Jobs")
 
 
-
+        username = intent.getStringExtra("username")
+        Log.i(TAG, "username = $username")
+        mCreateJobUser.text = username
 
     }
 
     fun buttonClick(view: View){
-        mDatabase.child(mTextOne.text.toString()).child(mTextTwo.text.toString()).setValue("placeholder")
+        validateFields()
+        val jid = generateUniqueJobID().toString()
+        Log.i(TAG, "jid = $jid")
+        val duedate: Date
+
+
+        val formatter = SimpleDateFormat("yyyy/MM/ddHH:mm")
+        duedate = formatter.parse(mCreateJobDateView.text.toString()+mCreateJobTimeView.text.toString())
+        Log.i(TAG, "duedate = $duedate")
+
+
+
+        val job = Job(jid, username!!, duedate, mCreateJobPayoutView.text.toString().toInt() )
+        val task = mDatabase.child(jid).setValue(job)
+        Log.i(TAG, "task isComplete= " + task.isComplete)
+    }
+
+
+
+    private fun validateFields(){
+
+        //TODO - CREATE VALIDATOR CODE TO MAKE SURE USER CANNOT ENTER IMPROPERLY FORMATTED DATA
+
+    }
+
+    @Suppress("UnnecessaryVariable")
+    fun generateUniqueJobID(): Long{
+
+
+        var randjid = (0..Long.MAX_VALUE).random()
+
+        //TODO - CHECK ALL "Jobs" KEYS IN DB TO MAKE SURE THIS ID IS UNIQUE
+
+        return randjid
     }
 
 
@@ -49,44 +95,6 @@ class CreateJob : Activity() {
 
 
 
-
-
-
-    private fun addUser() {
-
-        val mDatabase = FirebaseDatabase.getInstance().reference.root
-        val mUsers = FirebaseDatabase.getInstance().getReference("Users")
-        val mUserss = FirebaseDatabase.getInstance().getReference("authors")
-        mUserss.child("User2").setValue(User("asshile", "shithead")).addOnCompleteListener(OnCompleteListener<Void?> { task ->
-            if (task.isSuccessful) {
-                Toast.makeText(this, "Song Uploaded", Toast.LENGTH_SHORT).show()
-                Log.i(TAG, "OK")
-            }
-        }).addOnFailureListener(OnFailureListener { e ->
-            Toast.makeText(this, e.message, Toast.LENGTH_SHORT).show()
-            Log.i(TAG, "FUCK NO " + e.message)
-        })
-
-
-
-
-        Log.i(TAG, "mDatabase = $mDatabase ")
-        Log.i(TAG, "mUsers = $mUsers ")
-        var task1 = mDatabase!!.push().setValue("fuck")
-        Log.i(UserAuth.TAG, "task1.isSuccessful = " + task1.isSuccessful)
-
-        val id = (mUsers!!.push()).key.toString()
-        Log.i(UserAuth.TAG, "addUser: id = $id")
-        //creating an Author Object
-        val user = User("dickhead", "dickhead@dicksRus.com")
-
-        //Saving the Author
-        val task = mUsers!!.child("dickhead").child(id).setValue(user)
-        Log.i(UserAuth.TAG, "task.isSuccessful = " + task.isSuccessful)
-
-        if (task.isSuccessful) Toast.makeText(this, "User added", Toast.LENGTH_LONG).show()
-        else Toast.makeText(this, "User NOT added", Toast.LENGTH_LONG).show()
-    }
 
     companion object{
         val TAG = "main"
