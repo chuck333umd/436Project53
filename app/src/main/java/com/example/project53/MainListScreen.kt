@@ -43,7 +43,8 @@ import java.util.concurrent.TimeUnit
 
 // TODO - Implement sortJobsByRadius() to sort jobs by radius distance from current zipcode <mainlist_location.text>
 
-// TODO - Add the listview <mainlist_listview> that shows all jobs within radius <mainlist_radius.text>
+// TODO - Add the listview <mainlist_listview> that shows all jobs within radius <mainlist_radius.text> using list_item.xml layout
+// TODO   Clicking on one of the list items will open it in ViewJob.kt
 
 // TODO OPTIONAL - Clean up all the unnecessary crap from this activity pertaining to location,
 // TODO OPTIONAL   since we do not need to update the location once we obtain the initial ZIP,
