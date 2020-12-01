@@ -46,6 +46,8 @@ import java.util.concurrent.TimeUnit
 // TODO - Add the listview <mainlist_listview> that shows all jobs within radius <mainlist_radius.text> using list_item.xml layout
 // TODO   Clicking on one of the list items will open it in ViewJob.kt
 
+// TODO MAYBE - Change list_item.xml layout so that it better fits into the main listview.
+
 // TODO OPTIONAL - Clean up all the unnecessary crap from this activity pertaining to location,
 // TODO OPTIONAL   since we do not need to update the location once we obtain the initial ZIP,
 // TODO OPTIONAL   some of this can be probably be removed.
