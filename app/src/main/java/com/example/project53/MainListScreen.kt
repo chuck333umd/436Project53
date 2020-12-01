@@ -231,7 +231,12 @@ class MainListScreen : Activity() {
                 true
             }
             R.id.menu_myjobs -> {
+
+                val intentMyJobs = Intent(this, CreateJob::class.java)
+                intentMyJobs.putExtra("username", username)
+
                 startActivity(intentMyJobs)
+
                 true
             }
             R.id.menu_createjob -> {
@@ -243,10 +248,13 @@ class MainListScreen : Activity() {
                 true
             }
             R.id.menu_mytasks -> {
+
+                val intentMyTasks = Intent(this, CreateJob::class.java)
+                intentMyTasks.putExtra("username", username)
+
                 startActivity(intentMyTasks)
                 true
             }
-
             else -> super.onOptionsItemSelected(item)
         }
     }
@@ -261,7 +269,6 @@ class MainListScreen : Activity() {
         private const val MIN_DISTANCE = 10.0f
         private const val REQUEST_FINE_LOC_PERM_ONCREATE = 200
         private const val REQUEST_FINE_LOC_PERM_ONRESUME = 201
-        private var mFirstUpdate = true
         private const val TAG = "main"
     }
 
@@ -312,14 +319,8 @@ class MainListScreen : Activity() {
 
         // Determine whether initial reading is "good enough".
         // If not, register for further location updates
-        if (null == mBestReading ||
-                mBestReading!!.accuracy > MIN_ACCURACY ||
-                mBestReading!!.time < System.currentTimeMillis() - TWO_MIN
-        ) {
-
-            if (checkSelfPermission(ACCESS_FINE_LOCATION) !=
-                    PackageManager.PERMISSION_GRANTED
-            ) {
+        if (null == mBestReading || mBestReading!!.accuracy > MIN_ACCURACY || mBestReading!!.time < System.currentTimeMillis() - TWO_MIN) {
+            if (checkSelfPermission(ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                 requestPermissions(arrayOf(ACCESS_FINE_LOCATION), REQUEST_FINE_LOC_PERM_ONRESUME)
             } else {
                 continueInstallLocationListeners()
@@ -333,20 +334,14 @@ class MainListScreen : Activity() {
             // Register for network location updates
             if (null != mLocationManager.getProvider(LocationManager.NETWORK_PROVIDER)) {
                 Log.i(TAG, "Network location updates requested")
-                mLocationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER,
-                        POLLING_FREQ, MIN_DISTANCE, mLocationListener)
+                mLocationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, POLLING_FREQ, MIN_DISTANCE, mLocationListener)
                 mIsRequestingUpdates = true
             }
 
             // Register for GPS location updates
             if (null != mLocationManager.getProvider(LocationManager.GPS_PROVIDER)) {
                 Log.i(TAG, "GPS location updates requested")
-                mLocationManager.requestLocationUpdates(
-                        LocationManager.GPS_PROVIDER,
-                        POLLING_FREQ,
-                        MIN_DISTANCE,
-                        mLocationListener
-                )
+                mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, POLLING_FREQ, MIN_DISTANCE, mLocationListener)
                 mIsRequestingUpdates = true
             }
 
@@ -398,11 +393,7 @@ class MainListScreen : Activity() {
                 continueInstallLocationListeners()
             }
         } else {
-            Toast.makeText(
-                    this,
-                    "This app requires ACCESS_FINE_LOCATION permission",
-                    Toast.LENGTH_LONG
-            ).show()
+            Toast.makeText(this, "This app requires ACCESS_FINE_LOCATION permission", Toast.LENGTH_LONG).show()
         }
     }
 
