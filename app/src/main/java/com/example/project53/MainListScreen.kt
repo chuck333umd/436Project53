@@ -40,6 +40,10 @@ import java.util.concurrent.TimeUnit
  * Author: Chuck Daniels
  */
 
+// TODO OPTIONAL - Clean up all the unnecessary crap from this activity pertaining to location,
+// TODO OPTIONAL - since we do not need to update the location once we obtain the initial ZIP,
+// TODO OPTIONAL - a lot of this can be removed.
+
 class MainListScreen : Activity() {
 
 
@@ -380,7 +384,7 @@ class MainListScreen : Activity() {
     }
 
     // Update display
-    private fun  updateDisplay(location: Location) {
+    private fun updateDisplay(location: Location) {
 
         val geocoder = Geocoder(this, Locale.getDefault())
         val addresses: List<Address> = geocoder.getFromLocation(location.latitude, location.longitude, 1)

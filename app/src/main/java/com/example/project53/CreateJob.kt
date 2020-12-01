@@ -62,10 +62,13 @@ class CreateJob : Activity() {
         Log.i(TAG, "duedate = $duedate")
 
 
-
         val job = Job(jid, username!!, duedate, mCreateJobPayoutView.text.toString().toInt() )
         val task = mDatabase.child(jid).setValue(job)
+
         Log.i(TAG, "task isComplete= " + task.isComplete)
+
+        //TODO - add job ID to jobsCreated List in User object in "Users" database corresponding to this user
+
     }
 
 
