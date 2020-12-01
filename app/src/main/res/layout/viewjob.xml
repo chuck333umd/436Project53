@@ -24,7 +24,7 @@
       android:layout_height="wrap_content"
       android:layout_marginTop="88dp"
       android:layout_marginEnd="28dp"
-      android:text="Payout"
+      android:text="Payout ($)"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintTop_toTopOf="parent" />
 
@@ -109,13 +109,46 @@
       app:layout_constraintTop_toBottomOf="@+id/viewjob_editTextTime" />
 
   <Button
-      android:id="@+id/viewjob_button"
+      android:id="@+id/viewjob_acceptbutton"
       android:layout_width="338dp"
       android:layout_height="54dp"
       android:layout_marginStart="28dp"
       android:layout_marginTop="20dp"
-      android:onClick="buttonClick"
+      android:onClick="acceptJobButtonClick"
       android:text="ACCEPT JOB"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toBottomOf="@+id/viewjob_editTextDescription" />
+
+  <Button
+      android:id="@+id/viewjob_quitbutton"
+      android:layout_width="338dp"
+      android:layout_height="54dp"
+      android:layout_marginStart="28dp"
+      android:layout_marginTop="84dp"
+      android:onClick="quitJobButtonClick"
+      android:text="QUIT JOB"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toBottomOf="@+id/viewjob_editTextDescription" />
+
+  <Button
+      android:id="@+id/viewjob_firebutton"
+      android:layout_width="338dp"
+      android:layout_height="54dp"
+      android:layout_marginStart="28dp"
+      android:layout_marginTop="152dp"
+      android:onClick="fireTaskerButtonClick"
+      android:text="FIRE TASKER"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toBottomOf="@+id/viewjob_editTextDescription" />
+
+  <Button
+      android:id="@+id/viewjob_completejob"
+      android:layout_width="338dp"
+      android:layout_height="54dp"
+      android:layout_marginStart="28dp"
+      android:layout_marginTop="220dp"
+      android:onClick="completeJobButtonClick"
+      android:text="JOB COMPLETE"
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toBottomOf="@+id/viewjob_editTextDescription" />
 

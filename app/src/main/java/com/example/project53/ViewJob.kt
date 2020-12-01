@@ -6,13 +6,8 @@ import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.TextView
-import android.widget.Toast
-import com.google.android.gms.tasks.OnCompleteListener
-import com.google.android.gms.tasks.OnFailureListener
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
-import java.util.Date
-import java.text.SimpleDateFormat
 
 
 // TODO - Implement a way for the view to show a different button depending on the case:
@@ -21,7 +16,7 @@ import java.text.SimpleDateFormat
 // TODO   Case 3 - Job is currently assigned to a tasker and is being viewed by the creator (shows IN PROGRESS notation as well as FIRE TASKER button)
 // TODO   Case 4 - Job is completed (shows COMPLETED notation)
 
-// TODO - Implement functionality for the above listed cases. 
+// TODO - Implement functionality for the above listed cases.
 
 class ViewJob : Activity() {
 
@@ -42,7 +37,7 @@ class ViewJob : Activity() {
         setContentView(R.layout.createjob)
 
         mViewJob_User = findViewById(R.id.viewjob_username)
-        mAcceptJobButton = findViewById(R.id.viewjob_button)
+        mAcceptJobButton = findViewById(R.id.viewjob_acceptbutton)
         mViewJob_DateView = findViewById(R.id.viewjob_editTextDate)
         mViewJob_TimeView = findViewById(R.id.viewjob_editTextTime)
         mViewJob_PayoutView = findViewById(R.id.viewjob_editTextPayout)
@@ -62,12 +57,36 @@ class ViewJob : Activity() {
 
     }
 
-    fun acceptJob(){
+    fun acceptJobButtonClick(view: View){
 
         //TODO - edit job in "Jobs" database to show isStarted = true
         //TODO - edit job in "Jobs" database to show tasker = username of <person who accepted>
 
-        //TODO - edit user record in "Users" databse to show tasksAccepted includes this job ID
+        //TODO - edit user record in "Users" database to show tasksAccepted includes this job ID
+
+    }
+
+    fun quitJobButtonClick(view: View){
+
+        //TODO - edit job in "Jobs" database to show isStarted = false
+        //TODO - edit job in "Jobs" database to show tasker = null
+
+        //TODO - edit user record in "Users" database to show tasksAccepted excludes this job ID
+
+    }
+
+    fun fireTaskerButtonClick(view: View){
+
+        //TODO - edit job in "Jobs" database to show isStarted = false
+        //TODO - edit job in "Jobs" database to show tasker = null
+
+        //TODO - edit user record in "Users" database to show tasksAccepted excludes this job ID
+
+    }
+
+    fun completeJobButtonClick(view: View){
+
+        //TODO - edit job in "Jobs" database to show isDone = false
 
     }
 
