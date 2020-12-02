@@ -81,7 +81,7 @@ class CreateJob : Activity() {
         var mUsers = FirebaseDatabase.getInstance().getReference("Users").child(username!!)
 
         validateFields()
-        val jid = generateUniqueJobID().toString()
+        val jid = generateUniqueJobID()
         Log.i(TAG, "jid = $jid")
         val duedate: Date
 
@@ -91,12 +91,12 @@ class CreateJob : Activity() {
         Log.i(TAG, "duedate = $duedate")
 
 
-        val job = Job(jid, username!!, duedate, mCreateJobPayoutView.text.toString().toInt() )
-        val task = mDatabase.child(jid).setValue(job)
+        val job = Job(jid.toString(), username!!, duedate, mCreateJobPayoutView.text.toString().toInt() )
+        val task = mDatabase.child(jid.toString()).setValue(job)
 
         Log.i(TAG, "task isComplete= " + task.isComplete)
 
-        jobsCreated!!.add(jid.toLong())
+        jobsCreated!!.add(jid)
         var newUser = User(username!!, email!!, jobsCreated!!,tasksAccepted!! )
         //TODO - add job ID to jobsCreated List in User object in "Users" database corresponding to this user
         mUsers.setValue(newUser)
