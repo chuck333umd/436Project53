@@ -3,6 +3,7 @@ package com.example.project53
 import android.Manifest.permission.ACCESS_FINE_LOCATION
 import android.annotation.TargetApi
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Color.parseColor
@@ -11,10 +12,12 @@ import android.os.Build
 import android.os.Bundle
 import android.os.Parcelable
 import android.util.Log
+import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.view.inputmethod.InputMethodManager
+import android.widget.ListView
 import android.widget.TextView
 import android.widget.Toast
 import java.util.*
@@ -61,6 +64,7 @@ class MainListScreen : Activity() {
     private lateinit var mCurrentUser: TextView
     private var mZip = ""
     private var mRadius = 50
+    private val listView = findViewById<ListView>(R.id.mainlist_listview)
 
     private var username: String? = null
 
@@ -74,7 +78,7 @@ class MainListScreen : Activity() {
     private var mCancelHandle: ScheduledFuture<*>? = null
     private var mIsRequestingUpdates = false
     private var mShouldResume = false
-
+    internal lateinit var mAdapter: MainListAdapater
     @TargetApi(Build.VERSION_CODES.M)
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -113,13 +117,15 @@ class MainListScreen : Activity() {
             installLocationListeners()
         }
 
-
+        listView.setFooterDividersEnabled(true)
+        val footerView = (this.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater).inflate(R.layout.mainlist, null, false) as TextView
+        listView.addFooterView(footerView)
         /** Dont forget to update this value when you search the database for <jobs within radius> */
 
         if (numJobs == 0) Toast.makeText(applicationContext, "No Jobs Currently", Toast.LENGTH_SHORT).show()
 
         displayJobsByRadius()
-
+        listView.adapter = mAdapter
     }
 
     fun displayJobsByRadius(){
