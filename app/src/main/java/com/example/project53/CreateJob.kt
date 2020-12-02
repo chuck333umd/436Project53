@@ -1,6 +1,7 @@
 package com.example.project53
 
 import android.app.Activity
+import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -21,6 +22,8 @@ class CreateJob : Activity() {
     private lateinit var mDatabase: DatabaseReference
     private lateinit var mCreateJobUser: TextView
     private lateinit var mCreateJobButton: Button
+    private lateinit var mEditZipButton: Button
+    private lateinit var mEditZipTextView: TextView
     private lateinit var mCreateJobDateView: TextView
     private lateinit var mCreateJobTimeView: TextView
     private lateinit var mCreateJobPayoutView: TextView
@@ -38,7 +41,9 @@ class CreateJob : Activity() {
         setContentView(R.layout.createjob)
 
         mCreateJobUser = findViewById(R.id.createjob_username)
+        mEditZipButton = findViewById(R.id.createjob_changeZipButton)
         mCreateJobButton = findViewById(R.id.createjob_button)
+        mEditZipTextView = findViewById(R.id.createjob_editZip)
         mCreateJobDateView = findViewById(R.id.createjob_editTextDate)
         mCreateJobTimeView = findViewById(R.id.createjob_editTextTime)
         mCreateJobPayoutView = findViewById(R.id.createjob_editTextPayout)
@@ -51,11 +56,13 @@ class CreateJob : Activity() {
         username = intent.getStringExtra("username")
         zip = intent.getStringExtra("zip")
 
+
         Log.i(TAG, "username = $username")
         Log.i(TAG, "testest = $username")
 
 
         mCreateJobUser.text = username
+        mEditZipTextView.text = zip
 
     }
 
@@ -114,6 +121,25 @@ class CreateJob : Activity() {
     }
 
 
+
+    fun buttonClickChangeZip(view: View){
+
+        //hideKeyboard(this)
+
+        if (zipValidator(mEditZipTextView.text.toString())){
+            zip = mEditZipTextView.text.toString()
+            mEditZipTextView.setTextColor(Color.parseColor("#000000"))
+            Toast.makeText(applicationContext, "Location Updated", Toast.LENGTH_SHORT).show()
+        }else{
+            mEditZipTextView.setTextColor(Color.parseColor("#FF0000"))
+            Toast.makeText(applicationContext, "Invalid Zip", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    fun zipValidator(s: String): Boolean {
+        val regex = "^[0-9]{5}$".toRegex()
+        return regex.containsMatchIn(s)
+    }
 
     private fun validateFields(){
 

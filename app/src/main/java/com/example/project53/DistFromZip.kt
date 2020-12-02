@@ -17,6 +17,7 @@ class DistFromZip {
 
         val lat1 = apiResponse1.substringAfter("\"lat\" : ").substring(0, 9)
         val lon1 = apiResponse1.substringAfter("\"lng\" : ").substring(0, 9)
+        Log.i(ViewJob.TAG, "zip1 = $zip1 ")
         Log.i(ViewJob.TAG, "lat = $lat1 ")
         Log.i(ViewJob.TAG, "lon = $lon1 ")
 
@@ -25,6 +26,7 @@ class DistFromZip {
 
         val lat2 = apiResponse2.substringAfter("\"lat\" : ").substring(0, 9)
         val lon2 = apiResponse2.substringAfter("\"lng\" : ").substring(0, 9)
+        Log.i(ViewJob.TAG, "zip2 = $zip2 ")
         Log.i(ViewJob.TAG, "lat = $lat2 ")
         Log.i(ViewJob.TAG, "lon = $lon2 ")
 
