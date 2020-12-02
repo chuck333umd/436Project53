@@ -242,7 +242,8 @@ class MainListScreen : Activity() {
                 /** TEST */
                 val testViewJobIntent = Intent(this, ViewJob::class.java)
                 testViewJobIntent.putExtra("username", username)
-                testViewJobIntent.putExtra("jid", "840156014258245955")
+                testViewJobIntent.putExtra("jid", "2807950703516412630")
+                testViewJobIntent.putExtra("zip", mZip)
                 startActivity(testViewJobIntent)
 
                 /** CHANGE BACK TO THIS WHEN DONE TESTING: */
@@ -259,6 +260,7 @@ class MainListScreen : Activity() {
 
                 val intentCreateJob = Intent(this, CreateJob::class.java)
                 intentCreateJob.putExtra("username", username)
+                intentCreateJob.putExtra("zip", mZip)
 
                 startActivity(intentCreateJob)
                 true

@@ -15,14 +15,16 @@ class Job{
     public var isStarted: Boolean = false
     public var isDone: Boolean = false
     public var description: String = ""
+    public var zip: String = ""
 
     /** Use when job creator will not accept a lower offer initially*/
 
 
-    constructor (jid: String, creator: String, date: Date, desc: String, payout: Int) {
+    constructor (jid: String, creator: String, date: Date, desc: String, zip: String, payout: Int) {
         this.jid = jid
         this.creator = creator
         this.date = date
+        this.zip = zip
         this.payout = payout
         this.acceptLowerOffer = false
         this.minpayout = -1
@@ -31,11 +33,11 @@ class Job{
     }
 
     /** Use when job creator will auto-accept a lower offer without negotiation (like ebay)*/
-    constructor (jid: String, creator: String, date: Date, payout: Int, desc: String, minPayout: Int) {
+    constructor (jid: String, creator: String, date: Date, desc: String, zip: String,payout: Int, minPayout: Int) {
         this.jid = jid
         this.creator = creator
         this.date = date
-        this.date = date
+        this.zip = zip
         this.payout = payout
         this.description = desc
         this.acceptLowerOffer = true

@@ -35,6 +35,8 @@ android {
 
 dependencies {
 
+
+
     implementation 'com.google.firebase:firebase-auth-ktx:19.4.0'
     implementation 'com.google.firebase:firebase-database-ktx:19.5.1'
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"

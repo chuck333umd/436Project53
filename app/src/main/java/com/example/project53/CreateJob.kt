@@ -29,6 +29,7 @@ class CreateJob : Activity() {
 
     private var username: String? = null
     private var email: String? = null
+    private var zip: String? = null
     private var jobsCreated: ArrayList<String>? = null
     private var tasksAccepted: ArrayList<String>? = null
 
@@ -48,6 +49,8 @@ class CreateJob : Activity() {
 
 
         username = intent.getStringExtra("username")
+        zip = intent.getStringExtra("zip")
+
         Log.i(TAG, "username = $username")
         Log.i(TAG, "testest = $username")
 
@@ -93,7 +96,7 @@ class CreateJob : Activity() {
         Log.i(TAG, "duedate = $duedate")
 
 
-        val job = Job(jid, username!!, duedate, mCreateJobDescriptionView.text.toString(), mCreateJobPayoutView.text.toString().toInt() )
+        val job = Job(jid, username!!, duedate, mCreateJobDescriptionView.text.toString(), zip.toString(), mCreateJobPayoutView.text.toString().toInt() )
         val task = mDatabase.child(jid).setValue(job)
 
         Log.i(TAG, "task isComplete= " + task.isComplete)
