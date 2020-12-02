@@ -91,6 +91,7 @@ class UserAuth : Activity() {
                 intent.putExtra("user", mAuth!!.currentUser)
                 intent.putExtra("loggedIn", true)
 
+
                 startActivity(intent)
 
 
@@ -137,7 +138,7 @@ class UserAuth : Activity() {
                     override fun onDataChange(dataSnapshot: DataSnapshot) {
                         if (!dataSnapshot.exists()) {
 
-                            val newuser = User(username, userEmail!!.text.toString(), ArrayList<Long>(), ArrayList<Long>())
+                            val newuser = User(username, userEmail!!.text.toString(), ArrayList<String>(), ArrayList<String>())
                             mUsers!!.child(username.toString()).setValue(newuser)
 
                             Toast.makeText(applicationContext, "Registration successful!", Toast.LENGTH_LONG).show()
