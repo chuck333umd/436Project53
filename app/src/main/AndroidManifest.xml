@@ -50,6 +50,12 @@
             android:label="Login / Register">
             android:theme="@style/AppTheme">
         </activity>
+
+        <activity
+            android:name="com.example.project53.ViewJob"
+            android:label="View Job">
+
+        </activity>
     </application>
 
 </manifest>

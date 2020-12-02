@@ -128,6 +128,8 @@ class MainListScreen : Activity() {
 
         //TODO - When displaying an individual job with ViewJob, send an intent containing username
         //TODO   as "username" StringExtra and job ID as "jid" LongExtra
+
+
     }
 
     fun locationButton(view: View){
@@ -237,10 +239,20 @@ class MainListScreen : Activity() {
             }
             R.id.menu_myjobs -> {
 
+                /** TEST */
+                val testViewJobIntent = Intent(this, ViewJob::class.java)
+                testViewJobIntent.putExtra("username", username)
+                testViewJobIntent.putExtra("jid", "1952233907058104849")
+
+                startActivity(testViewJobIntent)
+
+                /** CHANGE BACK TO THIS WHEN DONE TESTING: */
+                /*
                 val intentMyJobs = Intent(this, CreateJob::class.java)
                 intentMyJobs.putExtra("username", username)
 
                 startActivity(intentMyJobs)
+                */
 
                 true
             }

@@ -174,4 +174,26 @@
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toBottomOf="@+id/viewjob_editTextTime" />
 
+  <CheckBox
+      android:id="@+id/viewjob_completedCheckBox"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="88dp"
+      android:layout_marginEnd="28dp"
+      android:clickable="false"
+      android:text="Complete?"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintTop_toTopOf="parent" />
+
+  <CheckBox
+      android:id="@+id/viewjob_startedCheckBox"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="40dp"
+      android:layout_marginEnd="44dp"
+      android:clickable="false"
+      android:text="Started?"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintTop_toTopOf="parent" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
