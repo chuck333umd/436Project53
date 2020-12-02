@@ -9,8 +9,7 @@ import android.widget.TextView
 import android.widget.Toast
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.gms.tasks.OnFailureListener
-import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.*
 import java.util.Date
 import java.text.SimpleDateFormat
 
@@ -27,7 +26,9 @@ class CreateJob : Activity() {
     private lateinit var mCreateJobDescriptionView: TextView
 
     private var username: String? = null
-
+    private var email: String? = null
+    private var jobsCreated: ArrayList<Long>? = null
+    private var tasksAccepted: ArrayList<Long>? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,11 +47,39 @@ class CreateJob : Activity() {
 
         username = intent.getStringExtra("username")
         Log.i(TAG, "username = $username")
+        Log.i(TAG, "testest = $username")
+
+
         mCreateJobUser.text = username
 
     }
 
+    override fun onStart() {
+        super.onStart()
+        var mUsers = FirebaseDatabase.getInstance().getReference("Users").child(username!!)
+
+        val postListener = object : ValueEventListener{
+            override fun onDataChange(snapshot: DataSnapshot) {
+                var userData = snapshot.getValue(User::class.java)
+                email = userData!!.email
+                username = userData!!.name
+                jobsCreated = userData!!.jobsCreated
+                tasksAccepted = userData!!.tasksAccepted
+
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                TODO("Not yet implemented")
+            }
+        }
+        mUsers.addListenerForSingleValueEvent(postListener)
+        Log.i(TAG, "userData = $mUsers")
+
+    }
+
     fun buttonClick(view: View){
+        var mUsers = FirebaseDatabase.getInstance().getReference("Users").child(username!!)
+
         validateFields()
         val jid = generateUniqueJobID().toString()
         Log.i(TAG, "jid = $jid")
@@ -67,7 +96,10 @@ class CreateJob : Activity() {
 
         Log.i(TAG, "task isComplete= " + task.isComplete)
 
+        jobsCreated!!.add(jid.toLong())
+        var newUser = User(username!!, email!!, jobsCreated!!,tasksAccepted!! )
         //TODO - add job ID to jobsCreated List in User object in "Users" database corresponding to this user
+        mUsers.setValue(newUser)
 
     }
 

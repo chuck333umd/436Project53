@@ -1,6 +1,6 @@
 package com.example.project53
 
-class User(var name: String, var email: String, var jobsCreated: ArrayList<Long>, var tasksAccepted: ArrayList<Long>) {
+class User(var name: String = "", var email: String = "", var jobsCreated: ArrayList<Long> = arrayListOf(), var tasksAccepted: ArrayList<Long> = arrayListOf()) {
 
 
 
