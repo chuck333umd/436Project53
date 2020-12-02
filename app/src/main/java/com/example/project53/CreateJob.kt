@@ -91,7 +91,7 @@ class CreateJob : Activity() {
         Log.i(TAG, "duedate = $duedate")
 
 
-        val job = Job(jid, username!!, duedate, mCreateJobPayoutView.text.toString().toInt() )
+        val job = Job(jid, username!!, duedate, mCreateJobDescriptionView.text.toString(), mCreateJobPayoutView.text.toString().toInt() )
         val task = mDatabase.child(jid).setValue(job)
 
         Log.i(TAG, "task isComplete= " + task.isComplete)
