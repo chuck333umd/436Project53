@@ -14,6 +14,7 @@
       android:layout_marginEnd="28dp"
       android:ems="10"
       android:inputType="number"
+      android:text="69"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintTop_toBottomOf="@+id/textView7" />
 
@@ -23,7 +24,7 @@
       android:layout_height="wrap_content"
       android:layout_marginTop="88dp"
       android:layout_marginEnd="28dp"
-      android:text="Payout"
+      android:text="Payout ($)"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintTop_toTopOf="parent" />
 
@@ -43,6 +44,7 @@
       android:layout_height="wrap_content"
       android:layout_marginStart="24dp"
       android:layout_marginTop="32dp"
+      android:textSize="10pt"
       app:layout_constraintStart_toEndOf="@+id/textView2"
       app:layout_constraintTop_toTopOf="parent" />
 
@@ -53,6 +55,7 @@
       android:layout_marginStart="16dp"
       android:ems="10"
       android:inputType="date"
+      android:text="2020/12/25"
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toBottomOf="@+id/textView3" />
 
@@ -63,6 +66,7 @@
       android:layout_marginStart="16dp"
       android:ems="10"
       android:inputType="time"
+      android:text="15:30"
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toBottomOf="@+id/textView4" />
 
@@ -94,6 +98,7 @@
       android:ems="10"
       android:gravity="start|top"
       android:inputType="textMultiLine"
+      android:text="temp job description"
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toBottomOf="@+id/textView6" />
 

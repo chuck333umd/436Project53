@@ -40,14 +40,22 @@ import java.util.concurrent.TimeUnit
  * Author: Chuck Daniels
  */
 
+
+// TODO - Implement displayJobsByRadius() to sort jobs by radius distance from current zipcode <mainlist_location.text>
+
+// TODO - Add the listview <mainlist_listview> that shows all jobs within radius <mainlist_radius.text> using list_item.xml layout
+// TODO   Clicking on one of the list items will open it in ViewJob.kt
+
+// TODO MAYBE - Change list_item.xml layout so that it better fits into the main listview.
+
 // TODO OPTIONAL - Clean up all the unnecessary crap from this activity pertaining to location,
-// TODO OPTIONAL - since we do not need to update the location once we obtain the initial ZIP,
-// TODO OPTIONAL - a lot of this can be removed.
+// TODO OPTIONAL   since we do not need to update the location once we obtain the initial ZIP,
+// TODO OPTIONAL   some of this can be probably be removed.
 
 class MainListScreen : Activity() {
 
 
-    private var loggedIn: Boolean = false /** Change to false for final build */
+    private var loggedIn: Boolean = false
     private lateinit var mZipView: TextView
     private lateinit var mRadiusView: TextView
     private lateinit var mCurrentUser: TextView
@@ -75,8 +83,8 @@ class MainListScreen : Activity() {
 
         setContentView(R.layout.mainlist)
 
-        mZipView = findViewById(R.id.location)
-        mRadiusView = findViewById(R.id.radius)
+        mZipView = findViewById(R.id.mainlist_location)
+        mRadiusView = findViewById(R.id.mainlist_radius)
 
         mCurrentUser = findViewById(R.id.mainlist_currentUser)
 
@@ -92,11 +100,6 @@ class MainListScreen : Activity() {
         }
 
 
-
-        Log.i("SplashScreen", "Starting Main List Screen")
-
-
-        /** START IMPORT */
         mLocationManager = getSystemService(LOCATION_SERVICE) as LocationManager
         if (null != mLocationManager) {
             Log.i(TAG, "Couldn't find the LocationManager")
@@ -109,14 +112,22 @@ class MainListScreen : Activity() {
             getAndDisplayLastKnownLocation()
             installLocationListeners()
         }
-        /** FINISH IMPORT */
 
 
+        /** Dont forget to update this value when you search the database for <jobs within radius> */
 
         if (numJobs == 0) Toast.makeText(applicationContext, "No Jobs Currently", Toast.LENGTH_SHORT).show()
 
+        displayJobsByRadius()
 
+    }
 
+    fun displayJobsByRadius(){
+
+        //TODO - Implement method to return list of job IDs for any job within radius
+
+        //TODO - When displaying an individual job with ViewJob, send an intent containing username
+        //TODO   as "username" StringExtra and job ID as "jid" LongExtra
     }
 
     fun locationButton(view: View){
@@ -181,6 +192,78 @@ class MainListScreen : Activity() {
         //finishAffinity()
     }
 
+    // Update display
+    private fun updateDisplay(location: Location) {
+
+        val geocoder = Geocoder(this, Locale.getDefault())
+        val addresses: List<Address> = geocoder.getFromLocation(location.latitude, location.longitude, 1)
+
+        Log.i("main", "addresses: $addresses")
+        addresses.forEach { a ->
+            Log.i("main", "zip: " + a.postalCode)
+            mZipView.text = a.postalCode
+            mZip = a.postalCode
+        }
+
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        if (loggedIn) {
+            menuInflater.inflate(R.menu.loggedin, menu)
+        }else{
+            menuInflater.inflate(R.menu.notloggedin, menu)
+        }
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+
+        val intentMyJobs = Intent(this, MyJobs::class.java)
+        val intentMyTasks = Intent(this, MyTasks::class.java)
+        val intentCreateJob = Intent(this, CreateJob::class.java)
+        val intentLogin = Intent(this, UserAuth::class.java)
+
+        return when (item.itemId) {
+            R.id.menu_login -> {
+
+                startActivity(intentLogin)
+                true
+            }
+            R.id.menu_logout -> {
+                loggedIn = false
+                mCurrentUser.text = "None"
+                invalidateOptionsMenu()
+                true
+            }
+            R.id.menu_myjobs -> {
+
+                val intentMyJobs = Intent(this, CreateJob::class.java)
+                intentMyJobs.putExtra("username", username)
+
+                startActivity(intentMyJobs)
+
+                true
+            }
+            R.id.menu_createjob -> {
+
+                val intentCreateJob = Intent(this, CreateJob::class.java)
+                intentCreateJob.putExtra("username", username)
+
+                startActivity(intentCreateJob)
+                true
+            }
+            R.id.menu_mytasks -> {
+
+                val intentMyTasks = Intent(this, CreateJob::class.java)
+                intentMyTasks.putExtra("username", username)
+
+                startActivity(intentMyTasks)
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
+
 
     companion object {
         private const val ONE_MIN = 1000 * 60.toLong()
@@ -191,7 +274,6 @@ class MainListScreen : Activity() {
         private const val MIN_DISTANCE = 10.0f
         private const val REQUEST_FINE_LOC_PERM_ONCREATE = 200
         private const val REQUEST_FINE_LOC_PERM_ONRESUME = 201
-        private var mFirstUpdate = true
         private const val TAG = "main"
     }
 
@@ -242,14 +324,8 @@ class MainListScreen : Activity() {
 
         // Determine whether initial reading is "good enough".
         // If not, register for further location updates
-        if (null == mBestReading ||
-                mBestReading!!.accuracy > MIN_ACCURACY ||
-                mBestReading!!.time < System.currentTimeMillis() - TWO_MIN
-        ) {
-
-            if (checkSelfPermission(ACCESS_FINE_LOCATION) !=
-                    PackageManager.PERMISSION_GRANTED
-            ) {
+        if (null == mBestReading || mBestReading!!.accuracy > MIN_ACCURACY || mBestReading!!.time < System.currentTimeMillis() - TWO_MIN) {
+            if (checkSelfPermission(ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                 requestPermissions(arrayOf(ACCESS_FINE_LOCATION), REQUEST_FINE_LOC_PERM_ONRESUME)
             } else {
                 continueInstallLocationListeners()
@@ -263,20 +339,14 @@ class MainListScreen : Activity() {
             // Register for network location updates
             if (null != mLocationManager.getProvider(LocationManager.NETWORK_PROVIDER)) {
                 Log.i(TAG, "Network location updates requested")
-                mLocationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER,
-                        POLLING_FREQ, MIN_DISTANCE, mLocationListener)
+                mLocationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, POLLING_FREQ, MIN_DISTANCE, mLocationListener)
                 mIsRequestingUpdates = true
             }
 
             // Register for GPS location updates
             if (null != mLocationManager.getProvider(LocationManager.GPS_PROVIDER)) {
                 Log.i(TAG, "GPS location updates requested")
-                mLocationManager.requestLocationUpdates(
-                        LocationManager.GPS_PROVIDER,
-                        POLLING_FREQ,
-                        MIN_DISTANCE,
-                        mLocationListener
-                )
+                mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, POLLING_FREQ, MIN_DISTANCE, mLocationListener)
                 mIsRequestingUpdates = true
             }
 
@@ -328,11 +398,7 @@ class MainListScreen : Activity() {
                 continueInstallLocationListeners()
             }
         } else {
-            Toast.makeText(
-                    this,
-                    "This app requires ACCESS_FINE_LOCATION permission",
-                    Toast.LENGTH_LONG
-            ).show()
+            Toast.makeText(this, "This app requires ACCESS_FINE_LOCATION permission", Toast.LENGTH_LONG).show()
         }
     }
 
@@ -383,69 +449,7 @@ class MainListScreen : Activity() {
         }
     }
 
-    // Update display
-    private fun updateDisplay(location: Location) {
 
-        val geocoder = Geocoder(this, Locale.getDefault())
-        val addresses: List<Address> = geocoder.getFromLocation(location.latitude, location.longitude, 1)
-
-        Log.i("main", "addresses: $addresses")
-        addresses.forEach { a ->
-            Log.i("main", "zip: " + a.postalCode)
-            mZipView.text = a.postalCode
-            mZip = a.postalCode
-        }
-
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        if (loggedIn) {
-            menuInflater.inflate(R.menu.loggedin, menu)
-        }else{
-            menuInflater.inflate(R.menu.notloggedin, menu)
-        }
-        return true
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-
-        val intentMyJobs = Intent(this, MyJobs::class.java)
-        val intentMyTasks = Intent(this, MyTasks::class.java)
-        val intentCreateJob = Intent(this, CreateJob::class.java)
-        val intentLogin = Intent(this, UserAuth::class.java)
-
-        return when (item.itemId) {
-            R.id.menu_login -> {
-
-                startActivity(intentLogin)
-                true
-            }
-            R.id.menu_logout -> {
-                loggedIn = false
-                mCurrentUser.text = "None"
-                invalidateOptionsMenu()
-                true
-            }
-            R.id.menu_myjobs -> {
-                startActivity(intentMyJobs)
-                true
-            }
-            R.id.menu_createjob -> {
-
-                val intentCreateJob = Intent(this, CreateJob::class.java)
-                intentCreateJob.putExtra("username", username)
-
-                startActivity(intentCreateJob)
-                true
-            }
-            R.id.menu_mytasks -> {
-                startActivity(intentMyTasks)
-                true
-            }
-
-            else -> super.onOptionsItemSelected(item)
-        }
-    }
 
 
 
