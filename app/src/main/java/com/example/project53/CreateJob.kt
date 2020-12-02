@@ -10,6 +10,8 @@ import android.widget.Toast
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.gms.tasks.OnFailureListener
 import com.google.firebase.database.*
+import java.lang.Double.parseDouble
+import java.lang.NumberFormatException
 import java.util.Date
 import java.text.SimpleDateFormat
 
@@ -100,7 +102,12 @@ class CreateJob : Activity() {
         var newUser = User(username!!, email!!, jobsCreated!!,tasksAccepted!! )
         //TODO - add job ID to jobsCreated List in User object in "Users" database corresponding to this user
         mUsers.setValue(newUser)
-
+        mCreateJobDateView.text = null;
+        mCreateJobTimeView.text = null;
+        mCreateJobPayoutView.text = null;
+        mCreateJobMinPayoutView.text = null;
+        mCreateJobDescriptionView.text = null;
+        finish()
     }
 
 
