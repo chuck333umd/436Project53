@@ -122,8 +122,13 @@ class ViewJob : Activity() {
 
     private fun getDistance(zip1: String, zip2: String): String{
 
-        return DistFromZip().getDist(zip1, zip2).toString()
+        var ret = DistFromZip().getDist(zip1, zip2).toString()
 
+        if (ret.equals(-1F)){
+            Toast.makeText(this, "Not a valid ZIP Code!", Toast.LENGTH_LONG).show()
+        }
+
+        return ret
     }
 
     private fun setupViewButtons(){

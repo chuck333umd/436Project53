@@ -3,6 +3,8 @@ package com.example.project53
 import android.location.Location
 import android.os.StrictMode
 import android.util.Log
+import android.widget.Toast
+import java.lang.NumberFormatException
 import java.net.URL
 
 class DistFromZip {
@@ -30,18 +32,25 @@ class DistFromZip {
         Log.i(ViewJob.TAG, "lat = $lat2 ")
         Log.i(ViewJob.TAG, "lon = $lon2 ")
 
-        val loc1 = Location("")
-        loc1.latitude = lat1.toDouble()
-        loc1.longitude = lon1.toDouble()
+        try {
+            val loc1 = Location("")
+            loc1.latitude = lat1.toDouble()
+            loc1.longitude = lon1.toDouble()
 
-        val loc2 = Location("")
-        loc2.latitude = lat2.toDouble()
-        loc2.longitude = lon2.toDouble()
+            val loc2 = Location("")
+            loc2.latitude = lat2.toDouble()
+            loc2.longitude = lon2.toDouble()
 
-        val distanceInkM: Float = (loc1.distanceTo(loc2)/ 1000)
+            val distanceInkM: Float = (loc1.distanceTo(loc2)/ 1000)
 
-        Log.i(ViewJob.TAG, "distanceInkM = $distanceInkM ")
+            Log.i(ViewJob.TAG, "distanceInkM = $distanceInkM ")
 
-        return distanceInkM
+            return distanceInkM
+
+        }catch (e: NumberFormatException){
+
+        }
+
+        return -1F
     }
 }
