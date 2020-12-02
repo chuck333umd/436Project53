@@ -1,7 +1,9 @@
 package com.example.project53
 
 import android.app.Activity
+import android.location.Location
 import android.os.Bundle
+import android.os.StrictMode
 import android.util.Log
 import android.view.View
 import android.widget.Button
@@ -10,13 +12,14 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.core.view.isVisible
 import com.google.firebase.database.*
+import java.net.URL
 
 
-// TODO - Implement a way for the view to show a different button depending on the case:
-// TODO   Case 1 - Job is not currently assigned to any tasker (shows ACCEPT JOB button)
-// TODO   Case 2 - Job is currently assigned to a tasker and is being viewed by the tasker (shows IN PROGRESS notation as well as QUIT JOB button)
-// TODO   Case 3 - Job is currently assigned to a tasker and is being viewed by the creator (shows IN PROGRESS notation as well as FIRE TASKER button)
-// TODO   Case 4 - Job is completed (shows COMPLETED notation)
+// TODO (DONE) - Implement a way for the view to show a different button depending on the case:
+// TODO (DONE)  Case 1 - Job is not currently assigned to any tasker (shows ACCEPT JOB button)
+// TODO (DONE)  Case 2 - Job is currently assigned to a tasker and is being viewed by the tasker (shows IN PROGRESS notation as well as QUIT JOB button)
+// TODO (DONE)  Case 3 - Job is currently assigned to a tasker and is being viewed by the creator (shows IN PROGRESS notation as well as FIRE TASKER button)
+// TODO (DONE)  Case 4 - Job is completed (shows COMPLETED notation)
 
 // TODO - Implement functionality for the above listed cases.
 
@@ -33,7 +36,8 @@ class ViewJob : Activity() {
     private lateinit var mCancelJobButton: Button
 
     private lateinit var mViewJob_DateView: TextView
-    private lateinit var mViewJob_TimeView: TextView
+    private lateinit var mViewJob_ZipView: TextView
+    private lateinit var mViewJob_DistView: TextView
     private lateinit var mViewJob_PayoutView: TextView
     private lateinit var mViewJob_MinPayoutView: TextView
     private lateinit var mViewJob_DescriptionView: TextView
@@ -43,7 +47,8 @@ class ViewJob : Activity() {
 
     private var username: String? = null
     private var jid: String? = null
-    private var gotdata: Boolean = false
+    private var userZip: String? = null
+
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -60,7 +65,8 @@ class ViewJob : Activity() {
         mCancelJobButton = findViewById(R.id.viewjob_cancelbutton)
 
         mViewJob_DateView = findViewById(R.id.viewjob_editTextDate)
-        //mViewJob_TimeView = findViewById(R.id.viewjob_editTextTime)
+        mViewJob_ZipView = findViewById(R.id.viewjob_location)
+        mViewJob_DistView = findViewById(R.id.viewjob_distance)
         mViewJob_PayoutView = findViewById(R.id.viewjob_editTextPayout)
         mViewJob_DescriptionView = findViewById(R.id.viewjob_editTextDescription)
         mViewJob_CompletedCheckBox = findViewById(R.id.viewjob_completedCheckBox)
@@ -71,6 +77,7 @@ class ViewJob : Activity() {
 
         username = intent.getStringExtra("username")
         jid = intent.getStringExtra("jid")
+        userZip = intent.getStringExtra("zip")
 
         Log.i(TAG, "ViewJob()")
         Log.i(TAG, "username = $username")
@@ -96,9 +103,11 @@ class ViewJob : Activity() {
                 mViewJob_CompletedCheckBox.isChecked = job!!.isDone
                 mViewJob_StartedCheckBox.isChecked = job!!.isStarted
                 mViewJob_DescriptionView.text = job!!.description
+                mViewJob_ZipView.text = job!!.zip
+                mViewJob_DistView.text = getDistance(job!!.zip, userZip.toString())
 
                 /** ALL FUNCTIONS TO BE CALLED MUST BE CALLED FROM HERE IF THEY RELY ON THE DATA
-                 * PULLED FROM THE DATABASE.
+                 * PULLED FROM THE DATABASE. THERE IS A DELAY!
                  */
 
                 setupViewButtons()
@@ -111,9 +120,19 @@ class ViewJob : Activity() {
         })
     }
 
+    private fun getDistance(zip1: String, zip2: String): String{
+
+        var ret = DistFromZip().getDist(zip1, zip2).toString()
+
+        if (ret.equals(-1F)){
+            Toast.makeText(this, "Not a valid ZIP Code!", Toast.LENGTH_LONG).show()
+        }
+
+        return ret
+    }
 
     private fun setupViewButtons(){
-        
+
         //TODO - Hide/Show buttons depending on which case in above todo ^^^
 
         /** You did not create the job and it is up for grabs
@@ -263,7 +282,6 @@ class ViewJob : Activity() {
         //TODO - remove from "Users" database under your username
 
     }
-
 
 
     companion object{

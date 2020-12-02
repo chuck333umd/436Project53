@@ -142,8 +142,9 @@ class MainListScreen : Activity() {
 
         hideKeyboard(this)
 
+        Log.i(TAG, "validZip (per USPS): " + DistFromZip().getDist(mZipView.text.toString(), 21012.toString()).equals(-1F))
 
-        if (zipValidator(mZipView.text.toString())){
+        if (zipValidator(mZipView.text.toString()) && !DistFromZip().getDist(mZipView.text.toString(), 21012.toString()).equals(-1F)){
             mZip = mZipView.text.toString()
             mZipView.setTextColor(parseColor("#000000"))
             Toast.makeText(applicationContext, "Location Updated", Toast.LENGTH_SHORT).show()
@@ -248,7 +249,8 @@ class MainListScreen : Activity() {
                 /** TEST */
                 val testViewJobIntent = Intent(this, ViewJob::class.java)
                 testViewJobIntent.putExtra("username", username)
-                testViewJobIntent.putExtra("jid", "840156014258245955")
+                testViewJobIntent.putExtra("jid", "7477874656431234048")
+                testViewJobIntent.putExtra("zip", mZip)
                 startActivity(testViewJobIntent)
 
                 /** CHANGE BACK TO THIS WHEN DONE TESTING: */
@@ -265,6 +267,7 @@ class MainListScreen : Activity() {
 
                 val intentCreateJob = Intent(this, CreateJob::class.java)
                 intentCreateJob.putExtra("username", username)
+                intentCreateJob.putExtra("zip", mZip)
 
                 startActivity(intentCreateJob)
                 true
