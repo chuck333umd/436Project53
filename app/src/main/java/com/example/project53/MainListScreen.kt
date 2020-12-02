@@ -242,8 +242,7 @@ class MainListScreen : Activity() {
                 /** TEST */
                 val testViewJobIntent = Intent(this, ViewJob::class.java)
                 testViewJobIntent.putExtra("username", username)
-                testViewJobIntent.putExtra("jid", "1952233907058104849")
-
+                testViewJobIntent.putExtra("jid", "840156014258245955")
                 startActivity(testViewJobIntent)
 
                 /** CHANGE BACK TO THIS WHEN DONE TESTING: */

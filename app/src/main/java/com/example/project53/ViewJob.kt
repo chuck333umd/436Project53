@@ -7,6 +7,8 @@ import android.view.View
 import android.widget.Button
 import android.widget.CheckBox
 import android.widget.TextView
+import android.widget.Toast
+import androidx.core.view.isVisible
 import com.google.firebase.database.*
 
 
@@ -23,7 +25,13 @@ class ViewJob : Activity() {
     private lateinit var mJobs: DatabaseReference
     private lateinit var mViewJob_Creator: TextView
     private lateinit var mViewJob_Tasker: TextView
+
     private lateinit var mAcceptJobButton: Button
+    private lateinit var mQuitJobButton: Button
+    private lateinit var mFireTaskerButton: Button
+    private lateinit var mCompleteJobButton: Button
+    private lateinit var mCancelJobButton: Button
+
     private lateinit var mViewJob_DateView: TextView
     private lateinit var mViewJob_TimeView: TextView
     private lateinit var mViewJob_PayoutView: TextView
@@ -35,6 +43,7 @@ class ViewJob : Activity() {
 
     private var username: String? = null
     private var jid: String? = null
+    private var gotdata: Boolean = false
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -43,9 +52,15 @@ class ViewJob : Activity() {
 
         mViewJob_Creator = findViewById(R.id.viewjob_username)
         mViewJob_Tasker = findViewById(R.id.viewjob_taskername)
+
         mAcceptJobButton = findViewById(R.id.viewjob_acceptbutton)
+        mQuitJobButton = findViewById(R.id.viewjob_quitbutton)
+        mFireTaskerButton = findViewById(R.id.viewjob_firebutton)
+        mCompleteJobButton = findViewById(R.id.viewjob_completejob)
+        mCancelJobButton = findViewById(R.id.viewjob_cancelbutton)
+
         mViewJob_DateView = findViewById(R.id.viewjob_editTextDate)
-        mViewJob_TimeView = findViewById(R.id.viewjob_editTextTime)
+        //mViewJob_TimeView = findViewById(R.id.viewjob_editTextTime)
         mViewJob_PayoutView = findViewById(R.id.viewjob_editTextPayout)
         mViewJob_DescriptionView = findViewById(R.id.viewjob_editTextDescription)
         mViewJob_CompletedCheckBox = findViewById(R.id.viewjob_completedCheckBox)
@@ -69,7 +84,7 @@ class ViewJob : Activity() {
         val ref = mJobs.child(jid.toString())
         var job: Job? = null
 
-        ref.addValueEventListener(object : ValueEventListener {
+        ref.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 job = dataSnapshot.getValue(Job::class.java)
                 Log.i(TAG, "The read succeeded: " + job.toString())
@@ -81,48 +96,134 @@ class ViewJob : Activity() {
                 mViewJob_CompletedCheckBox.isChecked = job!!.isDone
                 mViewJob_StartedCheckBox.isChecked = job!!.isStarted
                 mViewJob_DescriptionView.text = job!!.description
-                /*
-                for (childSnapshot in dataSnapshot.children) {
-                    val user = childSnapshot.getValue(Job::class.java)
-                }
 
+                /** ALL FUNCTIONS TO BE CALLED MUST BE CALLED FROM HERE IF THEY RELY ON THE DATA
+                 * PULLED FROM THE DATABASE.
                  */
+
+                setupViewButtons()
+
             }
 
             override fun onCancelled(databaseError: DatabaseError) {
                 Log.i(TAG, "The read failed: " + databaseError.code)
             }
         })
-
-        Log.i(TAG, "job = $job")
-        if (job != null) {
-            /*
-            mViewJob_Creator.text = job!!.creator
-            mViewJob_Tasker.text = job!!.tasker
-            mViewJob_DateView.text = job!!.date.toString()
-            // mViewJob_TimeView.text = job!!.date.toString()
-            mViewJob_PayoutView.text = job!!.payout.toString()
-            mViewJob_CompletedCheckBox.isChecked = job!!.isDone
-            mViewJob_StartedCheckBox.isChecked = job!!.isStarted
-            */
-
-
-
-        }else{
-            Log.i(TAG, "job = $job")
-        }
-        setupViewButtons()
-
     }
 
+
     private fun setupViewButtons(){
+        
         //TODO - Hide/Show buttons depending on which case in above todo ^^^
 
+        /** You did not create the job and it is up for grabs
+          *  Your options are - accept the job*/
+        if (mViewJob_Creator.text.toString() == ""){
+            Toast.makeText(this, "Task Creator = NULL... ERROR!", Toast.LENGTH_SHORT).show()
+
+        }
+        if (username != mViewJob_Creator.text.toString() && !mViewJob_StartedCheckBox.isChecked){
+
+            Log.i(TAG, "3)mViewJob_Creator.text = " + mViewJob_Creator.text.toString())
+            Log.i(TAG, " username != mViewJob_Creator.text && mViewJob_StartedCheckBox.isChecked != true")
+
+            mAcceptJobButton.isVisible = true
+            mAcceptJobButton.isClickable = true
+
+            mFireTaskerButton.isVisible = false
+            mFireTaskerButton.isClickable= false
+
+            mCompleteJobButton.isVisible = false
+            mCompleteJobButton.isClickable= false
+
+            mCancelJobButton.isVisible = false
+            mCancelJobButton.isClickable= false
+
+            mQuitJobButton.isVisible = false
+            mQuitJobButton.isClickable= false
+        }
+        /** You are the tasker and you have accepted the job
+         *  Your options are - quit the job*/
+        if (username == mViewJob_Tasker.text && mViewJob_StartedCheckBox.isChecked == true){
+            mAcceptJobButton.isVisible = false
+            mAcceptJobButton.isClickable = false
+
+            mFireTaskerButton.isVisible = false
+            mFireTaskerButton.isClickable= false
+
+            mCompleteJobButton.isVisible = false
+            mCompleteJobButton.isClickable= false
+
+            mCancelJobButton.isVisible = false
+            mCancelJobButton.isClickable= false
+
+            mQuitJobButton.isVisible = true
+            mQuitJobButton.isClickable= true
+        }
+        /** You created the job and it is already assigned to someone
+         *  Your options are - fire the tasker*/
+        if (username == mViewJob_Creator.text && mViewJob_StartedCheckBox.isChecked == true){
+            Log.i(TAG, "username == mViewJob_Creator.text && mViewJob_StartedCheckBox.isChecked == true")
+
+            mAcceptJobButton.isVisible = false
+            mAcceptJobButton.isClickable = false
+
+            mFireTaskerButton.isVisible = true
+            mFireTaskerButton.isClickable= true
+
+            mCompleteJobButton.isVisible = true
+            mCompleteJobButton.isClickable= true
+
+            mCancelJobButton.isVisible = false
+            mCancelJobButton.isClickable= false
+
+            mQuitJobButton.isVisible = false
+            mQuitJobButton.isClickable= false
+        }
+
+        /** You created the job and it is not assigned
+         * Your options are - cancel the job*/
+        if (username == mViewJob_Creator.text && mViewJob_StartedCheckBox.isChecked == false){
+
+            mAcceptJobButton.isVisible = false
+            mAcceptJobButton.isClickable = false
+
+            mFireTaskerButton.isVisible = false
+            mFireTaskerButton.isClickable= false
+
+            mCompleteJobButton.isVisible = true
+            mCompleteJobButton.isClickable= true
+
+            mCancelJobButton.isVisible = false
+            mCancelJobButton.isClickable= false
+
+            mQuitJobButton.isVisible = false
+            mQuitJobButton.isClickable= false
+        }
+
+        /** You didnt create the job and its in progress and you are not the tasker
+         * Your options are - NOTHING! You shouldn't be here*/
+        if (username != mViewJob_Creator.text && username != mViewJob_Tasker.text && mViewJob_StartedCheckBox.isChecked == true){
+
+            mAcceptJobButton.isVisible = false
+            mAcceptJobButton.isClickable = false
+
+            mFireTaskerButton.isVisible = false
+            mFireTaskerButton.isClickable= false
+
+            mCompleteJobButton.isVisible = false
+            mCompleteJobButton.isClickable= false
+
+            mCancelJobButton.isVisible = false
+            mCancelJobButton.isClickable= false
+
+            mQuitJobButton.isVisible = false
+            mQuitJobButton.isClickable= false
+        }
 
     }
 
     fun acceptJobButtonClick(view: View){
-
 
 
         //TODO - edit job in "Jobs" database to show isStarted = true
@@ -153,6 +254,13 @@ class ViewJob : Activity() {
     fun completeJobButtonClick(view: View){
 
         //TODO - edit job in "Jobs" database to show isDone = false
+
+    }
+
+    fun cancelJobButtonClick(view: View){
+
+        //TODO - delete from "Jobs" database
+        //TODO - remove from "Users" database under your username
 
     }
 
