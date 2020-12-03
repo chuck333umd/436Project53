@@ -17,6 +17,7 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.view.inputmethod.InputMethodManager
+import android.widget.LinearLayout
 import android.widget.ListView
 import android.widget.TextView
 import android.widget.Toast
@@ -64,7 +65,6 @@ class MainListScreen : Activity() {
     private lateinit var mCurrentUser: TextView
     private var mZip = ""
     private var mRadius = 50
-    private val listView = findViewById<ListView>(R.id.mainlist_listview)
 
     private var username: String? = null
 
@@ -86,10 +86,10 @@ class MainListScreen : Activity() {
         var numJobs = 0
 
         setContentView(R.layout.mainlist)
-
+        mAdapter = MainListAdapater(applicationContext)
         mZipView = findViewById(R.id.mainlist_location)
         mRadiusView = findViewById(R.id.mainlist_radius)
-
+        var listView = findViewById<ListView>(R.id.mainlist_listview)
         mCurrentUser = findViewById(R.id.mainlist_currentUser)
 
         val logIn = intent.getBooleanExtra("loggedIn", false)
@@ -118,7 +118,7 @@ class MainListScreen : Activity() {
         }
 
         listView.setFooterDividersEnabled(true)
-        val footerView = (this.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater).inflate(R.layout.mainlist, null, false) as TextView
+        val footerView = (this.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater).inflate(R.layout.mainlist, null, false) as LinearLayout
         listView.addFooterView(footerView)
         /** Dont forget to update this value when you search the database for <jobs within radius> */
 

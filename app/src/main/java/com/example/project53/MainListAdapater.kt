@@ -23,11 +23,11 @@ class MainListAdapater(private val mContext: Context) : BaseAdapter(){
     }
 
     override fun getItemId(position: Int): Long {
-        TODO("Not yet implemented")
+        return position.toLong()
     }
 
     override fun getCount(): Int {
-        TODO("Not yet implemented")
+        return jobsList.size
     }
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View? {
@@ -36,7 +36,7 @@ class MainListAdapater(private val mContext: Context) : BaseAdapter(){
         var viewHolder: ViewHolder
         if(null == convertView){
             viewHolder = ViewHolder()
-            viewHolder.title = convertView!!.findViewById<View>(R.id.listitem_desc) as TextView
+            viewHolder.title = viewHolder!!.mLayout!!.findViewById(R.id.listitem_desc) as TextView
         } else {
             viewHolder = convertView.tag as ViewHolder
         }
