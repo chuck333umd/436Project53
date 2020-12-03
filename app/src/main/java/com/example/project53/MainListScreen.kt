@@ -145,10 +145,10 @@ class MainListScreen : Activity() {
         }
 
 
-        Log.i(TAG, "validZip (per USPS): " + dfz.equals(-1F))
+        Log.i(TAG, "validZip (per USPS): " + (dfz > -1))
 
 
-        if (zipValidator(mZipView.text.toString()) && dfz > 0.0){
+        if (zipValidator(mZipView.text.toString()) && dfz > -1){
             mZip = mZipView.text.toString()
             mZipView.setTextColor(parseColor("#000000"))
             Toast.makeText(applicationContext, "Location Updated", Toast.LENGTH_SHORT).show()
