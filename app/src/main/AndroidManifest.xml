@@ -17,6 +17,7 @@
 
         <activity
             android:name="com.example.project53.SplashScreen"
+            android:screenOrientation="portrait"
             android:label="COVID"
             android:noHistory="true"
             android:theme="@android:style/Theme.NoTitleBar.Fullscreen" >
@@ -28,31 +29,37 @@
         </activity>
         <activity
             android:name="com.example.project53.MainListScreen"
+            android:screenOrientation="portrait"
             android:label="Covid Services Jobs List"
             android:windowSoftInputMode="stateHidden">
         </activity>
         <activity
             android:name="com.example.project53.MyJobs"
+            android:screenOrientation="portrait"
             android:label="My Jobs">
         </activity>
         <activity
             android:name="com.example.project53.MyTasks"
+            android:screenOrientation="portrait"
             android:label="My Tasks">
         </activity>
         <activity
             android:name="com.example.project53.CreateJob"
+            android:screenOrientation="portrait"
             android:label="Create Job">
 
         </activity>
 
         <activity
             android:name="com.example.project53.UserAuth"
+            android:screenOrientation="portrait"
             android:label="Login / Register">
             android:theme="@style/AppTheme">
         </activity>
 
         <activity
             android:name="com.example.project53.ViewJob"
+            android:screenOrientation="portrait"
             android:label="View Job">
 
         </activity>

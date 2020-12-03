@@ -142,15 +142,32 @@ class MainListScreen : Activity() {
 
         hideKeyboard(this)
 
-        Log.i(TAG, "validZip (per USPS): " + DistFromZip().getDist(mZipView.text.toString(), 21012.toString()).equals(-1F))
+        /** Dont bother wasting a call to Geocoder API unless it is properly formatted */
+        if (!zipValidator(mZipView.text.toString())){
+                Toast.makeText(this, "Location is not a ZIP!", Toast.LENGTH_SHORT).show()
+                mZipView.setTextColor(parseColor("#FF0000"))
+                return
+        }
 
-        if (zipValidator(mZipView.text.toString()) && !DistFromZip().getDist(mZipView.text.toString(), 21012.toString()).equals(-1F)){
+        var dfz =  DistFromZip().getDist(mZipView.text.toString(), 21012.toString())
+
+        when (dfz){
+            -1F ->  Toast.makeText(this, "API Error", Toast.LENGTH_SHORT).show()
+            -2F ->  Toast.makeText(this, "ZIP Bad", Toast.LENGTH_SHORT).show()
+            -3F ->  Toast.makeText(this, "ZIP2 Bad", Toast.LENGTH_SHORT).show()
+        }
+
+
+        Log.i(TAG, "validZip (per USPS): " + (dfz > -1))
+
+
+        if (zipValidator(mZipView.text.toString()) && dfz > -1){
             mZip = mZipView.text.toString()
             mZipView.setTextColor(parseColor("#000000"))
             Toast.makeText(applicationContext, "Location Updated", Toast.LENGTH_SHORT).show()
         }else{
             mZipView.setTextColor(parseColor("#FF0000"))
-            Toast.makeText(applicationContext, "Invalid Zip", Toast.LENGTH_SHORT).show()
+            //Toast.makeText(applicationContext, "Bad Zip / Geocoder API Error!", Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -274,7 +291,7 @@ class MainListScreen : Activity() {
             }
             R.id.menu_mytasks -> {
 
-                val intentMyTasks = Intent(this, CreateJob::class.java)
+                val intentMyTasks = Intent(this, MyTasks::class.java)
                 intentMyTasks.putExtra("username", username)
 
                 startActivity(intentMyTasks)
@@ -418,7 +435,7 @@ class MainListScreen : Activity() {
                 continueInstallLocationListeners()
             }
         } else {
-            Toast.makeText(this, "This app requires ACCESS_FINE_LOCATION permission", Toast.LENGTH_LONG).show()
+            Toast.makeText(this, "This app requires ACCESS_FINE_LOCATION permission", Toast.LENGTH_SHORT).show()
         }
     }
 
