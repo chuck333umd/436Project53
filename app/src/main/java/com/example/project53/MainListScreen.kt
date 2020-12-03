@@ -6,6 +6,7 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.Color
 import android.graphics.Color.parseColor
 import android.location.*
 import android.os.Build
@@ -21,6 +22,11 @@ import android.widget.LinearLayout
 import android.widget.ListView
 import android.widget.TextView
 import android.widget.Toast
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
+import java.lang.Exception
 import java.util.*
 import java.util.concurrent.Executors
 import java.util.concurrent.ScheduledFuture
@@ -65,8 +71,8 @@ class MainListScreen : Activity() {
     private lateinit var mCurrentUser: TextView
     private var mZip = ""
     private var mRadius = 50
-
     private var username: String? = null
+
 
 
     // Current best location estimate
@@ -78,20 +84,22 @@ class MainListScreen : Activity() {
     private var mCancelHandle: ScheduledFuture<*>? = null
     private var mIsRequestingUpdates = false
     private var mShouldResume = false
+    internal lateinit var jobsCreated: MutableList<String>
+    internal lateinit var listView: ListView
+
     internal lateinit var mAdapter: MainListAdapater
     @TargetApi(Build.VERSION_CODES.M)
+
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         var numJobs = 0
-
+        jobsCreated = ArrayList()
         setContentView(R.layout.mainlist)
-        mAdapter = MainListAdapater(applicationContext)
         mZipView = findViewById(R.id.mainlist_location)
         mRadiusView = findViewById(R.id.mainlist_radius)
-        var listView = findViewById<ListView>(R.id.mainlist_listview)
         mCurrentUser = findViewById(R.id.mainlist_currentUser)
-
+        listView = findViewById<ListView>(R.id.mainlist_listview)
         val logIn = intent.getBooleanExtra("loggedIn", false)
         if (logIn) {
 
@@ -116,16 +124,15 @@ class MainListScreen : Activity() {
             getAndDisplayLastKnownLocation()
             installLocationListeners()
         }
-
+/*
         listView.setFooterDividersEnabled(true)
         val footerView = (this.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater).inflate(R.layout.mainlist, null, false) as LinearLayout
-        listView.addFooterView(footerView)
+        listView.addFooterView(footerView)*/
         /** Dont forget to update this value when you search the database for <jobs within radius> */
 
         if (numJobs == 0) Toast.makeText(applicationContext, "No Jobs Currently", Toast.LENGTH_SHORT).show()
 
         displayJobsByRadius()
-        listView.adapter = mAdapter
     }
 
     fun displayJobsByRadius(){
@@ -356,7 +363,36 @@ class MainListScreen : Activity() {
         }
     }
 
+    override fun onStart() {
+        super.onStart()
+        var mUsers = FirebaseDatabase.getInstance().getReference("Jobs")
+        val postListener = object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                val jid: String = ""
+                var job : Job? = null
 
+                for (postSnap in snapshot.children) {
+                    try {
+                        job = postSnap.getValue(Job::class.java)
+
+                        Log.d(TAG, "jobs?" + job!!.jid)
+                    } catch (e: Exception) {
+                        Log.e(TAG, e.toString())
+                    } finally {
+                        Log.d(TAG, "we are getting here right?" + job)
+                        jobsCreated!!.add(job!!.jid)
+                    }
+                }
+                    Log.d(TAG, "jobsCreated?" + jobsCreated + job)
+                    val mAdapter = MainListAdapater(this@MainListScreen, jobsCreated!!)
+                    listView.adapter = mAdapter;
+            }
+            override fun onCancelled(error: DatabaseError) {
+                TODO("Not yet implemented")
+            }
+        }
+        mUsers.addValueEventListener(postListener)
+    }
     private fun installLocationListeners() {
 
         // Determine whether initial reading is "good enough".

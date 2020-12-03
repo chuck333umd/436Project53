@@ -78,6 +78,7 @@ class CreateJob : Activity() {
                 jobsCreated = userData!!.jobsCreated
                 tasksAccepted = userData!!.tasksAccepted
 
+
             }
 
             override fun onCancelled(error: DatabaseError) {
