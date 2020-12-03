@@ -15,7 +15,11 @@ class DistFromZip {
         StrictMode.setThreadPolicy(policy)
 
         val apiResponse1 = URL("https://maps.googleapis.com/maps/api/geocode/json?components=postal_code:$zip1&key=AIzaSyByaBb5GYYIoBo7lk1odivoK-q-ZfclmIQ").readText()
-        //Log.i(ViewJob.TAG, "apiResponse1 = $apiResponse1 ")
+        Log.i(ViewJob.TAG, "apiResponse1 = $apiResponse1 ")
+
+        if (apiResponse1.contains("ZERO_RESULTS")){
+            return -2F
+        }
 
         val lat1 = apiResponse1.substringAfter("\"lat\" : ").substring(0, 9)
         val lon1 = apiResponse1.substringAfter("\"lng\" : ").substring(0, 9)
@@ -25,6 +29,9 @@ class DistFromZip {
 
         val apiResponse2 = URL("https://maps.googleapis.com/maps/api/geocode/json?components=postal_code:$zip2&key=AIzaSyByaBb5GYYIoBo7lk1odivoK-q-ZfclmIQ").readText()
         //Log.i(ViewJob.TAG, "apiResponse1 = $apiResponse1 ")
+        if (apiResponse2.contains("ZERO_RESULTS")){
+            return -3F
+        }
 
         val lat2 = apiResponse2.substringAfter("\"lat\" : ").substring(0, 9)
         val lon2 = apiResponse2.substringAfter("\"lng\" : ").substring(0, 9)

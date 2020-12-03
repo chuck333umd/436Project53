@@ -71,17 +71,17 @@ class UserAuth : Activity() {
         val password: String = userPassword!!.text.toString()
 
         if (TextUtils.isEmpty(email)) {
-            Toast.makeText(applicationContext, "Please enter email...", Toast.LENGTH_LONG).show()
+            Toast.makeText(applicationContext, "Please enter email...", Toast.LENGTH_SHORT).show()
             return
         }
         if (TextUtils.isEmpty(password)) {
-            Toast.makeText(applicationContext, "Please enter password!", Toast.LENGTH_LONG).show()
+            Toast.makeText(applicationContext, "Please enter password!", Toast.LENGTH_SHORT).show()
             return
         }
 
         mAuth!!.signInWithEmailAndPassword(email, password).addOnCompleteListener { task -> progressBar!!.visibility = View.GONE
             if (task.isSuccessful) {
-                Toast.makeText(applicationContext, "Login successful!", Toast.LENGTH_LONG).show()
+                Toast.makeText(applicationContext, "Login successful!", Toast.LENGTH_SHORT).show()
 
                 Log.i("main", mAuth!!.uid!!)
                 Log.i("main", "mAuth!!.currentUser!!.displayName = " + mAuth!!.currentUser!!.displayName)
@@ -97,7 +97,7 @@ class UserAuth : Activity() {
 
 
             } else {
-                Toast.makeText(applicationContext, "Login failed! Please try again later", Toast.LENGTH_LONG).show()
+                Toast.makeText(applicationContext, "Login failed! Please try again later", Toast.LENGTH_SHORT).show()
             }
         }
     }
@@ -111,16 +111,16 @@ class UserAuth : Activity() {
 
 
         if (!validator.validUsername(username)) {
-            Toast.makeText(applicationContext, "Enter a valid username!", Toast.LENGTH_LONG).show()
+            Toast.makeText(applicationContext, "Enter a valid username!", Toast.LENGTH_SHORT).show()
             return
         }
 
         if (!validator.validEmail(email)) {
-            Toast.makeText(applicationContext, "Enter a valid email!", Toast.LENGTH_LONG).show()
+            Toast.makeText(applicationContext, "Enter a valid email!", Toast.LENGTH_SHORT).show()
             return
         }
         if (!validator.validPassword(password)) {
-            Toast.makeText(applicationContext, "Enter a valid password!", Toast.LENGTH_LONG).show()
+            Toast.makeText(applicationContext, "Enter a valid password!", Toast.LENGTH_SHORT).show()
             return
         }
 
@@ -141,12 +141,12 @@ class UserAuth : Activity() {
                             val newuser = User(username, userEmail!!.text.toString(), ArrayList<String>(), ArrayList<String>())
                             mUsers!!.child(username.toString()).setValue(newuser)
 
-                            Toast.makeText(applicationContext, "Registration successful!", Toast.LENGTH_LONG).show()
+                            Toast.makeText(applicationContext, "Registration successful!", Toast.LENGTH_SHORT).show()
                             progressBar!!.visibility = View.GONE
 
                             loginUserAccount()
                         }else{
-                            Toast.makeText(applicationContext, "Username Not Unique!", Toast.LENGTH_LONG).show()
+                            Toast.makeText(applicationContext, "Username Not Unique!", Toast.LENGTH_SHORT).show()
                             userName!!.setText("")
                             progressBar!!.visibility = View.GONE
                         }
@@ -168,7 +168,7 @@ class UserAuth : Activity() {
 
 
             } else {
-                Toast.makeText(applicationContext, "Failure (or Email May Already Exist)!", Toast.LENGTH_LONG).show()
+                Toast.makeText(applicationContext, "Failure (or Email May Already Exist)!", Toast.LENGTH_SHORT).show()
                 progressBar!!.visibility = View.GONE
             }
         })
