@@ -136,6 +136,13 @@ class MainListScreen : Activity() {
 
         hideKeyboard(this)
 
+        /** Dont bother wasting a call to Geocoder API unless it is properly formatted */
+        if (!zipValidator(mZipView.text.toString())){
+                Toast.makeText(this, "Location is not a ZIP!", Toast.LENGTH_SHORT).show()
+                mZipView.setTextColor(parseColor("#FF0000"))
+                return
+        }
+
         var dfz =  DistFromZip().getDist(mZipView.text.toString(), 21012.toString())
 
         when (dfz){
@@ -145,7 +152,7 @@ class MainListScreen : Activity() {
         }
 
 
-        Log.i(TAG, "validZip (per USPS): " + (dfz > -1)) 
+        Log.i(TAG, "validZip (per USPS): " + (dfz > -1))
 
 
         if (zipValidator(mZipView.text.toString()) && dfz > -1){
