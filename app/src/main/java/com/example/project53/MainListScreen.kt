@@ -145,7 +145,7 @@ class MainListScreen : Activity() {
         }
 
 
-        Log.i(TAG, "validZip (per USPS): " + (dfz > -1))
+        Log.i(TAG, "validZip (per USPS): " + (dfz > -1)) 
 
 
         if (zipValidator(mZipView.text.toString()) && dfz > -1){
