@@ -3,22 +3,18 @@ package com.example.project53
 import android.Manifest.permission.ACCESS_FINE_LOCATION
 import android.annotation.TargetApi
 import android.app.Activity
-import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.graphics.Color
 import android.graphics.Color.parseColor
 import android.location.*
 import android.os.Build
 import android.os.Bundle
 import android.os.Parcelable
 import android.util.Log
-import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.view.inputmethod.InputMethodManager
-import android.widget.LinearLayout
 import android.widget.ListView
 import android.widget.TextView
 import android.widget.Toast
@@ -85,6 +81,12 @@ class MainListScreen : Activity() {
     private var mIsRequestingUpdates = false
     private var mShouldResume = false
     internal lateinit var jobsCreated: MutableList<String>
+    internal lateinit var description: MutableList<String>
+    internal lateinit var createdBy: MutableList<String>
+    internal lateinit var dueDate: MutableList<String>
+    internal lateinit var dueTime: MutableList<String>
+    internal lateinit var dollar: MutableList<String>
+
     internal lateinit var listView: ListView
 
     internal lateinit var mAdapter: MainListAdapater
@@ -95,6 +97,11 @@ class MainListScreen : Activity() {
 
         var numJobs = 0
         jobsCreated = ArrayList()
+        description  = ArrayList()
+        createdBy = ArrayList()
+        dueDate = ArrayList()
+        dueTime = ArrayList()
+        dollar = ArrayList()
         setContentView(R.layout.mainlist)
         mZipView = findViewById(R.id.mainlist_location)
         mRadiusView = findViewById(R.id.mainlist_radius)
@@ -381,10 +388,16 @@ class MainListScreen : Activity() {
                     } finally {
                         Log.d(TAG, "we are getting here right?" + job)
                         jobsCreated!!.add(job!!.jid)
+                        description!!.add(job!!.description)
+                        dollar!!.add(job!!.payout.toString())
+                        dueDate!!.add(job!!.date.toString())
+                        dueTime!!.add(job!!.date.toString())
+                        createdBy!!.add(job!!.creator)
+
                     }
                 }
                     Log.d(TAG, "jobsCreated?" + jobsCreated + job)
-                    val mAdapter = MainListAdapater(this@MainListScreen, jobsCreated!!)
+                    val mAdapter = MainListAdapater(this@MainListScreen, jobsCreated!!,description!!,dollar!!,dueDate!!,dueTime!!,createdBy!!)
                     listView.adapter = mAdapter;
             }
             override fun onCancelled(error: DatabaseError) {
