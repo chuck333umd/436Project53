@@ -46,7 +46,7 @@ class MainListAdapater(private val mContext: Context, private val jobs: MutableL
         val createdView = rowView.findViewById(R.id.listitem_username) as TextView
 
         descView.text = curDesc
-        dateView.text = curTime
+        dateView.text = curDate
         payoutView.text = curPayout
         createdView.text = curCreated
         timeView.text = curTime

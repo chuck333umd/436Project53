@@ -17,6 +17,7 @@ class Job{
     public var description: String = ""
     public var zip: String = ""
 
+
     /** Use when job creator will not accept a lower offer initially*/
 
 
@@ -42,6 +43,19 @@ class Job{
         this.description = desc
         this.acceptLowerOffer = true
         this.minpayout = minPayout
+    }
+    constructor (jid: String, creator: String, date: Date, desc: String, zip: String,payout: Int, minPayout: Int, done:Boolean, started:Boolean,acceptLowerOffer:Boolean, tasker:String) {
+        this.jid = jid
+        this.creator = creator
+        this.date = date
+        this.zip = zip
+        this.payout = payout
+        this.description = desc
+        this.acceptLowerOffer = acceptLowerOffer
+        this.minpayout = minPayout
+        this.isStarted = done
+        this.isDone = started
+        this.tasker = tasker
     }
 
     constructor()

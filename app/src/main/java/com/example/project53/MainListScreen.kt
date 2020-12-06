@@ -391,7 +391,7 @@ class MainListScreen : Activity() {
                         description!!.add(job!!.description)
                         dollar!!.add(job!!.payout.toString())
                         dueDate!!.add(job!!.date.toString())
-                        dueTime!!.add(job!!.date.toString())
+                        dueTime!!.add(job!!.date!!.time.toString())
                         createdBy!!.add(job!!.creator)
 
                     }

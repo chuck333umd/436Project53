@@ -12,7 +12,9 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.core.view.isVisible
 import com.google.firebase.database.*
+import java.lang.Exception
 import java.net.URL
+import java.util.*
 
 
 // TODO (DONE) - Implement a way for the view to show a different button depending on the case:
@@ -43,12 +45,20 @@ class ViewJob : Activity() {
     private lateinit var mViewJob_DescriptionView: TextView
     private lateinit var mViewJob_CompletedCheckBox: CheckBox
     private lateinit var mViewJob_StartedCheckBox: CheckBox
-
-
+    private var acceptLowerOffer:Boolean = false
+    private var creator:String? = null
+    private var date: Date? = null
+    private var description: String? = null
+    private var minpayout: Int? = -1
+    private var payout: Int? = -1
+    private var started: Boolean = false
+    private var done: Boolean = false;
     private var username: String? = null
     private var jid: String? = null
     private var userZip: String? = null
-
+    private var email: String? = null
+    private var jobsCreated: ArrayList<String>? = null
+    private var tasksAccepted: ArrayList<String>? = null
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -247,12 +257,20 @@ class ViewJob : Activity() {
 
     fun acceptJobButtonClick(view: View){
 
-
+        var mUsers = FirebaseDatabase.getInstance().getReference("Job").child(jid!!)
+        var mUsers1 = FirebaseDatabase.getInstance().getReference("Users").child(username!!)
+        Log.d(TAG, "jidtest" + jid)
+        var newJob = Job(jid!!, creator!!, date!!, description!!, userZip!!, payout!!,minpayout!!,done!!,true,acceptLowerOffer!!,username!!)
+        mUsers.setValue(newJob)
+        tasksAccepted!!.add(jid!!)
+        var newUser = User(username!!,email!!,jobsCreated!!,tasksAccepted!!)
+        mUsers1!!.setValue(newUser)
         //TODO - edit job in "Jobs" database to show isStarted = true
         //TODO - edit job in "Jobs" database to show tasker = username of <person who accepted>
 
-        //TODO - edit user record in "Users" database to show tasksAccepted includes this job ID
 
+        //TODO - edit user record in "Users" database to show tasksAccepted includes this job ID
+        finish()
     }
 
     fun quitJobButtonClick(view: View){
@@ -276,17 +294,64 @@ class ViewJob : Activity() {
     fun completeJobButtonClick(view: View){
 
         //TODO - edit job in "Jobs" database to show isDone = false
-
+        var mUsers = FirebaseDatabase.getInstance().getReference("Job").child(jid!!)
+        Log.d(TAG, "jidtest1" + jid)
+        var newJob = Job(jid!!, creator!!, date!!, description!!, userZip!!, payout!!,minpayout!!,true!!,true,acceptLowerOffer!!,username!!)
+        mUsers.setValue(newJob)
+        finish()
     }
 
     fun cancelJobButtonClick(view: View){
 
         //TODO - delete from "Jobs" database
         //TODO - remove from "Users" database under your username
+        var mUsers = FirebaseDatabase.getInstance().getReference("Job").child(jid!!)
+        mUsers.removeValue()
 
     }
+    override fun onStart() {
+        super.onStart()
+        Log.d(TAG,"test123121212")
+        var mUsers = FirebaseDatabase.getInstance().getReference("Jobs").child(jid!!)
+        var mUsers1 = FirebaseDatabase.getInstance().getReference("Users").child(username!!)
+        val postListener1 = object : ValueEventListener{
+            override fun onDataChange(snapshot: DataSnapshot) {
+                var userData = snapshot.getValue(User::class.java)
+                email = userData!!.email
+                username = userData!!.name
+                jobsCreated = userData!!.jobsCreated
+                tasksAccepted = userData!!.tasksAccepted
 
+                Log.d(TAG,"testpostlisten1")
 
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                TODO("Not yet implemented")
+            }
+        }
+        mUsers1.addValueEventListener(postListener1)
+        val postListener = object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                var job = snapshot.getValue(Job::class.java)
+                Log.d(TAG, "are we even gteting here please")
+                acceptLowerOffer = job!!.acceptLowerOffer
+                creator = job!!.creator
+                date = job!!.date
+                description = job!!.description
+                done = job!!.isDone
+                minpayout = job!!.minpayout
+                payout = job!!.payout
+                started = job!!.isStarted
+            }
+            override fun onCancelled(error: DatabaseError) {
+                TODO("Not yet implemented")
+            }
+
+        }
+        mUsers.addValueEventListener(postListener)
+
+    }
     companion object{
         val TAG = "main"
     }
