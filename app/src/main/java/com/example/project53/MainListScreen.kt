@@ -171,10 +171,10 @@ class MainListScreen : Activity() {
 
                         val dist = DistFromZip().getDist(job!!.zip.toString(), mZip ).toInt()
                         Log.i("dfz", "jid: " + job!!.jid + ", dist: $dist")
-                        if ( dist < mRadius) {
+                        if ( dist < mRadius && job!!.isStarted == false) {
                             numJobs++
                             Log.i("dfz", "adding jid: " + job!!.jid + ", zip: " + job!!.zip + ", dist: $dist")
-                            Log.d(TAG, "we are getting here right?" + job)
+                            //Log.d(TAG, "we are getting here right?" + job)
                             jobsCreated!!.add(job!!.jid)
                             description!!.add(job!!.description)
                             dollar!!.add(job!!.payout.toString())

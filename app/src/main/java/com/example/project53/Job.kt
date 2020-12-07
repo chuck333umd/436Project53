@@ -9,8 +9,6 @@ class Job{
     public var tasker: String? = null
     public var date: Date? = null
     public var payout: Int = -1
-    public var acceptLowerOffer: Boolean = false
-    public var minpayout: Int = -1
     public var isStarted: Boolean = false
     public var isDone: Boolean = false
     public var description: String = ""
@@ -26,34 +24,21 @@ class Job{
         this.date = date
         this.zip = zip
         this.payout = payout
-        this.acceptLowerOffer = false
-        this.minpayout = -1
         this.description = desc
+        this.tasker = null
 
     }
 
-    /** Use when job creator will auto-accept a lower offer without negotiation (like ebay)*/
-    constructor (jid: String, creator: String, date: Date, desc: String, zip: String,payout: Int, minPayout: Int) {
+
+    constructor (jid: String, creator: String, date: Date, desc: String, zip: String, payout: Int, done:Boolean, started:Boolean, tasker: String?) {
         this.jid = jid
         this.creator = creator
         this.date = date
         this.zip = zip
         this.payout = payout
         this.description = desc
-        this.acceptLowerOffer = true
-        this.minpayout = minPayout
-    }
-    constructor (jid: String, creator: String, date: Date, desc: String, zip: String, payout: Int, minPayout: Int, done:Boolean, started:Boolean, acceptLowerOffer:Boolean, tasker: String?) {
-        this.jid = jid
-        this.creator = creator
-        this.date = date
-        this.zip = zip
-        this.payout = payout
-        this.description = desc
-        this.acceptLowerOffer = acceptLowerOffer
-        this.minpayout = minPayout
-        this.isStarted = done
-        this.isDone = started
+        this.isStarted = started
+        this.isDone = done
         this.tasker = tasker
     }
 
