@@ -1,6 +1,5 @@
 package com.example.project53
 
-import java.sql.Time
 import java.util.*
 
 class Job{
@@ -44,7 +43,7 @@ class Job{
         this.acceptLowerOffer = true
         this.minpayout = minPayout
     }
-    constructor (jid: String, creator: String, date: Date, desc: String, zip: String,payout: Int, minPayout: Int, done:Boolean, started:Boolean,acceptLowerOffer:Boolean, tasker:String) {
+    constructor (jid: String, creator: String, date: Date, desc: String, zip: String, payout: Int, minPayout: Int, done:Boolean, started:Boolean, acceptLowerOffer:Boolean, tasker: String?) {
         this.jid = jid
         this.creator = creator
         this.date = date

@@ -377,6 +377,12 @@ class MainListScreen : Activity() {
             override fun onDataChange(snapshot: DataSnapshot) {
                 val jid: String = ""
                 var job : Job? = null
+                jobsCreated.clear()
+                description.clear()
+                dueDate.clear()
+                dollar.clear()
+                dueTime.clear()
+                dueTime.clear()
 
                 for (postSnap in snapshot.children) {
                     try {
