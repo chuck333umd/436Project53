@@ -85,21 +85,54 @@
 
   <Button
       android:id="@+id/viewjob_completejob"
-      android:layout_width="338dp"
-      android:layout_height="54dp"
-      android:layout_marginStart="28dp"
-      android:layout_marginTop="208dp"
+      android:layout_width="174dp"
+      android:layout_height="36dp"
+      android:layout_marginStart="116dp"
+      android:layout_marginTop="232dp"
       android:onClick="completeJobButtonClick"
       android:text="JOB COMPLETE"
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toBottomOf="@+id/viewjob_editTextDescription" />
 
   <Button
+      android:id="@+id/viewjob_acceptbutton"
+      android:layout_width="173dp"
+      android:layout_height="37dp"
+      android:layout_marginStart="116dp"
+      android:layout_marginTop="108dp"
+      android:onClick="acceptJobButtonClick"
+      android:text="ACCEPT JOB"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toBottomOf="@+id/viewjob_editTextDescription" />
+
+  <Button
+      android:id="@+id/viewjob_quitbutton"
+      android:layout_width="174dp"
+      android:layout_height="36dp"
+      android:layout_marginStart="116dp"
+      android:layout_marginTop="136dp"
+      android:onClick="quitJobButtonClick"
+      android:text="QUIT JOB"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toBottomOf="@+id/viewjob_editTextDescription" />
+
+  <Button
+      android:id="@+id/viewjob_cancelbutton"
+      android:layout_width="172dp"
+      android:layout_height="35dp"
+      android:layout_marginStart="116dp"
+      android:layout_marginTop="168dp"
+      android:onClick="cancelJobButtonClick"
+      android:text="CANCEL JOB"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toBottomOf="@+id/viewjob_editTextDescription" />
+
+  <Button
       android:id="@+id/viewjob_firebutton"
-      android:layout_width="338dp"
-      android:layout_height="54dp"
-      android:layout_marginStart="28dp"
-      android:layout_marginTop="140dp"
+      android:layout_width="172dp"
+      android:layout_height="38dp"
+      android:layout_marginStart="116dp"
+      android:layout_marginTop="196dp"
       android:onClick="fireTaskerButtonClick"
       android:text="FIRE TASKER"
       app:layout_constraintStart_toStartOf="parent"
@@ -108,7 +141,7 @@
   <TextView
       android:id="@+id/viewjob_editTextDescription"
       android:layout_width="366dp"
-      android:layout_height="108dp"
+      android:layout_height="82dp"
       android:layout_marginStart="16dp"
       android:layout_marginTop="12dp"
       android:ems="10"
@@ -128,27 +161,16 @@
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toBottomOf="@+id/viewjob_editTextDate" />
 
-  <Button
-      android:id="@+id/viewjob_quitbutton"
-      android:layout_width="338dp"
-      android:layout_height="54dp"
-      android:layout_marginStart="28dp"
-      android:layout_marginTop="72dp"
-      android:onClick="quitJobButtonClick"
-      android:text="QUIT JOB"
-      app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toBottomOf="@+id/viewjob_editTextDescription" />
+  <TextView
+      android:id="@+id/viewjob_contactInfoTV"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginStart="16dp"
+      android:layout_marginTop="180dp"
 
-  <Button
-      android:id="@+id/viewjob_cancelbutton"
-      android:layout_width="338dp"
-      android:layout_height="54dp"
-      android:layout_marginStart="28dp"
-      android:layout_marginTop="72dp"
-      android:onClick="cancelJobButtonClick"
-      android:text="CANCEL JOB"
+      android:text="Contact Info:"
       app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toBottomOf="@+id/viewjob_editTextDescription" />
+      app:layout_constraintTop_toBottomOf="@+id/viewjob_editTextDate" />
 
   <TextView
       android:id="@+id/textView7"
@@ -172,6 +194,17 @@
       app:layout_constraintTop_toBottomOf="@+id/textView3" />
 
   <TextView
+      android:id="@+id/viewjob_contactInfo"
+      android:layout_width="235dp"
+      android:layout_height="48dp"
+      android:layout_marginStart="16dp"
+      android:layout_marginTop="268dp"
+      android:ems="10"
+      android:inputType="date"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toBottomOf="@+id/textView3" />
+
+  <TextView
       android:id="@+id/textView3"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
@@ -181,17 +214,6 @@
 
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toBottomOf="@+id/textView2" />
-
-  <Button
-      android:id="@+id/viewjob_acceptbutton"
-      android:layout_width="338dp"
-      android:layout_height="54dp"
-      android:layout_marginStart="28dp"
-      android:layout_marginTop="8dp"
-      android:onClick="acceptJobButtonClick"
-      android:text="ACCEPT JOB"
-      app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toBottomOf="@+id/viewjob_editTextDescription" />
 
   <TextView
       android:id="@+id/viewjob_editTextPayout"

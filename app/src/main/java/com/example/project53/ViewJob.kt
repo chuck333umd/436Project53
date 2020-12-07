@@ -37,12 +37,14 @@ class ViewJob : Activity() {
     private lateinit var mViewJob_ZipView: TextView
     private lateinit var mViewJob_DistView: TextView
     private lateinit var mViewJob_PayoutView: TextView
-    private lateinit var mViewJob_MinPayoutView: TextView
+    private lateinit var mViewJob_ContactInfo: TextView
+    private lateinit var mViewJob_ContactInfoTV: TextView
     private lateinit var mViewJob_DescriptionView: TextView
     private lateinit var mViewJob_CompletedCheckBox: CheckBox
     private lateinit var mViewJob_StartedCheckBox: CheckBox
 
     private var creator:String? = null
+    private var tasker:String? = null
     private var date: Date? = null
     private var description: String? = null
 
@@ -51,10 +53,16 @@ class ViewJob : Activity() {
     private var done: Boolean = false;
     private var username: String? = null
     private var jid: String? = null
+    private var cemail: String? = null
+    private var temail: String? = null
     private var userZip: String? = null
     private var email: String? = null
+    private var useremail: String? = null
     private var jobsCreated: ArrayList<String>? = null
     private var tasksAccepted: ArrayList<String>? = null
+
+    private var creatorContactInfo: String? = null
+    private var taskerContactInfo: String? = null
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -74,6 +82,8 @@ class ViewJob : Activity() {
         mViewJob_ZipView = findViewById(R.id.viewjob_location)
         mViewJob_DistView = findViewById(R.id.viewjob_distance)
         mViewJob_PayoutView = findViewById(R.id.viewjob_editTextPayout)
+        mViewJob_ContactInfo = findViewById(R.id.viewjob_contactInfo)
+        mViewJob_ContactInfoTV = findViewById(R.id.viewjob_contactInfoTV)
         mViewJob_DescriptionView = findViewById(R.id.viewjob_editTextDescription)
         mViewJob_CompletedCheckBox = findViewById(R.id.viewjob_completedCheckBox)
         mViewJob_StartedCheckBox = findViewById(R.id.viewjob_startedCheckBox)
@@ -84,10 +94,12 @@ class ViewJob : Activity() {
         username = intent.getStringExtra("username")
         jid = intent.getStringExtra("jid")
         userZip = intent.getStringExtra("zip")
+        useremail = intent.getStringExtra("email")
 
         Log.i(TAG, "ViewJob()")
         Log.i(TAG, "username = $username")
         Log.i(TAG, "jid = $jid")
+        Log.i(TAG, "useremail = $useremail")
 
 
 
@@ -106,15 +118,34 @@ class ViewJob : Activity() {
                 mViewJob_Creator.text = job!!.creator
                 mViewJob_Tasker.text = job!!.tasker
                 mViewJob_DateView.text = job!!.date.toString()
-                // mViewJob_TimeView.text = job!!.date.toString()
+                creatorContactInfo = job!!.cemail.toString()
+                taskerContactInfo = job!!.temail.toString()
                 mViewJob_PayoutView.text = job!!.payout.toString()
                 mViewJob_CompletedCheckBox.isChecked = job!!.isDone
-                done = job!!.isDone
-                started = job!!.isStarted
                 mViewJob_StartedCheckBox.isChecked = job!!.isStarted
                 mViewJob_DescriptionView.text = job!!.description
                 mViewJob_ZipView.text = job!!.zip
                 mViewJob_DistView.text = getDistance(job!!.zip, userZip.toString())
+
+                creator = job!!.creator
+                date = job!!.date
+                description = job!!.description
+                tasker = job!!.tasker
+                payout = job!!.payout
+                done = job!!.isDone
+                started = job!!.isStarted
+                cemail = job!!.cemail
+                temail = job!!.temail
+
+                creatorContactInfo = job!!.temail
+                taskerContactInfo = job!!.temail
+
+                Log.d(TAG, "job = snapshot.getValue(Job::class.java)")
+                Log.d(TAG, "creator = $creator")
+                Log.d(TAG, "tasker = $tasker")
+                Log.d(TAG, "date = $date")
+                Log.d(TAG, "cemail = $cemail")
+                Log.d(TAG, "temail = $temail")
 
                 /** ALL FUNCTIONS TO BE CALLED MUST BE CALLED FROM HERE IF THEY RELY ON THE DATA
                  * PULLED FROM THE DATABASE. THERE IS A DELAY!
@@ -128,6 +159,11 @@ class ViewJob : Activity() {
                 Log.i(TAG, "The read failed: " + databaseError.code)
             }
         })
+    }
+
+    override fun onStart() {
+        super.onStart()
+
     }
 
     private fun getDistance(zip1: String, zip2: String): String{
@@ -150,6 +186,25 @@ class ViewJob : Activity() {
 
         /** You did not create the job and it is up for grabs
           *  Your options are - accept the job*/
+
+        mViewJob_ContactInfo.isVisible = false
+        mViewJob_ContactInfoTV.isVisible = false
+
+        if (username == mViewJob_Tasker.text.toString()){
+            Log.i("main", " useremail = $cemail")
+            mViewJob_ContactInfo.text = "User: "+ creator + ": " + cemail
+            mViewJob_ContactInfo.isVisible = true
+            mViewJob_ContactInfoTV.isVisible = true
+        }
+
+        if (username == mViewJob_Creator.text.toString() && mViewJob_StartedCheckBox.isChecked){
+            Log.i("main", " useremail = $temail")
+            mViewJob_ContactInfo.text = "User: "+ tasker + ": " + temail
+            mViewJob_ContactInfo.isVisible = true
+            mViewJob_ContactInfoTV.isVisible = true
+        }
+
+
         if (mViewJob_Creator.text.toString() == ""){
             Toast.makeText(this, "Task Creator = NULL... ERROR!", Toast.LENGTH_SHORT).show()
 
@@ -259,12 +314,16 @@ class ViewJob : Activity() {
 
         var mUsers = FirebaseDatabase.getInstance().getReference("Jobs").child(jid!!)
         var mUsers1 = FirebaseDatabase.getInstance().getReference("Users").child(username!!)
-        Log.d(TAG, "acceptJobButtonClick" + jid)
-        var newJob = Job(jid!!, creator!!, date!!, description!!, userZip!!, payout!!,false,true,username!!)
+        Log.d(TAG, "acceptJobButtonClick = $jid")
+        Log.d(TAG, "creator = $creator")
+        Log.d(TAG, "username = $username")
+        Log.d(TAG, "cemail = $cemail")
+        Log.d(TAG, "temail = $temail")
+
+        var newJob = Job(jid!!, creator!!, cemail!!, date!!, description!!, userZip!!, payout!!,false,true, username!!, useremail!!)
         mUsers.setValue(newJob)
-        tasksAccepted!!.add(jid!!)
-        var newUser = User(username!!,email!!,jobsCreated!!,tasksAccepted!!)
-        mUsers1!!.setValue(newUser)
+
+
         //TODO - edit job in "Jobs" database to show isStarted = true
         //TODO - edit job in "Jobs" database to show tasker = username of <person who accepted>
 
@@ -280,12 +339,10 @@ class ViewJob : Activity() {
         var mUsers = FirebaseDatabase.getInstance().getReference("Jobs").child(jid!!)
         var mUsers1 = FirebaseDatabase.getInstance().getReference("Users").child(username!!)
         Log.d(TAG, "jidtest" + jid)
-        var newJob = Job(jid!!, creator!!, date!!, description!!, userZip!!, payout!!,false,false,null)
+        var newJob = Job(jid!!, creator!!,cemail!!, date!!, description!!, userZip!!, payout!!,false,false,null, null)
         mUsers.setValue(newJob)
-        tasksAccepted!!.remove(jid!!)
-        var newUser = User(username!!,email!!,jobsCreated!!,tasksAccepted!!)
-        mUsers1!!.setValue(newUser)
-        //TODO - edit user record in "Users" database to show tasksAccepted excludes this job ID
+
+
         this.finish()
 
     }
@@ -293,7 +350,7 @@ class ViewJob : Activity() {
     fun fireTaskerButtonClick(view: View){
 
         var mUsers = FirebaseDatabase.getInstance().getReference("Jobs").child(jid!!)
-        var newJob = Job(jid!!, creator!!, date!!, description!!, userZip!!, payout!!,false,false,null)
+        var newJob = Job(jid!!, creator!!,cemail!!, date!!, description!!, userZip!!, payout!!,false,false,null, null)
         mUsers.setValue(newJob)
 
 
@@ -312,7 +369,7 @@ class ViewJob : Activity() {
         Log.d(TAG, "completeJobButtonClick" + jid)
         var mUsers = FirebaseDatabase.getInstance().getReference("Jobs").child(jid!!)
 
-        var newJob = Job(jid!!, creator!!, date!!, description!!, userZip!!, payout!!,true,true,username!!)
+        var newJob = Job(jid!!, creator!!, cemail!!, date!!, description!!, userZip!!, payout!!,true,true,username!!, temail!!)
         mUsers.setValue(newJob)
         this.finish()
     }
@@ -325,49 +382,7 @@ class ViewJob : Activity() {
         this.finish()
 
     }
-    override fun onStart() {
-        super.onStart()
-        Log.d(TAG,"test123121212")
-        var mUsers = FirebaseDatabase.getInstance().getReference("Jobs").child(jid!!)
-        var mUsers1 = FirebaseDatabase.getInstance().getReference("Users").child(username!!)
-        val postListener1 = object : ValueEventListener{
-            override fun onDataChange(snapshot: DataSnapshot) {
-                var userData = snapshot.getValue(User::class.java)
-                email = userData!!.email
-                username = userData!!.name
-                jobsCreated = userData!!.jobsCreated
-                tasksAccepted = userData!!.tasksAccepted
 
-                //Log.d(TAG,"testpostlisten1")
-
-            }
-
-            override fun onCancelled(error: DatabaseError) {
-                TODO("Not yet implemented")
-            }
-        }
-        mUsers1.addValueEventListener(postListener1)
-        val postListener = object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                var job = snapshot.getValue(Job::class.java)
-                Log.d(TAG, "are we even gteting here please")
-
-                creator = job!!.creator
-                date = job!!.date
-                description = job!!.description
-                done = job!!.isDone
-
-                payout = job!!.payout
-                started = job!!.isStarted
-            }
-            override fun onCancelled(error: DatabaseError) {
-                TODO("Not yet implemented")
-            }
-
-        }
-        mUsers.addValueEventListener(postListener)
-
-    }
     companion object{
         val TAG = "main"
     }

@@ -19,6 +19,7 @@ class MyJobs : Activity() {
     private var numJobs = 0
     private lateinit var username: String
     private lateinit var mZip: String
+    private lateinit var useremail: String
 
     internal lateinit var jobsCreatedJID: MutableList<String>
     internal lateinit var listView: ListView
@@ -41,6 +42,7 @@ class MyJobs : Activity() {
         jobsCreatedJID = mutableListOf()
 
         username = intent.getStringExtra("username").toString()
+        useremail = intent.getStringExtra("email").toString()
 
         // TODO - IMPLEMENT THIS CLASS
         // TODO   Search all jobs currently in DB and display all jobs created by the current user
@@ -119,6 +121,7 @@ class MyJobs : Activity() {
 
                     intent.putExtra("jid", jobsCreated[item])
                     intent.putExtra("username", username)
+                    intent.putExtra("email", useremail)
                     intent.putExtra("zip", job!!.zip)
 
                     startActivity(intent)

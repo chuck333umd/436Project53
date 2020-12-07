@@ -6,6 +6,8 @@ class Job{
 
     public var jid: String = ""
     public var creator: String = ""
+    public var cemail: String = ""
+    public var temail: String? = ""
     public var tasker: String? = null
     public var date: Date? = null
     public var payout: Int = -1
@@ -18,9 +20,10 @@ class Job{
     /** Use when job creator will not accept a lower offer initially*/
 
 
-    constructor (jid: String, creator: String, date: Date, desc: String, zip: String, payout: Int) {
+    constructor (jid: String, creator: String, cemail: String, date: Date, desc: String, zip: String, payout: Int) {
         this.jid = jid
         this.creator = creator
+        this.cemail = cemail
         this.date = date
         this.zip = zip
         this.payout = payout
@@ -30,9 +33,10 @@ class Job{
     }
 
 
-    constructor (jid: String, creator: String, date: Date, desc: String, zip: String, payout: Int, done:Boolean, started:Boolean, tasker: String?) {
+    constructor (jid: String, creator: String, cemail: String, date: Date, desc: String, zip: String, payout: Int, done:Boolean, started:Boolean, tasker: String?, temail: String?) {
         this.jid = jid
         this.creator = creator
+        this.cemail = cemail
         this.date = date
         this.zip = zip
         this.payout = payout
@@ -40,6 +44,7 @@ class Job{
         this.isStarted = started
         this.isDone = done
         this.tasker = tasker
+        this.temail = temail
     }
 
     constructor()

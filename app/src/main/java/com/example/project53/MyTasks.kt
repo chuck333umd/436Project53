@@ -18,6 +18,7 @@ class MyTasks : Activity() {
 
     private var numJobs = 0
     private lateinit var username: String
+    private lateinit var useremail: String
     private lateinit var mZip: String
 
 
@@ -41,6 +42,7 @@ class MyTasks : Activity() {
 
 
         username = intent.getStringExtra("username").toString()
+        useremail = intent.getStringExtra("email").toString()
 
         // TODO - IMPLEMENT THIS CLASS
         // TODO   Search all jobs currently in DB and display all jobs created by the current user
@@ -119,6 +121,7 @@ class MyTasks : Activity() {
 
                     intent.putExtra("jid", jobsCreated[item])
                     intent.putExtra("username", username)
+                    intent.putExtra("email", useremail)
                     intent.putExtra("zip", job!!.zip)
 
                     startActivity(intent)

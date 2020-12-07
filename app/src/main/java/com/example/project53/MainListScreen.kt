@@ -69,6 +69,7 @@ class MainListScreen : Activity() {
     private var mZip = ""
     private var mRadius = 550
     private var username: String? = null
+    private var useremail: String? = null
 
 
 
@@ -110,6 +111,7 @@ class MainListScreen : Activity() {
 
             invalidateOptionsMenu()
             username = intent.getStringExtra("username")
+            useremail = intent.getStringExtra("email")
             val userID = intent.getStringExtra("userID")
             val user = intent.getParcelableExtra<Parcelable>("user")
             loggedIn = true
@@ -216,6 +218,7 @@ class MainListScreen : Activity() {
             intent.putExtra("jid", jobsCreated[item])
             intent.putExtra("username", username)
             intent.putExtra("zip", mZip)
+            intent.putExtra("email", useremail)
 
             //starting the activity with intent
             startActivity(intent)
@@ -360,7 +363,7 @@ class MainListScreen : Activity() {
 
                 val intentMyJobs = Intent(this, MyJobs::class.java)
                 intentMyJobs.putExtra("username", username)
-                intentMyJobs.putExtra("jid", "1580387569798154325")
+
 
                 startActivity(intentMyJobs)
 
@@ -372,6 +375,7 @@ class MainListScreen : Activity() {
                 val intentCreateJob = Intent(this, CreateJob::class.java)
                 intentCreateJob.putExtra("username", username)
                 intentCreateJob.putExtra("zip", mZip)
+                intentCreateJob.putExtra("email", useremail)
 
                 startActivity(intentCreateJob)
                 true

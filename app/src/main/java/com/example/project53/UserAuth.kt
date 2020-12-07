@@ -89,6 +89,7 @@ class UserAuth : Activity() {
                 intent.putExtra("userID", mAuth!!.uid)
                 intent.putExtra("username", mAuth!!.currentUser!!.displayName)
                 intent.putExtra("user", mAuth!!.currentUser)
+                intent.putExtra("email", mAuth!!.currentUser!!.email)
                 intent.putExtra("loggedIn", true)
 
 
