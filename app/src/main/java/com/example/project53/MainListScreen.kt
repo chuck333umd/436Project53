@@ -15,6 +15,7 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.view.inputmethod.InputMethodManager
+import android.widget.AdapterView
 import android.widget.ListView
 import android.widget.TextView
 import android.widget.Toast
@@ -199,6 +200,26 @@ class MainListScreen : Activity() {
         }
         mUsers.addValueEventListener(postListener)
 
+        listView.onItemClickListener = AdapterView.OnItemClickListener { _, _, item, _ ->
+            //getting the selected artist
+           // val job = jobsCreated[item]
+
+
+            if (!loggedIn) {
+                val intentLogin = Intent(this, UserAuth::class.java)
+                startActivity(intentLogin)
+            }
+            //creating an intent
+            val intent = Intent(this, ViewJob::class.java)
+
+            //putting artist name and id to intent
+            intent.putExtra("jid", jobsCreated[item])
+            intent.putExtra("username", username)
+            intent.putExtra("zip", mZip)
+
+            //starting the activity with intent
+            startActivity(intent)
+        }
 
     }
 
