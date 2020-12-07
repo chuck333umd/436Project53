@@ -66,7 +66,7 @@ class MainListScreen : Activity() {
     private lateinit var mRadiusView: TextView
     private lateinit var mCurrentUser: TextView
     private var mZip = ""
-    private var mRadius = 50
+    private var mRadius = 500
     private var username: String? = null
 
 
@@ -90,18 +90,22 @@ class MainListScreen : Activity() {
     internal lateinit var listView: ListView
 
     internal lateinit var mAdapter: MainListAdapater
+
+    var numJobs = 0
+
     @TargetApi(Build.VERSION_CODES.M)
 
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        var numJobs = 0
-        jobsCreated = ArrayList()
-        description  = ArrayList()
-        createdBy = ArrayList()
-        dueDate = ArrayList()
-        location = ArrayList()
-        dollar = ArrayList()
+
+        jobsCreated = mutableListOf()
+        description  = mutableListOf()
+        createdBy = mutableListOf()
+        dueDate = mutableListOf()
+        location = mutableListOf()
+        dollar = mutableListOf()
+
         setContentView(R.layout.mainlist)
         mZipView = findViewById(R.id.mainlist_location)
         mRadiusView = findViewById(R.id.mainlist_radius)
@@ -135,19 +139,75 @@ class MainListScreen : Activity() {
         listView.setFooterDividersEnabled(true)
         val footerView = (this.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater).inflate(R.layout.mainlist, null, false) as LinearLayout
         listView.addFooterView(footerView)*/
-        /** Dont forget to update this value when you search the database for <jobs within radius> */
 
-        if (numJobs == 0) Toast.makeText(applicationContext, "No Jobs Currently", Toast.LENGTH_SHORT).show()
+
+
+
+    }
+
+    override fun onStart() {
+        super.onStart()
 
         displayJobsByRadius()
+
+        if (numJobs == 0) Toast.makeText(applicationContext, "No Jobs Currently", Toast.LENGTH_SHORT).show()
+        if (numJobs > 0) Toast.makeText(applicationContext, "Search Returned $numJobs Jobs", Toast.LENGTH_SHORT).show()
+
     }
 
     fun displayJobsByRadius(){
 
-        //TODO - Implement method to return list of job IDs for any job within radius
+
+        jobsCreated = mutableListOf()
+        description  = mutableListOf()
+        createdBy = mutableListOf()
+        dueDate = mutableListOf()
+        location = mutableListOf()
+        dollar = mutableListOf()
 
         //TODO - When displaying an individual job with ViewJob, send an intent containing username
         //TODO   as "username" StringExtra and job ID as "jid" LongExtra
+
+        var mUsers = FirebaseDatabase.getInstance().getReference("Jobs")
+        val postListener = object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                val jid: String = ""
+                var job : Job? = null
+
+                for (postSnap in snapshot.children) {
+                    numJobs++
+                    try {
+                        job = postSnap.getValue(Job::class.java)
+
+                        Log.d(TAG, "jobs?" + job!!.jid)
+                    } catch (e: Exception) {
+                        Log.e(TAG, e.toString())
+                    } finally {
+
+                        val dist = DistFromZip().getDist(job!!.zip.toString(), mZip ).toInt()
+                        Log.i("dfz", "jid: " + job!!.jid + ", dist: $dist")
+                        if ( dist < mRadius) {
+                            Log.i("dfz", "adding jid: " + job!!.jid + ", zip: " + job!!.zip + ", dist: $dist")
+                            Log.d(TAG, "we are getting here right?" + job)
+                            jobsCreated!!.add(job!!.jid)
+                            description!!.add(job!!.description)
+                            dollar!!.add(job!!.payout.toString())
+                            dueDate!!.add(job!!.date.toString())
+                            location!!.add(job!!.zip.toString())
+                            createdBy!!.add(job!!.creator)
+                        }
+
+                    }
+                }
+                Log.d(TAG, "jobsCreated?" + jobsCreated + job)
+                val mAdapter = MainListAdapater(this@MainListScreen, jobsCreated!!,description!!,dollar!!,dueDate!!,location!!,createdBy!!)
+                listView.adapter = mAdapter;
+            }
+            override fun onCancelled(error: DatabaseError) {
+                TODO("Not yet implemented")
+            }
+        }
+        mUsers.addValueEventListener(postListener)
 
 
     }
@@ -158,9 +218,9 @@ class MainListScreen : Activity() {
 
         /** Dont bother wasting a call to Geocoder API unless it is properly formatted */
         if (!zipValidator(mZipView.text.toString())){
-                Toast.makeText(this, "Location is not a ZIP!", Toast.LENGTH_SHORT).show()
-                mZipView.setTextColor(parseColor("#FF0000"))
-                return
+            Toast.makeText(this, "Location is not a ZIP!", Toast.LENGTH_SHORT).show()
+            mZipView.setTextColor(parseColor("#FF0000"))
+            return
         }
 
         var dfz =  DistFromZip().getDist(mZipView.text.toString(), 21012.toString())
@@ -195,6 +255,7 @@ class MainListScreen : Activity() {
             mRadius = mRadiusView.text.toString().toInt()
             mRadiusView.setTextColor(parseColor("#000000"))
             Toast.makeText(applicationContext, "Radius Updated", Toast.LENGTH_SHORT).show()
+            displayJobsByRadius()
         }else{
             mRadiusView.setTextColor(parseColor("#FF0000"))
             Toast.makeText(applicationContext, "Invalid Radius", Toast.LENGTH_SHORT).show()
@@ -370,53 +431,7 @@ class MainListScreen : Activity() {
         }
     }
 
-    override fun onStart() {
-        super.onStart()
-        var mUsers = FirebaseDatabase.getInstance().getReference("Jobs")
-        val postListener = object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                val jid: String = ""
-                var job : Job? = null
-                jobsCreated.clear()
-                description.clear()
-                dollar.clear()
-                dueDate.clear()
-                location.clear()
-                createdBy.clear()
 
-                for (postSnap in snapshot.children) {
-                    try {
-                        job = postSnap.getValue(Job::class.java)
-
-                        Log.d(TAG, "jobs?" + job!!.jid)
-                    } catch (e: Exception) {
-                        Log.e(TAG, e.toString())
-                    } finally {
-                        val dist = DistFromZip().getDist(job!!.zip.toString(), mZip ).toInt()
-                        Log.i("dfz", "jid: " + job!!.jid + ", dist: $dist")
-                        if ( dist < mRadius) {
-                            Log.i("dfz", "adding jid: " + job!!.jid + ", zip: " + job!!.zip + ", dist: $dist")
-                            Log.d(TAG, "we are getting here right?" + job)
-                            jobsCreated!!.add(job!!.jid)
-                            description!!.add(job!!.description)
-                            dollar!!.add(job!!.payout.toString())
-                            dueDate!!.add(job!!.date.toString())
-                            location!!.add(job!!.zip.toString())
-                            createdBy!!.add(job!!.creator)
-                        }
-
-                    }
-                }
-                    Log.d(TAG, "jobsCreated?" + jobsCreated + job)
-                    val mAdapter = MainListAdapater(this@MainListScreen, jobsCreated!!,description!!,dollar!!,dueDate!!,location!!,createdBy!!)
-                    listView.adapter = mAdapter;
-            }
-            override fun onCancelled(error: DatabaseError) {
-                TODO("Not yet implemented")
-            }
-        }
-        mUsers.addValueEventListener(postListener)
-    }
     private fun installLocationListeners() {
 
         // Determine whether initial reading is "good enough".
