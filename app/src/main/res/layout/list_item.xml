@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/linearLayout"
@@ -8,108 +7,90 @@
     android:layout_height="match_parent">
 
     <TextView
-        android:id="@+id/listitem_desc"
-        android:layout_width="342dp"
-        android:layout_height="86dp"
-        android:layout_marginStart="32dp"
-        android:layout_marginTop="76dp"
-        android:layout_marginEnd="32dp"
-        android:ems="10"
-        android:gravity="start|top"
-        android:inputType="textMultiLine"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.4"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/listitem_dollar" />
-
-    <TextView
-        android:id="@+id/listitem_date"
-        android:layout_width="143dp"
-        android:layout_height="45dp"
-        android:layout_marginTop="40dp"
-        android:layout_marginEnd="36dp"
-        android:ems="10"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/listitem_time"
-        android:layout_width="143dp"
-        android:layout_height="45dp"
-        android:layout_marginTop="132dp"
-        android:layout_marginEnd="36dp"
-        android:ems="10"
-
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
         android:id="@+id/listitem_username"
         android:layout_width="99dp"
         android:layout_height="19dp"
-        android:layout_marginStart="32dp"
-        android:layout_marginTop="40dp"
+        android:layout_marginStart="48dp"
+        android:layout_marginTop="4dp"
+        app:layout_constraintStart_toEndOf="@+id/textView12"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/listitem_dollar"
-        android:layout_width="65dp"
-        android:layout_height="30dp"
-        android:layout_marginStart="32dp"
-        android:layout_marginTop="52dp"
+        android:id="@+id/listitem_desc"
+        android:layout_width="344dp"
+        android:layout_height="43dp"
+        android:layout_marginStart="48dp"
+        android:layout_marginTop="48dp"
         android:ems="10"
+        android:gravity="start|top"
+        android:inputType="textMultiLine"
+        
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/listitem_username" />
-
-    <TextView
-        android:id="@+id/textView8"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:text="Payout ($)"
-        app:layout_constraintBottom_toTopOf="@+id/listitem_dollar"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <TextView
-        android:id="@+id/textView9"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="140dp"
-        android:layout_marginBottom="4dp"
-        android:text="Due Date"
-        app:layout_constraintBottom_toTopOf="@+id/listitem_date"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/textView12"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="4dp"
-        android:text="Created By"
-        app:layout_constraintBottom_toTopOf="@+id/listitem_username"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.09"
-        app:layout_constraintStart_toStartOf="parent" />
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="4dp"
+        android:text="User:"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/textView10"
+        android:id="@+id/textView8"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="128dp"
-        android:layout_marginBottom="8dp"
-        android:text="Due Time"
-        app:layout_constraintBottom_toTopOf="@+id/listitem_time"
-        app:layout_constraintEnd_toEndOf="parent" />
+        android:layout_marginStart="104dp"
+        android:layout_marginTop="4dp"
+        android:text="Payout ($)"
+        android:textStyle="bold"
+        app:layout_constraintStart_toEndOf="@+id/listitem_username"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/listitem_date"
+        android:layout_width="198dp"
+        android:layout_height="19dp"
+        android:layout_marginStart="48dp"
+        android:layout_marginTop="28dp"
+        android:ems="10"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/textView11"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:layout_marginBottom="3dp"
-        android:text="Job Description"
-        app:layout_constraintBottom_toTopOf="@+id/listitem_desc"
-        app:layout_constraintStart_toStartOf="parent" />
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="48dp"
+        android:text="Job:"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/listitem_dollar"
+        android:layout_width="63dp"
+        android:layout_height="22dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="4dp"
+        android:ems="10"
+        app:layout_constraintStart_toEndOf="@+id/textView8"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textView9"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="4dp"
+        android:text="Due:"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView12" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

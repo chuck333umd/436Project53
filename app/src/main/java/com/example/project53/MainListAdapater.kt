@@ -41,7 +41,7 @@ class MainListAdapater(private val mContext: Context, private val jobs: MutableL
         val rowView = mLayoutInflater.inflate(R.layout.list_item,null,true)
         val descView = rowView.findViewById(R.id.listitem_desc) as TextView
         val dateView = rowView.findViewById(R.id.listitem_date) as TextView
-        val timeView = rowView.findViewById(R.id.listitem_time) as TextView
+        //val timeView = rowView.findViewById(R.id.listitem_time) as TextView
         val payoutView = rowView.findViewById(R.id.listitem_dollar) as TextView
         val createdView = rowView.findViewById(R.id.listitem_username) as TextView
 
@@ -49,7 +49,7 @@ class MainListAdapater(private val mContext: Context, private val jobs: MutableL
         dateView.text = curDate
         payoutView.text = curPayout
         createdView.text = curCreated
-        timeView.text = curTime
+        //timeView.text = curTime
 
 
         return rowView
