@@ -119,7 +119,7 @@ class MainListScreen : Activity() {
 
         mLocationManager = getSystemService(LOCATION_SERVICE) as LocationManager
         if (null != mLocationManager) {
-            Log.i(TAG, "Couldn't find the LocationManager")
+           // Log.i(TAG, "Couldn't find the LocationManager")
             // Return a LocationListener
         }
         mLocationListener = makeLocationListener()
@@ -171,10 +171,10 @@ class MainListScreen : Activity() {
 
                         val dist = DistFromZip().getDist(job!!.zip.toString(), mZip ).toInt()
                         Log.i("dfz", "jid: " + job!!.jid + ", dist: $dist")
-                        if ( dist < mRadius) {
+                        if ( dist < mRadius && job!!.isStarted == false) {
                             numJobs++
                             Log.i("dfz", "adding jid: " + job!!.jid + ", zip: " + job!!.zip + ", dist: $dist")
-                            Log.d(TAG, "we are getting here right?" + job)
+                            //Log.d(TAG, "we are getting here right?" + job)
                             jobsCreated!!.add(job!!.jid)
                             description!!.add(job!!.description)
                             dollar!!.add(job!!.payout.toString())
@@ -190,7 +190,7 @@ class MainListScreen : Activity() {
                 listView.adapter = mAdapter;
 
                 if (numJobs == 0) Toast.makeText(applicationContext, "No Jobs Currently", Toast.LENGTH_SHORT).show()
-                if (numJobs > 0) Toast.makeText(applicationContext, "Search Returned $numJobs Jobs", Toast.LENGTH_SHORT).show()
+                //if (numJobs > 0) Toast.makeText(applicationContext, "Search Returned $numJobs Jobs", Toast.LENGTH_SHORT).show()
                 numJobs = 0
 
             }
@@ -462,14 +462,14 @@ class MainListScreen : Activity() {
 
             // Register for network location updates
             if (null != mLocationManager.getProvider(LocationManager.NETWORK_PROVIDER)) {
-                Log.i(TAG, "Network location updates requested")
+                //Log.i(TAG, "Network location updates requested")
                 mLocationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, POLLING_FREQ, MIN_DISTANCE, mLocationListener)
                 mIsRequestingUpdates = true
             }
 
             // Register for GPS location updates
             if (null != mLocationManager.getProvider(LocationManager.GPS_PROVIDER)) {
-                Log.i(TAG, "GPS location updates requested")
+                //Log.i(TAG, "GPS location updates requested")
                 mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, POLLING_FREQ, MIN_DISTANCE, mLocationListener)
                 mIsRequestingUpdates = true
             }
@@ -477,7 +477,7 @@ class MainListScreen : Activity() {
             // Schedule a runnable to unregister LocationListeners after MEASURE_TIME
             mCancelHandle = Executors.newScheduledThreadPool(1).schedule(
                     {
-                        Log.i(TAG, "location updates cancelled")
+                        //Log.i(TAG, "location updates cancelled")
                         mLocationManager.removeUpdates(mLocationListener)
                         mIsRequestingUpdates = false
                     },

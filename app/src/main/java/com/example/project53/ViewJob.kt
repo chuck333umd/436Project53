@@ -41,11 +41,11 @@ class ViewJob : Activity() {
     private lateinit var mViewJob_DescriptionView: TextView
     private lateinit var mViewJob_CompletedCheckBox: CheckBox
     private lateinit var mViewJob_StartedCheckBox: CheckBox
-    private var acceptLowerOffer:Boolean = false
+
     private var creator:String? = null
     private var date: Date? = null
     private var description: String? = null
-    private var minpayout: Int? = -1
+
     private var payout: Int? = -1
     private var started: Boolean = false
     private var done: Boolean = false;
@@ -91,6 +91,8 @@ class ViewJob : Activity() {
 
 
 
+        setTitle("View Job #"+ jid?.substring(0,4)+" by: $username");
+
         // TODO - retrieve job from database using jid and populate TextViews
 
 
@@ -107,6 +109,8 @@ class ViewJob : Activity() {
                 // mViewJob_TimeView.text = job!!.date.toString()
                 mViewJob_PayoutView.text = job!!.payout.toString()
                 mViewJob_CompletedCheckBox.isChecked = job!!.isDone
+                done = job!!.isDone
+                started = job!!.isStarted
                 mViewJob_StartedCheckBox.isChecked = job!!.isStarted
                 mViewJob_DescriptionView.text = job!!.description
                 mViewJob_ZipView.text = job!!.zip
@@ -219,11 +223,11 @@ class ViewJob : Activity() {
             mFireTaskerButton.isVisible = false
             mFireTaskerButton.isClickable= false
 
-            mCompleteJobButton.isVisible = true
-            mCompleteJobButton.isClickable= true
+            mCompleteJobButton.isVisible = false
+            mCompleteJobButton.isClickable= false
 
-            mCancelJobButton.isVisible = false
-            mCancelJobButton.isClickable= false
+            mCancelJobButton.isVisible = true
+            mCancelJobButton.isClickable= true
 
             mQuitJobButton.isVisible = false
             mQuitJobButton.isClickable= false
@@ -253,10 +257,10 @@ class ViewJob : Activity() {
 
     fun acceptJobButtonClick(view: View){
 
-        var mUsers = FirebaseDatabase.getInstance().getReference("Job").child(jid!!)
+        var mUsers = FirebaseDatabase.getInstance().getReference("Jobs").child(jid!!)
         var mUsers1 = FirebaseDatabase.getInstance().getReference("Users").child(username!!)
-        Log.d(TAG, "jidtest" + jid)
-        var newJob = Job(jid!!, creator!!, date!!, description!!, userZip!!, payout!!,minpayout!!,done!!,true,acceptLowerOffer!!,username!!)
+        Log.d(TAG, "acceptJobButtonClick" + jid)
+        var newJob = Job(jid!!, creator!!, date!!, description!!, userZip!!, payout!!,false,true,username!!)
         mUsers.setValue(newJob)
         tasksAccepted!!.add(jid!!)
         var newUser = User(username!!,email!!,jobsCreated!!,tasksAccepted!!)
@@ -266,50 +270,59 @@ class ViewJob : Activity() {
 
 
         //TODO - edit user record in "Users" database to show tasksAccepted includes this job ID
-        finish()
+        this.finish()
     }
 
     fun quitJobButtonClick(view: View){
 
         //TODO - edit job in "Jobs" database to show isStarted = false
         //TODO - edit job in "Jobs" database to show tasker = null
-        var mUsers = FirebaseDatabase.getInstance().getReference("Job").child(jid!!)
+        var mUsers = FirebaseDatabase.getInstance().getReference("Jobs").child(jid!!)
         var mUsers1 = FirebaseDatabase.getInstance().getReference("Users").child(username!!)
         Log.d(TAG, "jidtest" + jid)
-        var newJob = Job(jid!!, creator!!, date!!, description!!, userZip!!, payout!!,minpayout!!,done!!,false,acceptLowerOffer!!,null)
+        var newJob = Job(jid!!, creator!!, date!!, description!!, userZip!!, payout!!,false,false,null)
         mUsers.setValue(newJob)
         tasksAccepted!!.remove(jid!!)
         var newUser = User(username!!,email!!,jobsCreated!!,tasksAccepted!!)
         mUsers1!!.setValue(newUser)
         //TODO - edit user record in "Users" database to show tasksAccepted excludes this job ID
+        this.finish()
 
     }
 
     fun fireTaskerButtonClick(view: View){
 
-        //TODO - edit job in "Jobs" database to show isStarted = false
-        //TODO - edit job in "Jobs" database to show tasker = null
+        var mUsers = FirebaseDatabase.getInstance().getReference("Jobs").child(jid!!)
+        var newJob = Job(jid!!, creator!!, date!!, description!!, userZip!!, payout!!,false,false,null)
+        mUsers.setValue(newJob)
+
+
+
+        //DONE - edit job in "Jobs" database to show isStarted = false
+        //DONE - edit job in "Jobs" database to show tasker = null
 
         //TODO - edit user record in "Users" database to show tasksAccepted excludes this job ID
+        this.finish()
 
     }
 
     fun completeJobButtonClick(view: View){
 
         //TODO - edit job in "Jobs" database to show isDone = false
-        var mUsers = FirebaseDatabase.getInstance().getReference("Job").child(jid!!)
-        Log.d(TAG, "jidtest1" + jid)
-        var newJob = Job(jid!!, creator!!, date!!, description!!, userZip!!, payout!!,minpayout!!,true!!,true,acceptLowerOffer!!,username!!)
-        mUsers.setValue(newJob)
-        finish()
-    }
+        Log.d(TAG, "completeJobButtonClick" + jid)
+        var mUsers = FirebaseDatabase.getInstance().getReference("Jobs").child(jid!!)
 
+        var newJob = Job(jid!!, creator!!, date!!, description!!, userZip!!, payout!!,true,true,username!!)
+        mUsers.setValue(newJob)
+        this.finish()
+    }
     fun cancelJobButtonClick(view: View){
 
         //TODO - delete from "Jobs" database
         //TODO - remove from "Users" database under your username
-        var mUsers = FirebaseDatabase.getInstance().getReference("Job").child(jid!!)
+        var mUsers = FirebaseDatabase.getInstance().getReference("Jobs").child(jid!!)
         mUsers.removeValue()
+        this.finish()
 
     }
     override fun onStart() {
@@ -325,7 +338,7 @@ class ViewJob : Activity() {
                 jobsCreated = userData!!.jobsCreated
                 tasksAccepted = userData!!.tasksAccepted
 
-                Log.d(TAG,"testpostlisten1")
+                //Log.d(TAG,"testpostlisten1")
 
             }
 
@@ -338,12 +351,12 @@ class ViewJob : Activity() {
             override fun onDataChange(snapshot: DataSnapshot) {
                 var job = snapshot.getValue(Job::class.java)
                 Log.d(TAG, "are we even gteting here please")
-                acceptLowerOffer = job!!.acceptLowerOffer
+
                 creator = job!!.creator
                 date = job!!.date
                 description = job!!.description
                 done = job!!.isDone
-                minpayout = job!!.minpayout
+
                 payout = job!!.payout
                 started = job!!.isStarted
             }
