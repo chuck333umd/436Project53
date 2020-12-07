@@ -205,6 +205,7 @@ class MainListScreen : Activity() {
 
                 if (numJobs == 0) Toast.makeText(applicationContext, "No Jobs Currently", Toast.LENGTH_SHORT).show()
                 if (numJobs > 0) Toast.makeText(applicationContext, "Search Returned $numJobs Jobs", Toast.LENGTH_SHORT).show()
+                numJobs = 0
 
             }
             override fun onCancelled(error: DatabaseError) {
