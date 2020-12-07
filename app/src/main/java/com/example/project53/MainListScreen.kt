@@ -349,20 +349,21 @@ class MainListScreen : Activity() {
             }
             R.id.menu_myjobs -> {
 
-                /** TEST */
+                /*/* TEST */
                 val testViewJobIntent = Intent(this, ViewJob::class.java)
                 testViewJobIntent.putExtra("username", username)
                 testViewJobIntent.putExtra("jid", "1580387569798154325")
                 testViewJobIntent.putExtra("zip", mZip)
                 startActivity(testViewJobIntent)
+*/
+                /**CHANGE BACK TO THIS WHEN DONE TESTING: */
 
-                /** CHANGE BACK TO THIS WHEN DONE TESTING: */
-                /*
-                val intentMyJobs = Intent(this, ViewJob::class.java)
+                val intentMyJobs = Intent(this, MyJobs::class.java)
                 intentMyJobs.putExtra("username", username)
+                intentMyJobs.putExtra("jid", "1580387569798154325")
 
                 startActivity(intentMyJobs)
-                */
+
 
                 true
             }

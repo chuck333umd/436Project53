@@ -8,7 +8,8 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
-import java.util.ArrayList
+import java.lang.Exception
+import java.util.*
 
 
 class MyJobs : Activity() {
@@ -22,7 +23,7 @@ class MyJobs : Activity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.myjobs)
+        setContentView(R.layout.mainlist)
         listView = findViewById<ListView>(R.id.mainlist_listview)
         jobsCreated = ArrayList()
 
@@ -37,18 +38,55 @@ class MyJobs : Activity() {
     override fun onStart() {
         super.onStart()
         var mUsers = FirebaseDatabase.getInstance().getReference("Users").child(username!!)
+        var mUsers1 = FirebaseDatabase.getInstance().getReference("Jobs")
+
         val postListener = object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
+
                 var userData = snapshot.getValue(User::class.java)
                 username = userData!!.name
                 jobsCreated = userData!!.jobsCreated
-                val mAdapter = MyJobsAdapter(this@MyJobs, jobsCreated!!)
+
+                val mAdapter = MyJobsAdapter(this@MyJobs, jobsCreated!!,username!!)
                 listView.adapter = mAdapter;
             }
             override fun onCancelled(error: DatabaseError) {
                 TODO("Not yet implemented")
             }
         }
-        mUsers.addValueEventListener(postListener)
+
+        mUsers.addValueEventListener(postListener)/*
+        var dueDate: MutableList<String>? = ArrayList()
+        var payout: MutableList<String>? = ArrayList()
+        var location: MutableList<String>? = ArrayList()
+        var job: Job? = null
+        val postListener1 = object: ValueEventListener{
+            override fun onCancelled(error: DatabaseError) {
+                TODO("Not yet implemented")
+            }
+
+            override fun onDataChange(snapshot1: DataSnapshot) {
+                var i = 0;
+
+                for (postSnap in snapshot1.children) {
+
+                    try {
+                        job = postSnap.getValue(Job::class.java)
+
+                    } catch (e: Exception) {
+                    } finally {
+                        if(job!!.jid == jobsCreated[i]){
+                            dueDate!!.add(job!!.date.toString())
+                            payout!!.add(job!!.payout.toString())
+                            location!!.add(job!!.zip.toString())
+                            i++
+                        }
+                    }
+                }
+            }
+        }
+        mUsers1.addValueEventListener(postListener1)
+        val mAdapter = MyJobsAdapter(this@MyJobs, jobsCreated!!, location!!, dueDate!!, payout!!)
+        listView.adapter = mAdapter;*/
     }
 }

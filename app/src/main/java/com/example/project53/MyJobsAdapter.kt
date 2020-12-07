@@ -6,10 +6,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
-import org.w3c.dom.Text
+import java.util.*
 
-class MyJobsAdapter(private val mContext: Context, jobsCreated: MutableList<String>) : BaseAdapter(){
+class MyJobsAdapter(private val mContext: Context, jobsCreated: MutableList<String>, userName: String) : BaseAdapter(){
     private var jobsList = jobsCreated
+    private var name = userName
 
     override fun getItem(pos: Int): Any {
 
@@ -34,12 +35,12 @@ class MyJobsAdapter(private val mContext: Context, jobsCreated: MutableList<Stri
         val rowView = mLayoutInflater.inflate(R.layout.list_item,null,true)
         val descView = rowView.findViewById(R.id.listitem_desc) as TextView
         val dateView = rowView.findViewById(R.id.listitem_date) as TextView
-        val timeView = rowView.findViewById(R.id.listitem_time) as TextView
+        val timeView = rowView.findViewById(R.id.listitem_location) as TextView
         val payoutView = rowView.findViewById(R.id.listitem_dollar) as TextView
         val createdView = rowView.findViewById(R.id.listitem_username) as TextView
 
-
-
+        descView.text = curJob
+        createdView.text = name
 
         return rowView
     }
