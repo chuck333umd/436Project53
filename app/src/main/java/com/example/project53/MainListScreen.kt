@@ -150,8 +150,7 @@ class MainListScreen : Activity() {
 
         displayJobsByRadius()
 
-        if (numJobs == 0) Toast.makeText(applicationContext, "No Jobs Currently", Toast.LENGTH_SHORT).show()
-        if (numJobs > 0) Toast.makeText(applicationContext, "Search Returned $numJobs Jobs", Toast.LENGTH_SHORT).show()
+
 
     }
 
@@ -175,7 +174,7 @@ class MainListScreen : Activity() {
                 var job : Job? = null
 
                 for (postSnap in snapshot.children) {
-                    numJobs++
+
                     try {
                         job = postSnap.getValue(Job::class.java)
 
@@ -187,6 +186,7 @@ class MainListScreen : Activity() {
                         val dist = DistFromZip().getDist(job!!.zip.toString(), mZip ).toInt()
                         Log.i("dfz", "jid: " + job!!.jid + ", dist: $dist")
                         if ( dist < mRadius) {
+                            numJobs++
                             Log.i("dfz", "adding jid: " + job!!.jid + ", zip: " + job!!.zip + ", dist: $dist")
                             Log.d(TAG, "we are getting here right?" + job)
                             jobsCreated!!.add(job!!.jid)
@@ -202,6 +202,10 @@ class MainListScreen : Activity() {
                 Log.d(TAG, "jobsCreated?" + jobsCreated + job)
                 val mAdapter = MainListAdapater(this@MainListScreen, jobsCreated!!,description!!,dollar!!,dueDate!!,location!!,createdBy!!)
                 listView.adapter = mAdapter;
+
+                if (numJobs == 0) Toast.makeText(applicationContext, "No Jobs Currently", Toast.LENGTH_SHORT).show()
+                if (numJobs > 0) Toast.makeText(applicationContext, "Search Returned $numJobs Jobs", Toast.LENGTH_SHORT).show()
+
             }
             override fun onCancelled(error: DatabaseError) {
                 TODO("Not yet implemented")
