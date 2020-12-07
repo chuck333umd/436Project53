@@ -6,6 +6,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.ValueEventListener
 import java.util.*
 
 class MyJobsAdapter(private val mContext: Context, jobsCreated: MutableList<String>, userName: String) : BaseAdapter(){
@@ -26,11 +29,10 @@ class MyJobsAdapter(private val mContext: Context, jobsCreated: MutableList<Stri
         return jobsList.size
     }
 
+
     override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View? {
         val curJob = jobsList[position]
-
-
-
+        
         var mLayoutInflater : LayoutInflater = LayoutInflater.from(mContext)
         val rowView = mLayoutInflater.inflate(R.layout.list_item,null,true)
         val descView = rowView.findViewById(R.id.listitem_desc) as TextView
