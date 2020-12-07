@@ -66,7 +66,7 @@ class MainListScreen : Activity() {
     private lateinit var mRadiusView: TextView
     private lateinit var mCurrentUser: TextView
     private var mZip = ""
-    private var mRadius = 500
+    private var mRadius = 550
     private var username: String? = null
 
 
@@ -99,13 +99,6 @@ class MainListScreen : Activity() {
         super.onCreate(savedInstanceState)
 
 
-        jobsCreated = mutableListOf()
-        description  = mutableListOf()
-        createdBy = mutableListOf()
-        dueDate = mutableListOf()
-        location = mutableListOf()
-        dollar = mutableListOf()
-
         setContentView(R.layout.mainlist)
         mZipView = findViewById(R.id.mainlist_location)
         mRadiusView = findViewById(R.id.mainlist_radius)
@@ -135,12 +128,6 @@ class MainListScreen : Activity() {
             getAndDisplayLastKnownLocation()
             installLocationListeners()
         }
-/*
-        listView.setFooterDividersEnabled(true)
-        val footerView = (this.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater).inflate(R.layout.mainlist, null, false) as LinearLayout
-        listView.addFooterView(footerView)*/
-
-
 
 
     }
@@ -151,11 +138,9 @@ class MainListScreen : Activity() {
         displayJobsByRadius()
 
 
-
     }
 
-    fun displayJobsByRadius(){
-
+    private fun displayJobsByRadius(){
 
         jobsCreated = mutableListOf()
         description  = mutableListOf()
@@ -346,13 +331,13 @@ class MainListScreen : Activity() {
                 /** TEST */
                 val testViewJobIntent = Intent(this, ViewJob::class.java)
                 testViewJobIntent.putExtra("username", username)
-                testViewJobIntent.putExtra("jid", "7477874656431234048")
+                testViewJobIntent.putExtra("jid", "1580387569798154325")
                 testViewJobIntent.putExtra("zip", mZip)
                 startActivity(testViewJobIntent)
 
                 /** CHANGE BACK TO THIS WHEN DONE TESTING: */
                 /*
-                val intentMyJobs = Intent(this, CreateJob::class.java)
+                val intentMyJobs = Intent(this, ViewJob::class.java)
                 intentMyJobs.putExtra("username", username)
 
                 startActivity(intentMyJobs)
