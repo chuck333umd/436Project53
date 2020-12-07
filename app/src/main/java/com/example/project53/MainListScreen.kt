@@ -159,13 +159,19 @@ class MainListScreen : Activity() {
                     } catch (e: Exception) {
                         Log.e(TAG, e.toString())
                     } finally {
-                        Log.d(TAG, "we are getting here right?" + job)
-                        jobsCreated!!.add(job!!.jid)
-                        description!!.add(job!!.description)
-                        dollar!!.add(job!!.payout.toString())
-                        dueDate!!.add(job!!.date.toString())
-                        location!!.add(job!!.zip.toString())
-                        createdBy!!.add(job!!.creator)
+                        
+                        val dist = DistFromZip().getDist(job!!.zip.toString(), mZip ).toInt()
+                        Log.i("dfz", "jid: " + job!!.jid + ", dist: $dist")
+                        if ( dist < mRadius) {
+                            Log.i("dfz", "adding jid: " + job!!.jid + ", zip: " + job!!.zip + ", dist: $dist")
+                            Log.d(TAG, "we are getting here right?" + job)
+                            jobsCreated!!.add(job!!.jid)
+                            description!!.add(job!!.description)
+                            dollar!!.add(job!!.payout.toString())
+                            dueDate!!.add(job!!.date.toString())
+                            location!!.add(job!!.zip.toString())
+                            createdBy!!.add(job!!.creator)
+                        }
 
                     }
                 }

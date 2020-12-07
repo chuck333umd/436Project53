@@ -15,7 +15,7 @@ class DistFromZip {
         StrictMode.setThreadPolicy(policy)
 
         val apiResponse1 = URL("https://maps.googleapis.com/maps/api/geocode/json?components=postal_code:$zip1&key=AIzaSyByaBb5GYYIoBo7lk1odivoK-q-ZfclmIQ").readText()
-        Log.i(ViewJob.TAG, "apiResponse1 = $apiResponse1 ")
+        Log.i("dist", "apiResponse1 = $apiResponse1 ")
 
         if (apiResponse1.contains("ZERO_RESULTS")){
             return -2F
@@ -23,21 +23,21 @@ class DistFromZip {
 
         val lat1 = apiResponse1.substringAfter("\"lat\" : ").substring(0, 9)
         val lon1 = apiResponse1.substringAfter("\"lng\" : ").substring(0, 9)
-        Log.i(ViewJob.TAG, "zip1 = $zip1 ")
-        Log.i(ViewJob.TAG, "lat = $lat1 ")
-        Log.i(ViewJob.TAG, "lon = $lon1 ")
+        Log.i("dist", "zip1 = $zip1 ")
+        Log.i("dist", "lat = $lat1 ")
+        Log.i("dist", "lon = $lon1 ")
 
         val apiResponse2 = URL("https://maps.googleapis.com/maps/api/geocode/json?components=postal_code:$zip2&key=AIzaSyByaBb5GYYIoBo7lk1odivoK-q-ZfclmIQ").readText()
-        //Log.i(ViewJob.TAG, "apiResponse1 = $apiResponse1 ")
+        //Log.i("dist", "apiResponse1 = $apiResponse1 ")
         if (apiResponse2.contains("ZERO_RESULTS")){
             return -3F
         }
 
         val lat2 = apiResponse2.substringAfter("\"lat\" : ").substring(0, 9)
         val lon2 = apiResponse2.substringAfter("\"lng\" : ").substring(0, 9)
-        Log.i(ViewJob.TAG, "zip2 = $zip2 ")
-        Log.i(ViewJob.TAG, "lat = $lat2 ")
-        Log.i(ViewJob.TAG, "lon = $lon2 ")
+        Log.i("dist", "zip2 = $zip2 ")
+        Log.i("dist", "lat = $lat2 ")
+        Log.i("dist", "lon = $lon2 ")
 
         try {
             val loc1 = Location("")
@@ -50,7 +50,7 @@ class DistFromZip {
 
             val distanceInkM: Float = (loc1.distanceTo(loc2)/ 1000)
 
-            Log.i(ViewJob.TAG, "distanceInkM = $distanceInkM ")
+            Log.i("dist", "distanceInkM = $distanceInkM ")
 
             return distanceInkM
 

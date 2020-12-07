@@ -29,7 +29,7 @@
                 android:layout_marginStart="40dp"
                 android:layout_marginTop="8dp"
                 android:ems="10"
-                android:inputType="textFilter"
+                android:inputType="number"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -51,7 +51,8 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="8dp"
                 android:ems="10"
-                android:inputType="textFilter"
+
+                android:inputType="number"
                 android:text="50"
                 app:layout_constraintStart_toEndOf="@+id/mainlist_location"
                 app:layout_constraintTop_toTopOf="parent" />
