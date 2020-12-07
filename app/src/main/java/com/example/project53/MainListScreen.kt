@@ -84,7 +84,7 @@ class MainListScreen : Activity() {
     internal lateinit var description: MutableList<String>
     internal lateinit var createdBy: MutableList<String>
     internal lateinit var dueDate: MutableList<String>
-    internal lateinit var dueTime: MutableList<String>
+    internal lateinit var location: MutableList<String>
     internal lateinit var dollar: MutableList<String>
 
     internal lateinit var listView: ListView
@@ -100,7 +100,7 @@ class MainListScreen : Activity() {
         description  = ArrayList()
         createdBy = ArrayList()
         dueDate = ArrayList()
-        dueTime = ArrayList()
+        location = ArrayList()
         dollar = ArrayList()
         setContentView(R.layout.mainlist)
         mZipView = findViewById(R.id.mainlist_location)
@@ -138,8 +138,46 @@ class MainListScreen : Activity() {
         /** Dont forget to update this value when you search the database for <jobs within radius> */
 
         if (numJobs == 0) Toast.makeText(applicationContext, "No Jobs Currently", Toast.LENGTH_SHORT).show()
+        if (numJobs > 0) Toast.makeText(applicationContext, "Search Returned $numJobs Jobs", Toast.LENGTH_SHORT).show()
 
         displayJobsByRadius()
+    }
+
+    override fun onStart() {
+        super.onStart()
+        var mUsers = FirebaseDatabase.getInstance().getReference("Jobs")
+        val postListener = object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                val jid: String = ""
+                var job : Job? = null
+
+                for (postSnap in snapshot.children) {
+                    try {
+                        job = postSnap.getValue(Job::class.java)
+
+                        Log.d(TAG, "jobs?" + job!!.jid)
+                    } catch (e: Exception) {
+                        Log.e(TAG, e.toString())
+                    } finally {
+                        Log.d(TAG, "we are getting here right?" + job)
+                        jobsCreated!!.add(job!!.jid)
+                        description!!.add(job!!.description)
+                        dollar!!.add(job!!.payout.toString())
+                        dueDate!!.add(job!!.date.toString())
+                        location!!.add(job!!.zip.toString())
+                        createdBy!!.add(job!!.creator)
+
+                    }
+                }
+                Log.d(TAG, "jobsCreated?" + jobsCreated + job)
+                val mAdapter = MainListAdapater(this@MainListScreen, jobsCreated!!,description!!,dollar!!,dueDate!!,location!!,createdBy!!)
+                listView.adapter = mAdapter;
+            }
+            override fun onCancelled(error: DatabaseError) {
+                TODO("Not yet implemented")
+            }
+        }
+        mUsers.addValueEventListener(postListener)
     }
 
     fun displayJobsByRadius(){
@@ -370,42 +408,7 @@ class MainListScreen : Activity() {
         }
     }
 
-    override fun onStart() {
-        super.onStart()
-        var mUsers = FirebaseDatabase.getInstance().getReference("Jobs")
-        val postListener = object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                val jid: String = ""
-                var job : Job? = null
 
-                for (postSnap in snapshot.children) {
-                    try {
-                        job = postSnap.getValue(Job::class.java)
-
-                        Log.d(TAG, "jobs?" + job!!.jid)
-                    } catch (e: Exception) {
-                        Log.e(TAG, e.toString())
-                    } finally {
-                        Log.d(TAG, "we are getting here right?" + job)
-                        jobsCreated!!.add(job!!.jid)
-                        description!!.add(job!!.description)
-                        dollar!!.add(job!!.payout.toString())
-                        dueDate!!.add(job!!.date.toString())
-                        dueTime!!.add(job!!.date!!.time.toString())
-                        createdBy!!.add(job!!.creator)
-
-                    }
-                }
-                    Log.d(TAG, "jobsCreated?" + jobsCreated + job)
-                    val mAdapter = MainListAdapater(this@MainListScreen, jobsCreated!!,description!!,dollar!!,dueDate!!,dueTime!!,createdBy!!)
-                    listView.adapter = mAdapter;
-            }
-            override fun onCancelled(error: DatabaseError) {
-                TODO("Not yet implemented")
-            }
-        }
-        mUsers.addValueEventListener(postListener)
-    }
     private fun installLocationListeners() {
 
         // Determine whether initial reading is "good enough".

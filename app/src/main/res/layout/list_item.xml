@@ -25,7 +25,7 @@
         android:ems="10"
         android:gravity="start|top"
         android:inputType="textMultiLine"
-        
+
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -47,6 +47,17 @@
         android:layout_marginStart="104dp"
         android:layout_marginTop="4dp"
         android:text="Payout ($)"
+        android:textStyle="bold"
+        app:layout_constraintStart_toEndOf="@+id/listitem_username"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textView10"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="104dp"
+        android:layout_marginTop="28dp"
+        android:text="Location:"
         android:textStyle="bold"
         app:layout_constraintStart_toEndOf="@+id/listitem_username"
         app:layout_constraintTop_toTopOf="parent" />
@@ -78,6 +89,16 @@
         android:layout_height="22dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="4dp"
+        android:ems="10"
+        app:layout_constraintStart_toEndOf="@+id/textView8"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/listitem_location"
+        android:layout_width="63dp"
+        android:layout_height="22dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="24dp"
         android:ems="10"
         app:layout_constraintStart_toEndOf="@+id/textView8"
         app:layout_constraintTop_toTopOf="parent" />

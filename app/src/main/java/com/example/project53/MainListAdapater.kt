@@ -7,13 +7,14 @@ import android.view.ViewGroup
 import android.widget.*
 import org.w3c.dom.Text
 
-class MainListAdapater(private val mContext: Context, private val jobs: MutableList<String>, description: MutableList<String>, dollar: MutableList<String>, dueDate: MutableList<String>, dueTime: MutableList<String>, createdBy: MutableList<String>) : BaseAdapter(){
+class MainListAdapater(private val mContext: Context, private val jobs: MutableList<String>, description: MutableList<String>, dollar: MutableList<String>, dueDate: MutableList<String>, location: MutableList<String>, createdBy: MutableList<String>) : BaseAdapter(){
     private var jobsList = jobs
     private var desc = description
     private var dollar = dollar
     private var date = dueDate
-    private var dueTime = dueTime
+    private var location = location
     private var created = createdBy
+
     override fun getItem(pos: Int): Any {
 
         return jobsList[pos]
@@ -30,18 +31,19 @@ class MainListAdapater(private val mContext: Context, private val jobs: MutableL
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View? {
         val curJob = jobsList[position]
-        val curTime = dueTime[position]
+        val curLoc = location[position]
         val curDate = date[position]
         val curCreated = created[position]
         val curPayout = dollar[position]
         val curDesc = desc[position]
 
 
+
         var mLayoutInflater : LayoutInflater = LayoutInflater.from(mContext)
         val rowView = mLayoutInflater.inflate(R.layout.list_item,null,true)
         val descView = rowView.findViewById(R.id.listitem_desc) as TextView
         val dateView = rowView.findViewById(R.id.listitem_date) as TextView
-        //val timeView = rowView.findViewById(R.id.listitem_time) as TextView
+        val curLocView = rowView.findViewById(R.id.listitem_location) as TextView
         val payoutView = rowView.findViewById(R.id.listitem_dollar) as TextView
         val createdView = rowView.findViewById(R.id.listitem_username) as TextView
 
@@ -49,7 +51,7 @@ class MainListAdapater(private val mContext: Context, private val jobs: MutableL
         dateView.text = curDate
         payoutView.text = curPayout
         createdView.text = curCreated
-        //timeView.text = curTime
+        curLocView.text = curLoc
 
 
         return rowView
