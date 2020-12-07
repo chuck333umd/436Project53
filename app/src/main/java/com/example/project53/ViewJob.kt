@@ -1,9 +1,7 @@
 package com.example.project53
 
 import android.app.Activity
-import android.location.Location
 import android.os.Bundle
-import android.os.StrictMode
 import android.util.Log
 import android.view.View
 import android.widget.Button
@@ -12,8 +10,6 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.core.view.isVisible
 import com.google.firebase.database.*
-import java.lang.Exception
-import java.net.URL
 import java.util.*
 
 
@@ -277,7 +273,14 @@ class ViewJob : Activity() {
 
         //TODO - edit job in "Jobs" database to show isStarted = false
         //TODO - edit job in "Jobs" database to show tasker = null
-
+        var mUsers = FirebaseDatabase.getInstance().getReference("Job").child(jid!!)
+        var mUsers1 = FirebaseDatabase.getInstance().getReference("Users").child(username!!)
+        Log.d(TAG, "jidtest" + jid)
+        var newJob = Job(jid!!, creator!!, date!!, description!!, userZip!!, payout!!,minpayout!!,done!!,false,acceptLowerOffer!!,null)
+        mUsers.setValue(newJob)
+        tasksAccepted!!.remove(jid!!)
+        var newUser = User(username!!,email!!,jobsCreated!!,tasksAccepted!!)
+        mUsers1!!.setValue(newUser)
         //TODO - edit user record in "Users" database to show tasksAccepted excludes this job ID
 
     }
