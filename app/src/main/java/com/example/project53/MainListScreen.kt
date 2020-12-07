@@ -84,7 +84,7 @@ class MainListScreen : Activity() {
     internal lateinit var description: MutableList<String>
     internal lateinit var createdBy: MutableList<String>
     internal lateinit var dueDate: MutableList<String>
-    internal lateinit var dueTime: MutableList<String>
+    internal lateinit var location: MutableList<String>
     internal lateinit var dollar: MutableList<String>
 
     internal lateinit var listView: ListView
@@ -100,7 +100,7 @@ class MainListScreen : Activity() {
         description  = ArrayList()
         createdBy = ArrayList()
         dueDate = ArrayList()
-        dueTime = ArrayList()
+        location = ArrayList()
         dollar = ArrayList()
         setContentView(R.layout.mainlist)
         mZipView = findViewById(R.id.mainlist_location)
@@ -379,10 +379,10 @@ class MainListScreen : Activity() {
                 var job : Job? = null
                 jobsCreated.clear()
                 description.clear()
-                dueDate.clear()
                 dollar.clear()
-                dueTime.clear()
-                dueTime.clear()
+                dueDate.clear()
+                location.clear()
+                createdBy.clear()
 
                 for (postSnap in snapshot.children) {
                     try {
@@ -392,18 +392,23 @@ class MainListScreen : Activity() {
                     } catch (e: Exception) {
                         Log.e(TAG, e.toString())
                     } finally {
-                        Log.d(TAG, "we are getting here right?" + job)
-                        jobsCreated!!.add(job!!.jid)
-                        description!!.add(job!!.description)
-                        dollar!!.add(job!!.payout.toString())
-                        dueDate!!.add(job!!.date.toString())
-                        dueTime!!.add(job!!.date!!.time.toString())
-                        createdBy!!.add(job!!.creator)
+                        val dist = DistFromZip().getDist(job!!.zip.toString(), mZip ).toInt()
+                        Log.i("dfz", "jid: " + job!!.jid + ", dist: $dist")
+                        if ( dist < mRadius) {
+                            Log.i("dfz", "adding jid: " + job!!.jid + ", zip: " + job!!.zip + ", dist: $dist")
+                            Log.d(TAG, "we are getting here right?" + job)
+                            jobsCreated!!.add(job!!.jid)
+                            description!!.add(job!!.description)
+                            dollar!!.add(job!!.payout.toString())
+                            dueDate!!.add(job!!.date.toString())
+                            location!!.add(job!!.zip.toString())
+                            createdBy!!.add(job!!.creator)
+                        }
 
                     }
                 }
                     Log.d(TAG, "jobsCreated?" + jobsCreated + job)
-                    val mAdapter = MainListAdapater(this@MainListScreen, jobsCreated!!,description!!,dollar!!,dueDate!!,dueTime!!,createdBy!!)
+                    val mAdapter = MainListAdapater(this@MainListScreen, jobsCreated!!,description!!,dollar!!,dueDate!!,location!!,createdBy!!)
                     listView.adapter = mAdapter;
             }
             override fun onCancelled(error: DatabaseError) {

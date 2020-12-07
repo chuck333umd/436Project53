@@ -14,7 +14,7 @@
         <ListView
             android:id="@+id/mainlist_listview"
             android:layout_width="match_parent"
-            android:layout_height="295dp" />
+            android:layout_height="543dp" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/relativeLayout"
@@ -22,25 +22,14 @@
             android:layout_height="match_parent"
             android:orientation="horizontal">
 
-            <TextView
-                android:id="@+id/mainlist_locationZip"
-                android:layout_width="154dp"
-                android:layout_height="21dp"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="8dp"
-                android:text="Your Location (Zip)"
-                android:textAlignment="center"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/mainlist_location" />
-
             <EditText
                 android:id="@+id/mainlist_location"
                 android:layout_width="154dp"
                 android:layout_height="41dp"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="20dp"
+                android:layout_marginStart="40dp"
+                android:layout_marginTop="8dp"
                 android:ems="10"
-                android:inputType="textFilter"
+                android:inputType="number"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -48,55 +37,43 @@
                 android:id="@+id/mainlist_locationButton"
                 android:layout_width="155dp"
                 android:layout_height="34dp"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="8dp"
+                android:layout_marginStart="40dp"
                 android:onClick="locationButton"
-                android:text="Change Location"
+                android:text="Set Location"
                 android:textSize="12dp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/mainlist_locationZip" />
+                app:layout_constraintTop_toBottomOf="@+id/mainlist_location" />
 
             <EditText
                 android:id="@+id/mainlist_radius"
                 android:layout_width="154dp"
                 android:layout_height="41dp"
                 android:layout_marginStart="16dp"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="8dp"
                 android:ems="10"
-                android:inputType="textFilter"
+
+                android:inputType="number"
                 android:text="50"
                 app:layout_constraintStart_toEndOf="@+id/mainlist_location"
                 app:layout_constraintTop_toTopOf="parent" />
-
-            <TextView
-                android:id="@+id/mainlist_radiusKM"
-                android:layout_width="154dp"
-                android:layout_height="21dp"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="8dp"
-                android:text="Radius (km)"
-                android:textAlignment="center"
-                app:layout_constraintStart_toEndOf="@+id/mainlist_locationZip"
-                app:layout_constraintTop_toBottomOf="@+id/mainlist_radius" />
 
             <Button
                 android:id="@+id/mainlist_radiusButton"
                 android:layout_width="155dp"
                 android:layout_height="34dp"
-                android:layout_marginStart="12dp"
-                android:layout_marginTop="8dp"
+                android:layout_marginStart="16dp"
                 android:onClick="radiusButton"
-                android:text="Change Radius"
+                android:text="Set Search Radius"
                 android:textSize="12dp"
                 app:layout_constraintStart_toEndOf="@+id/mainlist_locationButton"
-                app:layout_constraintTop_toBottomOf="@+id/mainlist_radiusKM" />
+                app:layout_constraintTop_toBottomOf="@+id/mainlist_radius" />
 
             <TextView
                 android:id="@+id/textView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
-                android:layout_marginBottom="16dp"
+                android:layout_marginBottom="8dp"
                 android:text="User:"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent" />
@@ -106,7 +83,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
-                android:layout_marginBottom="16dp"
+                android:layout_marginBottom="8dp"
                 android:text="None"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/textView" />

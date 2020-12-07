@@ -31,7 +31,7 @@
             android:name="com.example.project53.MainListScreen"
             android:screenOrientation="portrait"
             android:label="Covid Services Jobs List"
-            android:windowSoftInputMode="stateHidden">
+            android:windowSoftInputMode="adjustResize">
         </activity>
         <activity
             android:name="com.example.project53.MyJobs"
