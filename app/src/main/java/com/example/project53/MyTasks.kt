@@ -45,7 +45,7 @@ class MyTasks : Activity() {
         // TODO - IMPLEMENT THIS CLASS
         // TODO   Search all jobs currently in DB and display all jobs created by the current user
 
-
+        setTitle("My Tasks ($username)");
 
     }
     override fun onStart() {
