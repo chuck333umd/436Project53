@@ -253,7 +253,7 @@ class ViewJob : Activity() {
 
     fun acceptJobButtonClick(view: View){
 
-        var mUsers = FirebaseDatabase.getInstance().getReference("Job").child(jid!!)
+        var mUsers = FirebaseDatabase.getInstance().getReference("Jobs").child(jid!!)
         var mUsers1 = FirebaseDatabase.getInstance().getReference("Users").child(username!!)
         Log.d(TAG, "jidtest" + jid)
         var newJob = Job(jid!!, creator!!, date!!, description!!, userZip!!, payout!!,minpayout!!,done!!,true,acceptLowerOffer!!,username!!)
@@ -273,7 +273,7 @@ class ViewJob : Activity() {
 
         //TODO - edit job in "Jobs" database to show isStarted = false
         //TODO - edit job in "Jobs" database to show tasker = null
-        var mUsers = FirebaseDatabase.getInstance().getReference("Job").child(jid!!)
+        var mUsers = FirebaseDatabase.getInstance().getReference("Jobs").child(jid!!)
         var mUsers1 = FirebaseDatabase.getInstance().getReference("Users").child(username!!)
         Log.d(TAG, "jidtest" + jid)
         var newJob = Job(jid!!, creator!!, date!!, description!!, userZip!!, payout!!,minpayout!!,done!!,false,acceptLowerOffer!!,null)
@@ -297,7 +297,7 @@ class ViewJob : Activity() {
     fun completeJobButtonClick(view: View){
 
         //TODO - edit job in "Jobs" database to show isDone = false
-        var mUsers = FirebaseDatabase.getInstance().getReference("Job").child(jid!!)
+        var mUsers = FirebaseDatabase.getInstance().getReference("Jobs").child(jid!!)
         Log.d(TAG, "jidtest1" + jid)
         var newJob = Job(jid!!, creator!!, date!!, description!!, userZip!!, payout!!,minpayout!!,true!!,true,acceptLowerOffer!!,username!!)
         mUsers.setValue(newJob)
@@ -308,7 +308,7 @@ class ViewJob : Activity() {
 
         //TODO - delete from "Jobs" database
         //TODO - remove from "Users" database under your username
-        var mUsers = FirebaseDatabase.getInstance().getReference("Job").child(jid!!)
+        var mUsers = FirebaseDatabase.getInstance().getReference("Jobs").child(jid!!)
         mUsers.removeValue()
 
     }
