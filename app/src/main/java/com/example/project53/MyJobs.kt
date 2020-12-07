@@ -68,7 +68,12 @@ class MyJobs : Activity() {
         val postListener = object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 val jid: String = ""
-
+                jobsCreated.clear()
+                description.clear()
+                dollar.clear()
+                dueDate.clear()
+                location.clear()
+                createdBy.clear()
 
                 for (postSnap in snapshot.children) {
 
