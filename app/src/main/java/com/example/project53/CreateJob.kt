@@ -93,7 +93,7 @@ class CreateJob : Activity() {
     fun buttonClick(view: View){
         var mUsers = FirebaseDatabase.getInstance().getReference("Users").child(username!!)
 
-        validateFields()
+
         val jid = generateUniqueJobID().toString()
         Log.i(TAG, "jid = $jid")
         val duedate: Date
@@ -137,35 +137,15 @@ class CreateJob : Activity() {
         }
     }
 
-    fun zipValidator(s: String): Boolean {
+    private fun zipValidator(s: String): Boolean {
         val regex = "^[0-9]{5}$".toRegex()
         return regex.containsMatchIn(s)
     }
 
-    private fun validateFields(){
+     private fun generateUniqueJobID(): Long{
 
-        //TODO - CREATE VALIDATOR CODE TO MAKE SURE USER CANNOT ENTER IMPROPERLY FORMATTED DATA
-        //TODO - MAKE SURE PAYOUT IS IN WHOLE DOLLAR AMOUNT AND IS A VALID INT (NO CENTS)
-
+        return (0..Long.MAX_VALUE).random()
     }
-
-    @Suppress("UnnecessaryVariable")
-    fun generateUniqueJobID(): Long{
-
-
-        var randjid = (0..Long.MAX_VALUE).random()
-
-        //TODO (OPTIONAL) - CHECK ALL "Jobs" KEYS IN DB TO MAKE SURE THIS ID IS UNIQUE
-
-        return randjid
-    }
-
-
-
-
-
-
-
 
 
 

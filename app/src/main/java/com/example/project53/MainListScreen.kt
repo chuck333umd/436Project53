@@ -90,18 +90,22 @@ class MainListScreen : Activity() {
     internal lateinit var listView: ListView
 
     internal lateinit var mAdapter: MainListAdapater
+
+    var numJobs = 0
+
     @TargetApi(Build.VERSION_CODES.M)
 
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        var numJobs = 0
-        jobsCreated = ArrayList()
-        description  = ArrayList()
-        createdBy = ArrayList()
-        dueDate = ArrayList()
-        location = ArrayList()
-        dollar = ArrayList()
+
+        jobsCreated = mutableListOf()
+        description  = mutableListOf()
+        createdBy = mutableListOf()
+        dueDate = mutableListOf()
+        location = mutableListOf()
+        dollar = mutableListOf()
+
         setContentView(R.layout.mainlist)
         mZipView = findViewById(R.id.mainlist_location)
         mRadiusView = findViewById(R.id.mainlist_radius)
@@ -135,16 +139,35 @@ class MainListScreen : Activity() {
         listView.setFooterDividersEnabled(true)
         val footerView = (this.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater).inflate(R.layout.mainlist, null, false) as LinearLayout
         listView.addFooterView(footerView)*/
-        /** Dont forget to update this value when you search the database for <jobs within radius> */
 
-        if (numJobs == 0) Toast.makeText(applicationContext, "No Jobs Currently", Toast.LENGTH_SHORT).show()
-        if (numJobs > 0) Toast.makeText(applicationContext, "Search Returned $numJobs Jobs", Toast.LENGTH_SHORT).show()
 
-        displayJobsByRadius()
+
+
     }
 
     override fun onStart() {
         super.onStart()
+
+        displayJobsByRadius()
+
+        if (numJobs == 0) Toast.makeText(applicationContext, "No Jobs Currently", Toast.LENGTH_SHORT).show()
+        if (numJobs > 0) Toast.makeText(applicationContext, "Search Returned $numJobs Jobs", Toast.LENGTH_SHORT).show()
+
+    }
+
+    fun displayJobsByRadius(){
+
+
+        jobsCreated = mutableListOf()
+        description  = mutableListOf()
+        createdBy = mutableListOf()
+        dueDate = mutableListOf()
+        location = mutableListOf()
+        dollar = mutableListOf()
+
+        //TODO - When displaying an individual job with ViewJob, send an intent containing username
+        //TODO   as "username" StringExtra and job ID as "jid" LongExtra
+
         var mUsers = FirebaseDatabase.getInstance().getReference("Jobs")
         val postListener = object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
@@ -152,6 +175,7 @@ class MainListScreen : Activity() {
                 var job : Job? = null
 
                 for (postSnap in snapshot.children) {
+                    numJobs++
                     try {
                         job = postSnap.getValue(Job::class.java)
 
@@ -159,7 +183,7 @@ class MainListScreen : Activity() {
                     } catch (e: Exception) {
                         Log.e(TAG, e.toString())
                     } finally {
-                        
+
                         val dist = DistFromZip().getDist(job!!.zip.toString(), mZip ).toInt()
                         Log.i("dfz", "jid: " + job!!.jid + ", dist: $dist")
                         if ( dist < mRadius) {
@@ -184,14 +208,6 @@ class MainListScreen : Activity() {
             }
         }
         mUsers.addValueEventListener(postListener)
-    }
-
-    fun displayJobsByRadius(){
-
-        //TODO - Implement method to return list of job IDs for any job within radius
-
-        //TODO - When displaying an individual job with ViewJob, send an intent containing username
-        //TODO   as "username" StringExtra and job ID as "jid" LongExtra
 
 
     }
