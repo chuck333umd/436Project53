@@ -432,10 +432,6 @@ class ViewJob : Activity() {
 
     }
 
-    override fun onBackPressed() {
-        super.onBackPressed()
-    }
-
     companion object{
         val TAG = "main"
     }
