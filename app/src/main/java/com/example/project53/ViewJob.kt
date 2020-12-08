@@ -428,8 +428,7 @@ class ViewJob : Activity() {
     }
 
     override fun onBackPressed() {
-        val backToMainScreen = Intent(this, MainListScreen::class.java)
-        startActivity(backToMainScreen)
+        super.onBackPressed()
     }
 
     companion object{
