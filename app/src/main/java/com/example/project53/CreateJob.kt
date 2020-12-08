@@ -27,7 +27,6 @@ class CreateJob : Activity() {
     private lateinit var mCreateJobDateView: TextView
     private lateinit var mCreateJobTimeView: TextView
     private lateinit var mCreateJobPayoutView: TextView
-    private lateinit var mCreateJobMinPayoutView: TextView
     private lateinit var mCreateJobDescriptionView: TextView
 
     private var username: String? = null
@@ -117,7 +116,6 @@ class CreateJob : Activity() {
         mCreateJobDateView.text = null;
         mCreateJobTimeView.text = null;
         mCreateJobPayoutView.text = null;
-        mCreateJobMinPayoutView.text = null;
         mCreateJobDescriptionView.text = null;
         finish()
     }
