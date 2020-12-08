@@ -115,8 +115,8 @@ class SplashScreen : Activity(){
                     timeUp = System.currentTimeMillis()
 
                     /** Change this back for final build */
-                    //if (bList.size > 64 && (timeUp - timeDown).absoluteValue < 500 ) {
-                    if (/*bList.size > 64 && */(timeUp - timeDown).absoluteValue < 500 ) {
+                    if (bList.size > 64 && (timeUp - timeDown).absoluteValue < 500 ) {
+                    //if (/*bList.size > 64 && */(timeUp - timeDown).absoluteValue < 500 ) {
 
                         bList.forEach { b -> b.kill()}
                         active = false
