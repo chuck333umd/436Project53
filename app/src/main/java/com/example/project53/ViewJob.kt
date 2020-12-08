@@ -57,6 +57,7 @@ class ViewJob : Activity() {
     private var temail: String? = null
     private var userZip: String? = null
     private var email: String? = null
+    private var zip: String? = null
     private var useremail: String? = null
     private var jobsCreated: ArrayList<String>? = null
     private var tasksAccepted: ArrayList<String>? = null
@@ -136,6 +137,8 @@ class ViewJob : Activity() {
                 started = job!!.isStarted
                 cemail = job!!.cemail
                 temail = job!!.temail
+                zip = job!!.zip
+
 
                 creatorContactInfo = job!!.temail
                 taskerContactInfo = job!!.temail
@@ -359,7 +362,7 @@ class ViewJob : Activity() {
         //Log.d(TAG, "cemail = $cemail")
         //Log.d(TAG, "temail = $temail")
 
-        var newJob = Job(jid!!, creator!!, cemail!!, date!!, description!!, userZip!!, payout!!,false,true, username!!, useremail!!)
+        var newJob = Job(jid!!, creator!!, cemail!!, date!!, description!!, zip!!, payout!!,false,true, username!!, useremail!!)
         mUsers.setValue(newJob)
 
 
@@ -378,7 +381,7 @@ class ViewJob : Activity() {
         var mUsers = FirebaseDatabase.getInstance().getReference("Jobs").child(jid!!)
         var mUsers1 = FirebaseDatabase.getInstance().getReference("Users").child(username!!)
         //Log.d(TAG, "jidtest" + jid)
-        var newJob = Job(jid!!, creator!!,cemail!!, date!!, description!!, userZip!!, payout!!,false,false,null, null)
+        var newJob = Job(jid!!, creator!!,cemail!!, date!!, description!!, zip!!, payout!!,false,false,null, null)
         mUsers.setValue(newJob)
 
 
@@ -389,7 +392,7 @@ class ViewJob : Activity() {
     fun fireTaskerButtonClick(view: View){
 
         var mUsers = FirebaseDatabase.getInstance().getReference("Jobs").child(jid!!)
-        var newJob = Job(jid!!, creator!!,cemail!!, date!!, description!!, userZip!!, payout!!,false,false,null, null)
+        var newJob = Job(jid!!, creator!!,cemail!!, date!!, description!!, zip!!, payout!!,false,false,null, null)
         mUsers.setValue(newJob)
 
 
@@ -408,7 +411,7 @@ class ViewJob : Activity() {
         //Log.d(TAG, "completeJobButtonClick" + jid)
         var mUsers = FirebaseDatabase.getInstance().getReference("Jobs").child(jid!!)
 
-        var newJob = Job(jid!!, creator!!, cemail!!, date!!, description!!, userZip!!, payout!!,true,true, tasker!!, temail!!)
+        var newJob = Job(jid!!, creator!!, cemail!!, date!!, description!!, zip!!, payout!!,true,true, tasker!!, temail!!)
         mUsers.setValue(newJob)
         this.finish()
     }
