@@ -140,12 +140,12 @@ class ViewJob : Activity() {
                 creatorContactInfo = job!!.temail
                 taskerContactInfo = job!!.temail
 
-                Log.d(TAG, "job = snapshot.getValue(Job::class.java)")
-                Log.d(TAG, "creator = $creator")
-                Log.d(TAG, "tasker = $tasker")
-                Log.d(TAG, "date = $date")
-                Log.d(TAG, "cemail = $cemail")
-                Log.d(TAG, "temail = $temail")
+                //Log.d(TAG, "job = snapshot.getValue(Job::class.java)")
+                //Log.d(TAG, "creator = $creator")
+                //Log.d(TAG, "tasker = $tasker")
+                //Log.d(TAG, "date = $date")
+                //Log.d(TAG, "cemail = $cemail")
+                //Log.d(TAG, "temail = $temail")
 
                 /** ALL FUNCTIONS TO BE CALLED MUST BE CALLED FROM HERE IF THEY RELY ON THE DATA
                  * PULLED FROM THE DATABASE. THERE IS A DELAY!
@@ -231,7 +231,7 @@ class ViewJob : Activity() {
         }
         /** You are the tasker and you have accepted the job
          *  Your options are - quit the job*/
-        if (username == mViewJob_Tasker.text && mViewJob_StartedCheckBox.isChecked == true){
+        if (username == mViewJob_Tasker.text && mViewJob_StartedCheckBox.isChecked == true && mViewJob_CompletedCheckBox.isChecked != true){
             mAcceptJobButton.isVisible = false
             mAcceptJobButton.isClickable = false
 
@@ -247,9 +247,48 @@ class ViewJob : Activity() {
             mQuitJobButton.isVisible = true
             mQuitJobButton.isClickable= true
         }
+
+        /** You are the tasker and you have completed the job
+         *  Your options are - none*/
+        if (username == mViewJob_Tasker.text && mViewJob_StartedCheckBox.isChecked == true && mViewJob_CompletedCheckBox.isChecked == true){
+            mAcceptJobButton.isVisible = false
+            mAcceptJobButton.isClickable = false
+
+            mFireTaskerButton.isVisible = false
+            mFireTaskerButton.isClickable= false
+
+            mCompleteJobButton.isVisible = false
+            mCompleteJobButton.isClickable= false
+
+            mCancelJobButton.isVisible = false
+            mCancelJobButton.isClickable= false
+
+            mQuitJobButton.isVisible = false
+            mQuitJobButton.isClickable= false
+        }
+        /** You created the job and it is already assigned to someone and its done
+         *  Your options are -none*/
+        if (username == mViewJob_Creator.text && mViewJob_StartedCheckBox.isChecked == true && mViewJob_CompletedCheckBox.isChecked){
+            Log.i(TAG, "username == mViewJob_Creator.text && mViewJob_StartedCheckBox.isChecked == true")
+
+            mAcceptJobButton.isVisible = false
+            mAcceptJobButton.isClickable = false
+
+            mFireTaskerButton.isVisible = false
+            mFireTaskerButton.isClickable= false
+
+            mCompleteJobButton.isVisible = false
+            mCompleteJobButton.isClickable= false
+
+            mCancelJobButton.isVisible = false
+            mCancelJobButton.isClickable= false
+
+            mQuitJobButton.isVisible = false
+            mQuitJobButton.isClickable= false
+        }
         /** You created the job and it is already assigned to someone
          *  Your options are - fire the tasker*/
-        if (username == mViewJob_Creator.text && mViewJob_StartedCheckBox.isChecked == true){
+        if (username == mViewJob_Creator.text && mViewJob_StartedCheckBox.isChecked == true && !mViewJob_CompletedCheckBox.isChecked){
             Log.i(TAG, "username == mViewJob_Creator.text && mViewJob_StartedCheckBox.isChecked == true")
 
             mAcceptJobButton.isVisible = false
@@ -314,11 +353,11 @@ class ViewJob : Activity() {
 
         var mUsers = FirebaseDatabase.getInstance().getReference("Jobs").child(jid!!)
         var mUsers1 = FirebaseDatabase.getInstance().getReference("Users").child(username!!)
-        Log.d(TAG, "acceptJobButtonClick = $jid")
-        Log.d(TAG, "creator = $creator")
-        Log.d(TAG, "username = $username")
-        Log.d(TAG, "cemail = $cemail")
-        Log.d(TAG, "temail = $temail")
+        //Log.d(TAG, "acceptJobButtonClick = $jid")
+        //Log.d(TAG, "creator = $creator")
+        //Log.d(TAG, "username = $username")
+        //Log.d(TAG, "cemail = $cemail")
+        //Log.d(TAG, "temail = $temail")
 
         var newJob = Job(jid!!, creator!!, cemail!!, date!!, description!!, userZip!!, payout!!,false,true, username!!, useremail!!)
         mUsers.setValue(newJob)
@@ -338,7 +377,7 @@ class ViewJob : Activity() {
         //TODO - edit job in "Jobs" database to show tasker = null
         var mUsers = FirebaseDatabase.getInstance().getReference("Jobs").child(jid!!)
         var mUsers1 = FirebaseDatabase.getInstance().getReference("Users").child(username!!)
-        Log.d(TAG, "jidtest" + jid)
+        //Log.d(TAG, "jidtest" + jid)
         var newJob = Job(jid!!, creator!!,cemail!!, date!!, description!!, userZip!!, payout!!,false,false,null, null)
         mUsers.setValue(newJob)
 
@@ -365,11 +404,11 @@ class ViewJob : Activity() {
 
     fun completeJobButtonClick(view: View){
 
-        //TODO - edit job in "Jobs" database to show isDone = false
-        Log.d(TAG, "completeJobButtonClick" + jid)
+
+        //Log.d(TAG, "completeJobButtonClick" + jid)
         var mUsers = FirebaseDatabase.getInstance().getReference("Jobs").child(jid!!)
 
-        var newJob = Job(jid!!, creator!!, cemail!!, date!!, description!!, userZip!!, payout!!,true,true,username!!, temail!!)
+        var newJob = Job(jid!!, creator!!, cemail!!, date!!, description!!, userZip!!, payout!!,true,true, tasker!!, temail!!)
         mUsers.setValue(newJob)
         this.finish()
     }

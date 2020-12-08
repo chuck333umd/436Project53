@@ -155,7 +155,7 @@ class UserAuth : Activity() {
                     }
 
                     override fun onCancelled(databaseError: DatabaseError) {
-                        Log.d(TAG, databaseError.message) //Don't ignore errors!
+                        //Log.d(TAG, databaseError.message) //Don't ignore errors!
                     }
                 }
 

@@ -80,7 +80,7 @@ class MyJobs : Activity() {
                     try {
                         job = postSnap.getValue(Job::class.java)
 
-                        Log.d("myjobs", "jobs?" + job!!.jid)
+                        //Log.d("myjobs", "jobs?" + job!!.jid)
                     } catch (e: Exception) {
                         Log.e("myjobs", e.toString())
                     } finally {
@@ -98,7 +98,7 @@ class MyJobs : Activity() {
 
                     }
                 }
-                Log.d("myjobs", "jobsCreated?" + jobsCreated + job)
+                //Log.d("myjobs", "jobsCreated?" + jobsCreated + job)
                 val mAdapter = MyJobsAdapter(this@MyJobs, jobsCreated!!,description!!,dollar!!,dueDate!!,location!!,createdBy!!)
                 listView.adapter = mAdapter;
 

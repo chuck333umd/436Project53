@@ -19,6 +19,7 @@ import android.widget.AdapterView
 import android.widget.ListView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.core.view.isVisible
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
@@ -66,8 +67,9 @@ class MainListScreen : Activity() {
     private lateinit var mZipView: TextView
     private lateinit var mRadiusView: TextView
     private lateinit var mCurrentUser: TextView
+    private lateinit var mCurrentUserTV: TextView
     private var mZip = ""
-    private var mRadius = 550
+    private var mRadius = 5000
     private var username: String? = null
     private var useremail: String? = null
 
@@ -102,12 +104,17 @@ class MainListScreen : Activity() {
 
 
         setContentView(R.layout.mainlist)
+
         mZipView = findViewById(R.id.mainlist_location)
         mRadiusView = findViewById(R.id.mainlist_radius)
         mCurrentUser = findViewById(R.id.mainlist_currentUser)
+        mCurrentUserTV = findViewById(R.id.textView)
+        mCurrentUser.isVisible = false
+        mCurrentUserTV.isVisible = false
         listView = findViewById<ListView>(R.id.mainlist_listview)
         val logIn = intent.getBooleanExtra("loggedIn", false)
         if (logIn) {
+
 
             invalidateOptionsMenu()
             username = intent.getStringExtra("username")
@@ -115,7 +122,9 @@ class MainListScreen : Activity() {
             val userID = intent.getStringExtra("userID")
             val user = intent.getParcelableExtra<Parcelable>("user")
             loggedIn = true
-            mCurrentUser.text = username + "   ID:   " + userID
+
+            //mCurrentUser.text = username + "   ID:   " + userID
+            setTitle("Jobs List - Hello $username!");
         }
 
 
@@ -171,17 +180,17 @@ class MainListScreen : Activity() {
                     try {
                         job = postSnap.getValue(Job::class.java)
 
-                        Log.d(TAG, "jobs?" + job!!.jid)
+                        //Log.d(TAG, "jobs?" + job!!.jid)
                     } catch (e: Exception) {
                         Log.e(TAG, e.toString())
                     } finally {
 
                         val dist = DistFromZip().getDist(job!!.zip.toString(), mZip ).toInt()
                         Log.i("dfz", "jid: " + job!!.jid + ", dist: $dist")
-                        if ( dist < mRadius && job!!.isStarted == false) {
+                        if ( dist < mRadius && job!!.isStarted == false && job!!.isDone == false) {
                             numJobs++
                             Log.i("dfz", "adding jid: " + job!!.jid + ", zip: " + job!!.zip + ", dist: $dist")
-                            //Log.d(TAG, "we are getting here right?" + job)
+                            ////Log.d(TAG, "we are getting here right?" + job)
                             jobsCreated!!.add(job!!.jid)
                             description!!.add(job!!.description)
                             dollar!!.add(job!!.payout.toString())
@@ -192,7 +201,7 @@ class MainListScreen : Activity() {
 
                     }
                 }
-                Log.d(TAG, "jobsCreated?" + jobsCreated + job)
+                //Log.d(TAG, "jobsCreated?" + jobsCreated + job)
                 val mAdapter = MainListAdapater(this@MainListScreen, jobsCreated!!,description!!,dollar!!,dueDate!!,location!!,createdBy!!)
                 listView.adapter = mAdapter;
 
