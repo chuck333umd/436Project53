@@ -102,6 +102,7 @@ class ViewJob : Activity() {
         Log.i(TAG, "username = $username")
         Log.i(TAG, "jid = $jid")
         Log.i(TAG, "useremail = $useremail")
+        Log.i(TAG, "userzip = $userZip")
 
 
 
@@ -354,6 +355,10 @@ class ViewJob : Activity() {
 
     }
 
+    override fun onBackPressed() {
+        super.onBackPressed()
+        this.finish()
+    }
     fun acceptJobButtonClick(view: View){
 
         var mUsers = FirebaseDatabase.getInstance().getReference("Jobs").child(jid!!)

@@ -43,6 +43,7 @@ class MyTasks : Activity() {
 
         username = intent.getStringExtra("username").toString()
         useremail = intent.getStringExtra("email").toString()
+        mZip = intent.getStringExtra("zip").toString()
 
         // TODO - IMPLEMENT THIS CLASS
         // TODO   Search all jobs currently in DB and display all jobs created by the current user
@@ -124,11 +125,11 @@ class MyTasks : Activity() {
 
                     val intent = Intent(this@MyTasks, ViewJob::class.java)
 
-
+                    Log.i(ViewJob.TAG, "MyTasks() zip = $mZip ")
                     intent.putExtra("jid", jobsCreated[item])
                     intent.putExtra("username", username)
                     intent.putExtra("email", useremail)
-                    intent.putExtra("zip", job!!.zip)
+                    intent.putExtra("zip", mZip)
 
                     startActivity(intent)
 
