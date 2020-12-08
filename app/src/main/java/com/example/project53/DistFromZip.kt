@@ -15,7 +15,7 @@ class DistFromZip {
         StrictMode.setThreadPolicy(policy)
 
         val apiResponse1 = URL("https://maps.googleapis.com/maps/api/geocode/json?components=postal_code:$zip1&key=AIzaSyByaBb5GYYIoBo7lk1odivoK-q-ZfclmIQ").readText()
-        Log.i("dist", "apiResponse1 = $apiResponse1 ")
+       // Log.i("dist", "apiResponse1 = $apiResponse1 ")
 
         if (apiResponse1.contains("ZERO_RESULTS")){
             return -2F

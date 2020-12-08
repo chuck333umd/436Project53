@@ -359,7 +359,7 @@ class MainListScreen : Activity() {
                 true
             }
             R.id.menu_logout -> {
-                loggedIn = false
+                loggedIn = false 
                 mCurrentUser.text = "None"
                 invalidateOptionsMenu()
                 true
@@ -377,7 +377,8 @@ class MainListScreen : Activity() {
 
                 val intentMyJobs = Intent(this, MyJobs::class.java)
                 intentMyJobs.putExtra("username", username)
-
+                intentMyJobs.putExtra("zip", mZip)
+                intentMyJobs.putExtra("email", useremail)
 
                 startActivity(intentMyJobs)
 
@@ -398,6 +399,8 @@ class MainListScreen : Activity() {
 
                 val intentMyTasks = Intent(this, MyTasks::class.java)
                 intentMyTasks.putExtra("username", username)
+                intentMyTasks.putExtra("zip", mZip)
+                intentMyTasks.putExtra("email", useremail)
 
                 startActivity(intentMyTasks)
                 true
