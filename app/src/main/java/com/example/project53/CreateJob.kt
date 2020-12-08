@@ -96,28 +96,34 @@ class CreateJob : Activity() {
 
         val jid = generateUniqueJobID().toString()
         Log.i(TAG, "jid = $jid")
-        val duedate: Date
 
 
-        val formatter = SimpleDateFormat("yyyy/MM/ddHH:mm")
-        duedate = formatter.parse(mCreateJobDateView.text.toString()+mCreateJobTimeView.text.toString())
-        Log.i(TAG, "duedate = $duedate")
 
+        val dateReg = "([12]\\d{3}\\/(0[1-9]|1[0-2])\\/(0[1-9]|[12]\\d|3[01]))".toRegex()
+        val timeReg = "^(0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]\$".toRegex()
+        Log.d(TAG, "test regex" + dateReg.containsMatchIn(mCreateJobDateView.text.toString()) + timeReg.containsMatchIn(mCreateJobTimeView.text.toString()))
+        if(dateReg.containsMatchIn(mCreateJobDateView.text.toString()) && timeReg.containsMatchIn(mCreateJobTimeView.text.toString())) {
+            val duedate: Date
 
-        val job = Job(jid, username!!, email!!, duedate, mCreateJobDescriptionView.text.toString(), zip.toString(), mCreateJobPayoutView.text.toString().toInt() )
-        val task = mDatabase.child(jid).setValue(job)
+            val formatter = SimpleDateFormat("yyyy/MM/ddHH:mm")
+            duedate = formatter.parse(mCreateJobDateView.text.toString()+mCreateJobTimeView.text.toString())
+            val job = Job(jid, username!!, email!!, duedate, mCreateJobDescriptionView.text.toString(), zip.toString(), mCreateJobPayoutView.text.toString().toInt())
+            val task = mDatabase.child(jid).setValue(job)
 
-        Log.i(TAG, "task isComplete= " + task.isComplete)
+            Log.i(TAG, "task isComplete= " + task.isComplete)
 
-        jobsCreated!!.add(jid)
-        var newUser = User(username!!, email!!, jobsCreated!!,tasksAccepted!! )
-        //TODO - add job ID to jobsCreated List in User object in "Users" database corresponding to this user
-        mUsers.setValue(newUser)
-        mCreateJobDateView.text = null;
-        mCreateJobTimeView.text = null;
-        mCreateJobPayoutView.text = null;
-        mCreateJobDescriptionView.text = null;
-        finish()
+            jobsCreated!!.add(jid)
+            var newUser = User(username!!, email!!, jobsCreated!!, tasksAccepted!!)
+            //TODO - add job ID to jobsCreated List in User object in "Users" database corresponding to this user
+            mUsers.setValue(newUser)
+            mCreateJobDateView.text = null;
+            mCreateJobTimeView.text = null;
+            mCreateJobPayoutView.text = null;
+            mCreateJobDescriptionView.text = null;
+            finish()
+        } else {
+            Toast.makeText(applicationContext, "Invalid Date or Time inputs", Toast.LENGTH_SHORT).show()
+        }
     }
 
 
