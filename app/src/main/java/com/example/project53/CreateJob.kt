@@ -48,7 +48,6 @@ class CreateJob : Activity() {
         mCreateJobDateView = findViewById(R.id.createjob_editTextDate)
         mCreateJobTimeView = findViewById(R.id.createjob_editTextTime)
         mCreateJobPayoutView = findViewById(R.id.createjob_editTextPayout)
-        mCreateJobMinPayoutView = findViewById(R.id.createjob_editTextMinPayout)
         mCreateJobDescriptionView = findViewById(R.id.createjob_editTextDescription)
 
         mDatabase = FirebaseDatabase.getInstance().getReference("Jobs")
