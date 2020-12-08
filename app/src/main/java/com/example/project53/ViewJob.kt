@@ -104,7 +104,8 @@ class ViewJob : Activity() {
 
 
 
-        setTitle("View Job #"+ jid?.substring(0,4)+" by: $username");
+        if (username != null) title = "View Job #"+ jid?.substring(0,4)+" by: $username";
+        else title = "View Job #"+ jid?.substring(0,4);
 
         // TODO - retrieve job from database using jid and populate TextViews
 
